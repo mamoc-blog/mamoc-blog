@@ -1,20 +1,20 @@
-This is a starter template for [Learn Next.js](https://nextjs.org/learn).
+# mamoc.blog site
 
-Prerequisites
+## Prerequisites
 What things you need to install the software and how to install them:
 
 Node.js (v18.0.0 or higher)
 npm (usually comes with Node.js)
 
-Installation
+## Installation
 A step-by-step series of examples that tell you how to get a development environment running:
 
-Clone the Repository
+#### Clone the Repository
 
 `git clone https://github.com/mamoc-blog/mamoc-blog.git`
 `cd [local-repository]`
 
-Install Dependencies
+#### Install Dependencies
 
 Run the following command to install the required dependencies:
 
@@ -22,7 +22,7 @@ Run the following command to install the required dependencies:
 
 This will install all dependencies listed under dependencies and devDependencies in your package.json.
 
-Build the Project
+#### Build the Project
 
 Before starting the development server, you need to build any assets required by the project. Run the build script using:
 
@@ -33,9 +33,6 @@ After building the project, start the development server:
 
 `npm run dev`
 This will start the Next.js development server. You can now access your application by navigating to http://localhost:3000 in your browser.
-
-Running the Application
-To run the application in production mode, use:
 
 Additional Notes
 This project uses Sass for styling. Make sure any Sass files follow the .scss file extension.
