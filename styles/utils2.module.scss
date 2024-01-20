@@ -1,0 +1,128 @@
+@import "../styles/variables.scss";
+
+.container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between; /* This ensures elements are spaced out */
+  }
+  
+  .left, .right {
+    flex: 1; /* This will make both the left and right sides take up equal space */
+  }
+  
+  .left {
+    display: flex;
+    position: relative;
+    z-index: 2;
+  }
+
+  .blogLeft, .blogRight {
+    flex: 1;
+  }
+
+  .blogContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: flex-start; /* Adjust as needed */
+  }
+  
+  
+  .text {
+    padding-bottom: 48px;
+    padding-top: 30px;
+  
+    h1 {
+      font-weight: bold;
+      max-width: 480px;
+    }
+  }
+.text {
+  padding-bottom: 48px;
+  padding-top: 30px;
+  h1 {
+    font-weight: bold;
+    max-width: 480px;
+  }
+  .socials {
+    margin-top: 32px;
+    color: var(--color-gray);
+    font-size: var(--font-size-small);
+  }
+  .description {
+    margin-top: 18px;
+    font-size: var(--font-size-regular);
+    line-height: 1.33;
+    max-width: 400px;
+  }
+  .button {
+    width: fit-content;
+    margin-top: 48px;
+  }
+}
+
+.articles {
+  border-top: 1px solid var(--color-gray-vlight);
+  padding: 38px 0;
+  display: flex;
+  flex-direction: row;
+  gap: 32px 32px;
+  h6 {
+    margin-bottom: 8px;
+    font-weight: 400;
+  }
+  .docs {
+    flex: 1;
+    .doc {
+      margin-bottom: 16px;
+      a {
+        font-size: var(--font-size-h4);
+      }
+      .subtitle {
+        margin-top: 2px;
+        color: var(--color-gray);
+        font-size: var(--font-size-small);
+      }
+    }
+  }
+  .user_articles {
+    flex: 1;
+    .user_article {
+      margin-bottom: 16px;
+      .title {
+        font-weight: bold;
+        color: var(--color-black);
+        font-size: var(--font-size-h4);
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+      .subtitle {
+        margin-top: 2px;
+        color: var(--color-gray);
+        font-size: var(--font-size-small);
+      }
+      .written {
+        margin-right: 0.5em;
+      }
+    }
+  }
+}
+.imageSection {
+  padding-top: 60px; /* Adjust padding as needed */
+  padding-bottom: 60px; /* Adjust padding as needed */
+}
+
+.imageContainer {
+  width: 100%; /* Full width of the container */
+  max-width: none; /* Override any parent max-width */
+}
+
+.imageContainer img {
+  display: block; /* Ensure image is a block-level element */
+  width: 100%; /* Make image take full width of its container */
+  height: auto; /* Keep aspect ratio */
+}
+

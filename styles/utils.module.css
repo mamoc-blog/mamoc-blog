@@ -21,12 +21,12 @@
 }
 
 .headingMd {
-  font-size: 1.2rem;
-  line-height: 1.5;
+  font-size: 1.1rem;
+  line-height: 1.2;
 }
 
 .borderCircle {
-  border-radius: 9999px;
+  border-radius: 100px;
 }
 
 .colorInherit {
@@ -50,3 +50,4 @@
 .lightText {
   color: #666;
 }
+
