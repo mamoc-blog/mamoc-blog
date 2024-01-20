@@ -17,7 +17,8 @@ A step-by-step series of examples that tell you how to get a development environ
 #### Install Dependencies
 
 Run the following command to install the required dependencies:
-
+`brew install sass`
+`npm install next@latest react@latest react-dom@latest`
 `npm install`
 
 This will install all dependencies listed under dependencies and devDependencies in your package.json.
