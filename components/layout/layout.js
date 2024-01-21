@@ -1,7 +1,8 @@
 import Head from 'next/head';
 import Image from 'next/image';
-import styles from './layout.module.css';
+import styles from './layout.module.scss';
 import utilStyles from '../../styles/utils.module.css';
+import utilStyles2 from '../../styles/utils2.module.scss';
 import Link from 'next/link';
 import { SettingsProvider } from '../Theme';
 import {DarkModeToggle} from '../DarkModeToggle';
@@ -10,83 +11,68 @@ const name = '';
 export const siteTitle = 'MAMOC';
 
 export default function Layout({ children, home }) {
-  return (
+  return  (
     <SettingsProvider>
-    <div className={styles.container}>
-      <header className={styles.header}>
-        {home ? (
+      <Head>
+        <title>mamoc blog</title>
+      </Head>
+      <div className={styles.container}>
+        <header className={styles.header}>
           <>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ position: 'relative', height: '144px', width: '144px' }}>
-                <Image
-                  priority
-                  src="/images/cam.png"
-                  className={utilStyles.borderCircle}
-                  height={144}
-                  width={144}
-                  alt={name}
-                />
-              </div>
-              <div style={{ position: 'relative', height: '144px', width: '144px' }}>
-                <Image
-                  priority
-                  src="/images/alex.png"
-                  className={utilStyles.borderCircle}
-                  height={144}
-                  width={144}
-                  alt={name}
-                />
-              </div>
-            </div>
-            <h1 className={utilStyles.heading2Xl}>{name}</h1>
-
-            <div>
-              <DarkModeToggle/>
-            </div>
-          </>
-        ) : (
-          <>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ position: 'relative', height: '108px', width: '108px' }}>
-                <Link href="/">
+            <div className={styles.layoutContainer}>
+              <div className={styles.centeredComponents}>
+                <div className={styles.component}>
                   <Image
                     priority
                     src="/images/cam.png"
                     className={utilStyles.borderCircle}
-                    height={108}
-                    width={108}
+                    height={75}
+                    width={75}
                     alt={name}
                   />
-                </Link>
-              </div>
-              <div style={{ position: 'relative', height: '108px', width: '108px' }}>
-                <Link href="/">
+                </div>
+                <div className={styles.component}>
                   <Image
                     priority
                     src="/images/alex.png"
                     className={utilStyles.borderCircle}
-                    height={108}
-                    width={108}
+                    height={75}
+                    width={75}
                     alt={name}
                   />
-                </Link>
+                </div>
+              </div>
+              <div className={styles.before}>
+              <h2>mamoc</h2>
+              </div>
+              <div>
+                <DarkModeToggle/>
               </div>
             </div>
-            <h2 className={utilStyles.headingLg}>
-              <Link href="/" className={utilStyles.colorInherit}>
-                {name}
-              </Link>
-            </h2>
           </>
-        )}
-      </header>
-      <main>{children}</main>
-      {!home && (
-        <div className={styles.backToHome}>
-          <Link href="/">← Back to home</Link>
+        </header>
+      {home && 
+      <section className={utilStyles2.imageSection}>
+        <div className={utilStyles2.imageContainer}>
+          <Image
+            src="/images/artplaceholder.jpg"
+            alt="placeholder"
+            width={1500} // Adjust as needed
+            height={500} // This sets the height of the image
+          />
         </div>
-      )}
-    </div>
+      </section>}
+      <main style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
+        <div style={{ maxWidth: '60rem', width: '100%' }}>
+          {children}
+        </div>
+      </main>
+        {!home && (
+          <div className={styles.backToHome}>
+            <Link href="/">← Back to home</Link>
+          </div>
+        )}
+      </div>
     </SettingsProvider>
   );
 }

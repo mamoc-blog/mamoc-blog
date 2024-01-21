@@ -1,0 +1,78 @@
+.container {
+  // max-width: 60rem;
+  padding: 0 1rem;
+  margin: 0rem auto 3rem;
+  z-index: 1;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+}
+
+.backToHome {
+  margin: 3rem 0 0;
+}
+
+.headerheader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  
+} 
+
+.content {
+  display: flex;
+  align-items: center;
+}
+
+.title {
+  margin-right: 20px;
+  a {
+    color: #333; 
+    text-decoration: none;
+  }
+}
+.layoutContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; // Adjust for a smaller width
+  margin: auto; // Center the container
+  padding: 10px; // Add some padding inside the box
+  border: 2px solid #ccc; // Add a border
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // Optional: add a subtle shadow
+  position: relative;
+  box-sizing: border-box; // Include padding and border in the width
+
+  .component {
+    height: 75px; // Reduced size
+    width: 75px; // Reduced size
+  }
+
+  .centeredComponents {
+    display: flex;
+    gap: 10px;
+  }
+}
+
+.before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  h2 {
+    font-size: 5rem;
+    color: rgba(0, 0, 0, 0.9);
+    filter: blur(2px);
+    // animation: fadeInOut 8s ease-in-out infinite;
+    // text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+
+  }
+}

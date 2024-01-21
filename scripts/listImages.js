@@ -14,7 +14,7 @@ const imageFiles = fs.readdirSync(directoryPath)
       src: `/carousel/${file}`,
       author: author,
       blogPostTitle: blogPostName.replace(/-/g, ' '),
-      blogPostUrl: `/posts/${blogPostName}.mdx`,
+      blogPostUrl: `/posts/${blogPostName}`,
       imageNumber: imageNumber
     };
   });

@@ -18,16 +18,6 @@ export default function Home({ allPostsData, carouselProps }) {
       <Head>
         <title>{siteTitle}</title>
       </Head>
-      <section className={utilStyles2.imageSection}>
-        <div className={utilStyles2.imageContainer}>
-          <Image
-            src="/images/artplaceholder.jpg"
-            alt="placeholder"
-            width={1500} // Adjust as needed
-            height={500} // This sets the height of the image
-          />
-        </div>
-      </section>
       <section >
         <div className={utilStyles2.container}>
           <div className={utilStyles2.left}> 

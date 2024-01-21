@@ -6,7 +6,7 @@ export const DarkModeToggle = () => {
   const { darkTheme, toggleDarkTheme } = useSettingsContext();
 
   return (
-    <button onClick={toggleDarkTheme} style={{ border: 'none', background: 'none' }}>
+    <button onClick={toggleDarkTheme} style={{ border: 'none', background: 'none', zIndex:2 }}>
       {darkTheme ? (
         <>
           <Image

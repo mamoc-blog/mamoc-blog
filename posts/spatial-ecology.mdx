@@ -1,0 +1,366 @@
+---
+title: The Spatial Ecology of Predator-Prey Systems.
+date: '2023-11-18'
+math: true
+summary: The emergent properties of predator prey systems, analysed computationally through reaction-diffusion systems and agent based models.
+authors:
+  - cameron-michie
+commentable: false
+image:
+  placement: 2
+  caption: "./spatialEcology/mamoc2a4.png"
+---
+
+{{<figure src="./spatialEcology/mamoc2a4.png" >}}
+
+## Abstract
+
+This study focuses on two methods of computationally modelling systems of many interacting particles of two species. The first method is the general idea of reaction-diffusion systems, which are mathematical differential constructs that describe how spatial and temporal patterns can emerge from the interactions between mathematical species and their environment. Also considered are agent based models, which instead only use hyper-local information and do not rely on macroscopic differential equations at all. In particular, the predator prey system is considered from both perspectives. By coupling local interaction rules with movement, these models elucidate the dynamics of population spread, predator-prey relationships, and the emergence of patterns in ecosystems.
+
+## Introduction to reaction-diffusion systems
+
+Theoretical ecology is a mathematical framework for understanding how the interactions of individual organisms with each other and with the environment determine the distribution of populations and the structure of communities. Many different models are needed, each based on some set of hypotheses about the scale and structure of the spatial environment and the way that organisms disperse through it. When many agents interact in simple ways, sometimes emergent properties can be observed in their collective, such as the propagation of wavefronts or the formation of patterns. These patterns are glimpses of structure from chaos, and have prompted countless minds to become fascinated by the connections between maths and biology.
+
+Reaction-diffusion models are a way of translating the simple assumptions about ways agents can move and interact on the local level into global conclusions about the persistence or extinction of populations and the coexistence of interacting species. Born from the macroscopic observations of molecular diffusion, reaction-diffusion models now more widely refer to any event-driven system of interacting moving agents, and occur and many different scales.
+
+In biology, the great success of reaction-diffusion mathematics is the Turing model, which describes how homogeneous groups of cells in an embryo can spontaneously differentiate into patterns, like the spots and stripes on animal skins [[1]].
+
+{{<figure src="./spatialEcology/turingfishandpattern.png" caption="On the left, a computationally generated Turing pattern. On the right, an example of Turing patterns found organically in nature, on the beautiful patterns on the skin of fish. Photo credit: Dennis Jacobsen/Shutterstock" numbered="true" >}}
+
+
+In chemistry, the Belousov-Zhabotinsky chemical reaction is an incredible display of dispersive concentric patterns. Further examples are as distributed as econometric information diffusion and as grievous as modelling the spread of forest fires. 
+
+{{< youtube 6QESEa-00a0 >}}
+<br>
+These systems are linked, and the outcomes we see from their patterns are directly caused by similarities in the form of the differential equations which govern their spatio-temporal evolution. They share the two species reaction diffusion equations, which are given by
+
+$$
+\begin{pmatrix} \dot q_{1} \\\ \dot q_{2} \end{pmatrix} =
+\begin{pmatrix} D_{1} \\\ D_{2}  \end{pmatrix} \cdot
+\nabla^{2} \begin{pmatrix}q_{1} \\\ q_{2}  \end{pmatrix} + 
+\begin{pmatrix} R_{1}(q_{1}, q_{2}) \\\  R_{2}(q_{1}, q_{2}) \end{pmatrix},$$
+
+where $q_{1,2}$ describes the concentration of either species, $D_{1,2}$ their diffusion coefficients, and $R_{1,2}(q_{1}, q_{2})$ are functions representing the agent's interactive and local behaviour. Decomposing the equation, the first term on the right hand side can be recognised as Fick’s second law of diffusion, $ \dot q = D \nabla^{2} q$ for a concentration $q$ [[2]].  
+
+The dynamics of our model is specified by the rates at which individuals move and die or reproduce. As such, a good place to start is to consider the local mechanics of our agent movement and reactions, supposing that agents may only move to a randomly chosen nearest neighbour of their location, and reproduce or die at rates which depend on the number of individuals at the same location. Using some simplifying assumptions along the way, there are creative ways to derive the reaction term, which is usually, hopefully, linear in $q_{1,2}$. Often, however, we are not so lucky. Spatial models often unavoidably invite non-linear terms, resulting in chaotic long-term behaviour.
+
+## Lotka-Volterra equations.
+
+### Without spatial dependence.
+
+This example, the Lotka-Volterra equations, are a model for the population dynamics of a predator species and a prey species, perhaps foxes and rabbits, and is a convinient way to explore how reaction terms work. Choosing to completely ignore spatial dimensions, the mean field assumption can be adopted: that all agents interact with the average effect of all others. Letting $ x_1(t) $ denote the prey population and $x_2(t) $ denote the predator population at time $t $,
+
+$$ 
+\dot x_1 = \alpha x_1 - \beta x_1 x_2,$$
+$$\dot x_2 = \delta x_1 x_2 - \gamma x_2.
+$$
+- $ \alpha $ is the natural birth rate of the prey in the absence of predators.
+
+- $ \beta $ is the death rate of the prey due to predation.
+
+- $ \gamma $ is the natural death rate of the predators in the absence of prey.
+
+- $\delta $ is the rate at which predators increase by consuming prey.
+
+Reading off from the general form of reaction-diffusion equations, $D_1$ and $D_2$ have been set to zero, and the remaining terms are the reactive terms $R_{1,2}(q_{1}, q_{2})$. Below, linear stability analysis is used with the method outlined by Strogatz [[3] pp.151-152]. Firstly, the steady states of this system of differential equations are found by setting the time derivatives to zero. The trivial solution $x_1 = x_2 = 0$ indicates mutual extinction, but otherwise, solving for constants, we get ${x_1, x_2} = {\gamma / \delta, \alpha / \beta}$. Secondarily, to analyse the stability of these steady state solutions, our set of differential equations are linearised so that we have
+
+$$J = \begin{pmatrix} \frac{\partial f_1}{\partial x_1} & \frac{\partial f_1}{\partial x_2} \\\
+ \frac{\partial f_2}{\partial x_1} & \frac{\partial f_2}{\partial x_2} \end{pmatrix} = \begin{pmatrix} \alpha - \beta x_2 & -\beta x_1 \\\
+ \delta x_2 & \delta x_1 - \gamma \end{pmatrix}  = \begin{pmatrix} 0 & -\beta \frac{\gamma}{\delta} \\\
+  \delta \frac{\alpha}{\beta} & 0 \end{pmatrix}.$$
+
+The trivial solution has eigenvalues $\alpha$ and $-\gamma$, indicating a saddle point [[3], p.130]. This is good, because saddle points are unstable, meaning the model does not predict spiralling uncontrollably towards extinction. The other matrix has eigenvalues $+i \sqrt{\alpha \gamma}$ and $- i \sqrt{\alpha \gamma}$, which indicates periodic trigonometric-esque solutions.
+
+{{<figure src="./spatialEcology/LotkaVolterra.png" caption="These curves represent a typical periodic steady state solution to the Lotka-Volterra equations" numbered="true" >}}
+
+The model elegantly captures the core ideas: prey populations grow naturally but are eaten by predators, and predator populations decline without food but grow when they eat prey. That said, the model is limited, as it never predicts extinction for nonzero initial populations. A better model would include a notion of self competition in the individual populations, perhaps stemming from a fixed supply of food. Such a model would be self-limiting. A better model, 
+
+$$ 
+\dot x_1 = \alpha x_1 (1 - x_1 / \eta_{1}) - \beta x_1 x_2,$$
+$$\dot x_2 = \gamma x_2 (1 - x_2 / \eta_{2}) - \delta x_1 x_2
+$$
+
+introduces the notion of independent growth limitation on the individual populations $x_1$ and $x_2$ to
+the system through the Logistic model. The advantages is this allows one species to “win”, in addition to cases where both populations settle on fixed values. But there are limitations. The periodic/cyclic nature of the original Lotka-Volterra model is lost.
+
+{{<video library="1" src="./spatialEcology/LVselflimiting.mp4" controls="yes" >}}
+
+## Adding spatial dependence to the Lotka-Volterra model
+The main ingredient missing from these models is the absence of spatial dependence in the model. Further, there is reason to be concerned with the mean field assumption that we adopted before, which states that all agents interact with the average effect of all the others agents. In reality, agents exist in 2D space and can only interact with their immediate spatial neighbours, and the model should reflect this. 
+
+One option is to add in our our Fick’s law inspired diffusion terms, and so we define the spatial Lotka-Volterra equations
+
+$$\frac{\partial x_1}{\partial t} = \alpha x_1 - \beta x_1 x_2 + D_1 \nabla^2 x_1,$$
+
+$$\frac{\partial x_2}{\partial t} = \delta x_1 x_2 - \gamma x_2 + D_2 \nabla^2 x_2.$$
+
+This set of differential equations can be modelled computationally on a randomised initial population to show the progression of the reaction-diffusion system. We can use an Euler-esque method for executing this progression, by multiplying our differential equations by a timestep $dt$ to get a $dX$, and adding that to $X$ each iterative timestep $t$. 
+
+```python
+steps = 2000
+for t in range(steps):
+    # Lotka-Volterra equations with added diffusion Laplacians
+    laplacian_X1 = lapalcian(X1)
+    laplacian_X2 = lapalcian(X2)
+
+    dX1 = (alpha * X1 - beta * X1 * X2 + Dx * laplacian_X1) * dt
+    dX2 = (-gamma * X2 + delta * X1 * X2 + Dy * laplacian_X2) * dt
+
+    X1 += dX1
+    X2 += dX2
+```
+
+Animated, we get our first look at the emergent patterns of spatial ecology. The background is black, and the areas that are more green have a higher density of prey, and the areas that are more red have a higher density of predators. Both populations are initialised with a random uniform distribution. The population densities are continuous variables, and do not represent discrete population sizes, as much the general spatial flux of species densities. 
+
+{{<video library="1" src="./spatialEcology/LV1.mp4" caption="Reaction diffusion in action." controls="yes" >}}
+
+The patterns of dots and stripes that form and then disappear are reminiscent of Turing patterns, and in the appendix, we will consider whether these are Turing patterns, how they form, and why they also seem to disperse over time.
+
+## Agent based models for two species population dynamics.
+
+Spatial ecology can also be modelled computationally using agent-based models, and the benefit of this is that it did not assume the truth of a set of universal differential equations. As such, agent based models offer a completely different method for simulating systems of interacting particles by operating exclusively at the local level, with no macroscopic information shared to individual agents. Diffusion occurs via steps in random directions. Reactions occur based on only local information, such as if two interacting agents of the same species at the same place have enough energy to procreate. While these models are much closer approximations to real life, they still lack the macroscopic dynamics of flocking, herding, fleeing, or hunting. As such, it may make sense to imagine these agents as small groups of microorganisms, diffusing due to the random flow of Brownian motion, rather than intelligent autonomous animals.
+
+{{<video library="1" src="./spatialEcology/Example1.mp4" caption="..." controls="yes" >}}
+
+
+### Program overview
+
+The iterative time steps of my program is as simple as 
+
+```python
+TheGrid = ReactionDiffusionLibrary.Grid(gridxsize, gridysize)
+Prey = ReactionDiffusionLibrary.Species("Prey", Prey_E0, Prey_EP, Prey_N, TheGrid)
+Pred = ReactionDiffusionLibrary.Species("Predator", Pred_E0, Pred_EP, Pred_N, TheGrid)
+
+steps = 2000
+for step in range(steps):
+    Prey.Move()
+    Pred.Move()
+    TheGrid.Interact(Prey, Pred)
+```
+where the Prey, Pred, and TheGrid instances are C# classes incorporated into the python script using pythonnet clr. The two main mechanisms of reaction-diffusion are contained in the ``Move`` method and the ``Interact`` method. Here is ``Move``,
+
+```c#
+public void Move()
+    {
+        List<double[]> SpeciesCoords = new List<double[]>(AgentsList.Count);
+        Random random = new Random();
+
+        for (int i = 0; i < AgentsList.Count; i++)
+        {
+            // Move this agent to a random nearest neighbour square
+            var agent = AgentsList[i];
+            int dirIndex = random.Next(0, 5);
+            agent.Move(Grid.Directions[dirIndex]);
+            SpeciesCoords.Add(new double[] {agent.X, agent.Y});
+            
+            // Keep track of what agents are in what squares
+            char yOrDCondition = PredOrPrey == "Prey" ? 'y' : 'd';
+            agent.AgentId = $"{yOrDCondition}{i}";
+            agent.AgentIndex = i; 
+
+            Grid.AgentsInGrid[(int)agent.X][(int)agent.Y].Add(agent.AgentId);
+        }
+        this.Grid.WriteAgentsInGridToFile();
+    }
+```
+
+Each iteration, the coordinates of all the agents in the species are rewritten based on their movement in a random direction, and this also helped with dealing with the non constant number of agents due to births and deaths.
+
+The one alteration I made to the program to make it not a strictly agent based model is the ``Dying`` boolean, which turns on when a species total number of agents dips below 1000 gridwide. This allowed agents to procreate on their own whenever the species has sufficiently low numbers rather than needing to randomly stumble upon another of their species on the grid. To justify this, we can imagine each dot as a small collection of microorganisms rather than an individual. 
+
+The ``Interact`` method iterates through each square in the grid, collecting pairs of agents. If two agents of the same species are in the same grid square, and they have above the minimum procreation energy, they will breed and produce another agent at that square. If a predator is in the same square as a prey, it will feed on the prey, killing it and absorbing its energy. 
+
+```c#
+    public void Interact(Species PreySpeciesObj, Species PredSpeciesObj)
+    {
+        int ySize = GridYSize;
+        int xSize = GridXSize;
+        // Check each Grid cell
+        for (int y_i = 0; y_i < ySize; y_i++)
+        {
+            for (int x_i = 0; x_i < xSize; x_i++)
+            {
+                List<string> agents = AgentsInGrid[y_i][x_i];
+                if (agents.Count == 0) continue;
+                
+                List<int> preys = new List<int>();
+                List<int> preds = new List<int>();
+
+                // Check each agent in a Grid cell, and sort into species
+                foreach (string agentStr in agents)
+                {
+                    if (agentStr.StartsWith('y')) preys.Add(int.Parse(agentStr.Substring(1)));
+                    if (agentStr.StartsWith('d')) preds.Add(int.Parse(agentStr.Substring(1)));
+                }
+
+                // Predators breed and feed on prey
+                Procreate(preds, PredSpeciesObj);
+                for (int i = 0; i < preds.Count; i++)
+                {
+                    if (i < preys.Count)
+                    {
+                        Agent predator = PredSpeciesObj.AgentsList[preds[i]];
+                        Agent food = PreySpeciesObj.AgentsList[preys[i]];
+                        predator.Energy += food.Energy;
+                        food.AddToDeathList();
+                    }
+                }
+
+                // Preys breed
+                Procreate(preys, PreySpeciesObj);
+            }
+        }
+        // At the end of the turn, make babies into adults and handle deaths
+        PreySpeciesObj.NewDay();
+        PredSpeciesObj.NewDay();
+        ClearAgentsInGrid();
+    }
+```
+
+### Design considerations
+
+##### Energy
+Prey generate energy stochastically but passively, and will do so as long as they are not eaten. Predators can only generate energy by feeding on prey. Energy on average is gained rather than lost throughout the simulation. However, existing in the same gridsquare as another agent of your own species incurs an energy cost directly proportional to the number of agents there. For example, if $40$ agents occupy the same gridspace, they will each suffer an energy cost of $40$ energy that iteration. This is meant to replicate an energy cost due to limited food supply at any one area, and makes the populations display self-limiting behaviour. 
+
+##### Procreation
+To procreate, agents must bump into each other on the same gridspace, and if both parents have above a minium energetic threshold, they will procreate and suffer an energy cost. There is no limitation on procreating with your own offspring. To avoid extinction in my simulations
+
+##### Death
+Agents can die in two ways, running out of energy or being eaten. In this model, only prey may be eaten. While prey passively generate energy, they may still die from running out of energy if they live too long in areas with a high density of prey. Predators more usually die from running out of energy, by not eating enough prey.
+
+### Learnings from animating the agent based model
+
+The results are different from the Lotka-Volterra animation. Instead of smoothly fading between areas of high prey density and high predator density, we see vast areas of blank space. But still, some similar emergent properties can be seen, in particular the collections of agents evolving in wavefronts. 
+
+Explosive pockets of mass generations of new agents can be seen, but why do they occur? The spatial and energetic restrictions on when procreation can occur impede local procreation rates, which can lead to huge gains in average agent energy. If enough energy is stored up and a species begins to bump into itself, a chain reaction of procreation is set-off. The limiting factor of this is usually the rate of diffusion, which leads to most agents in the chain reaction dying due to the energy cost of occupying the same gridsquare as many others before they can move away to safer areas.
+
+{{<video library="1" src="./spatialEcology/Example2.mp4" caption="..." controls="yes" >}}
+
+Expanding the size of the grid, the emergence of wavefronts becomes more obvious. We can begin to see expanding florets of prey, chased down by a secondary wave of predators. These expanding wavefronts sometimes stochastically form similar concentric strucures to the patterns formed by the Belousov-Zhabotinsky chemical reaction.
+
+Each time the model is run, different patterns are generated. A glance at the population curves below for a selection of runs shows that in the early stages the curves appear self-similar. The long term behaviour is more unpredictable, and includes large spikes when the species has amassed a high energy and begins to collide into itself, provoking an uncontrolled chain reaction of procreation.
+
+{{<figure src="./spatialEcology/PopulationCurves.png" caption="An overview of the population curves for nine runs of the agent based model. As throughout, the green line represents the prey population and red represents the predator population" numbered="true" >}}
+
+# Conclusion
+
+Two models were examined in this article. [Feel free to check out my github.](https://github.com/cameron-michie/ReactionDiffusion).
+
+The agent based model was the most enjoyable, the most challenging, and took the most time. For performance reasons, the backend had to be rewritten in C#, but this was a fun challenge. The main interface and graphing remained in python. This model could easily be used for further research or study. For instance, agent based models have recently become hugely important in predicting the mature structure of bacterial biofilms, particularly to mirror how biofilms react to stimuli in lab scenarios.
+
+# Appendix 
+**Derivation of how Turing patterns form and why they disperse in the spatial Lotka Volterra equations**
+
+Patterns seem to form in the spatial Lotka reaction-diffusion simulation for predators and prey in a 2D grid. These patterns seem similar to Turing patterns commonly seen in nature. The equations I have called the spatial Lotka-Volterra equations were formed by adding in diffusive Laplacian terms to the classic Lotka-Volterra equations.
+
+$$\frac{\partial x_1}{\partial t} = \alpha x_1 - \beta x_1 x_2 + D_1 \nabla^2 x_1 $$
+
+$$\frac{\partial x_2}{\partial t} = \delta x_1 x_2 - \gamma x_2 + D_2 \nabla^2 x_2 $$
+
+To prove that the given system of equations produces Turing patterns [[4]], we need to perform a linear stability analysis around a homogeneous steady state solution, and look for conditions under which perturbations grow in a spatially inhomogeneous way. We will follow the method here [[5]]. First, let's find the homogeneous steady state $(x_1^{\*}, x_2^{\*})$ for a spatially uniform state by setting 
+
+$$ \frac{\partial x_1}{\partial t} = \frac{\partial x_2}{\partial t} = 0, \nabla^2 x_1 = \nabla^2 x_2 = 0.$$
+
+Subbing this into the above spatial Lotka Volterras, we get
+$$
+0 = \alpha x_1^\* - \beta x_1^\* x_2^\*,$$
+$$0 = \delta x_1^\* x_2^\* - \gamma x_2^\*.
+$$
+
+Solving for $ x_1^{\*} $ and $ x_2^{\*} $,
+$ x_2^{\*} = \frac{\alpha}{\beta}$ and 
+$ x_1^\* = \frac{\gamma}{\delta x_2^{\*}} = \frac{\gamma \beta}{\alpha \delta}$
+
+Next, we linearize the system around the steady state by letting $ x_1 = x_1^\* + u $ and $ x_2 = x_2^\* + v $, where $ u $ and $ v $ are small perturbations. We then substitute these into our system and keep only linear terms in $ u $ and $ v $. After linearization, the system becomes:
+$$
+\partial_t u = \alpha u - \beta (x_1^\* v + x_2^\* u) + D_1 \nabla^2 u$$
+$$
+\partial_t v = \delta (x_1^\* v + x_2^\* u) - \gamma v + D_2 \nabla^2 v
+$$
+
+Substituting the steady-state values and simplifying we get
+$$
+\partial_t u = (\alpha - \beta x_2^\*) u - \beta x_1^\* v + D_1 \nabla^2 uu = - \frac{\beta \gamma}{\delta} v + D_1 \nabla^2 u $$
+$$\partial_t v = \delta x_2^* u + (\delta x_1^* - \gamma) v + D_2 \nabla^2 v = \delta x_2^* u + (\delta x_1^* - \gamma) v + D_2 \nabla^2 .$$
+
+
+So, we have our fully linearized system which we can write in matrix form as:
+
+$$
+\begin{pmatrix} \partial_t u, \\\
+\partial_t v \end{pmatrix} =\begin{pmatrix} D_1 \nabla^2 & -\frac{\beta \gamma}{\delta} \\\
+\frac{\alpha \delta}{\beta} & D_2 \nabla^2 - \gamma
+\end{pmatrix}
+\begin{pmatrix}
+u \\\
+v
+\end{pmatrix}
+$$
+
+Now we look for solutions in the form of $ e^{\lambda t + ik\cdot r} $, where $ \lambda $ is the growth rate of the perturbation, $ k $ is the wave number, and $ r $ is the position vector.
+
+We substitute this form into the linearized system and solve for $ \lambda $. The dispersion relation is obtained by setting the determinant of the matrix minus $ \lambda I $ to zero:
+
+$$
+\det
+\begin{pmatrix}
+D_1 k^2 - \lambda & -\frac{\beta \gamma}{\delta} \\\
+\frac{\alpha \delta}{\beta} & D_2 k^2 - \gamma - \lambda
+\end{pmatrix}
+= 0
+$$
+
+Solving the characteristic equation, we get:
+$$
+(D_1 k^2 - \lambda)(D_2 k^2 - \gamma - \lambda) - \left(-\frac{\beta \gamma}{\delta}\right)\left(\frac{\alpha \delta}{\beta}\right) = 0
+$$
+
+Expanding and simplifying gives us a quadratic equation in $\lambda $,
+$$
+\lambda^2 + \lambda(D_1 k^2 + D_2 k^2 - \gamma) + h(k^2) = 0.
+$$
+where $ h(k^2) = D_1 D_2 k^4 - \gamma D_1 k^2 - \alpha \gamma$.
+
+For Turing instability, we need [[6]]:
+- the homogeneous system to be stable without diffusion, which we proved in the linear stability analysis in the previous section,
+- and the diffusion terms to destabilize the homogeneous steady state, meaning the real part of $ \lambda $ must be positive for some range of $k^2$.
+
+And so, one way to find evidence of Turing instability would be to look for any sign change in the real part of $\lambda (k^2)$, which would indicate there exists a range of wavenumbers for which patterns will emerge.
+
+Instead, we will reason that if we have $h(k^2) < 0$ for some $k^2$, it must be true that $ \lambda(k^2)$ is positive for that same interval of $k^2$, because of the positive $\lambda$ coefficients in $\lambda^2 - \lambda(D_1 k^2 + D_2 k^2 - \gamma) + h(k^2) = 0.$ 
+
+Next, performing a quick change of variables $z = k^2$, 
+
+$$\frac{dh(z=k^2)}{dz}=2 D_1 D_2 z - \gamma D_1,$$
+
+we aim to find the stationary point so set $\frac{h(z^{\*})}{dz}$ to zero, and prove its minimum is negative. We get $z^{\*}=\frac{\gamma}{2 D_2}$, and plugging this into $h(z)$ gives a value for $h_{min}$ (since $h(z)$ is clearly concave),
+
+$$h_{min}(z^{\*}=\frac{\gamma}{2 D_2}) = \frac{D_1 D_2 \gamma^2}{4 D_2} - \frac{D_1 \gamma^2}{2 D_2} - \alpha \gamma = - \frac{D_1 \gamma^2}{D_2} - \alpha \gamma$$
+
+Since $ \alpha, \gamma, D_1, D_2 $ are necessarily $>0$, we have proved that for $h(k^2)$ is necessarily negative for some range of $k^2$, and that $\lambda $ is positive for that same range of $k^2$. Why this leads to Turing instabilities is explained in more detail here [[6]].
+
+
+
+## References
+[1]: <https://royalsocietypublishing.org/doi/10.1098/rstb.1952.0012> "Turing, A. “The Chemical Basis of Morphogenesis.” Bulletin of Mathematical Biology, vol. 52, no. 1–2, Jan. 1990, pp. 153–97."
+[2]: <https://en.wikipedia.org/wiki/Fick%27s_laws_of_diffusion#Fick's_second_law> "Wikipedia Contributors. “Fick’s Laws of Diffusion.” Wikipedia, Wikimedia Foundation, 14 Nov. 2023, en.wikipedia.org/wiki/Fick%27s_laws_of_diffusion#Fick. Accessed 18 Nov. 2023."
+
+[3]: <https://www.biodyn.ro/course/literatura/Nonlinear_Dynamics_and_Chaos_2018_Steven_H._Strogatz.pdf> "Strogatz, Steven, author. Nonlinear Dynamics and Chaos : with Applications to Physics, Biology, Chemistry, and Engineering. Boulder, CO :Westview Press, a member of the Perseus Books Group, 2015."
+[4]: <http://be150.caltech.edu/2019/handouts/21_turing.html#:~:text=21_turing.%20Reaction,is%20a%20stable> "Bois, J and Elowitz, M (2019) 'Turing patterns' CalTech"
+[5]: <https://link.springer.com/chapter/10.1007/978-3-319-19500-1_7#:~:text=In%20his%20seminal%20paper%2C%20A,also%20called%20%E2%80%98diffusion%20driven%20instabilities%E2%80%99> "Perthame, B. 2015. Linear Instability, Turing Instability and Pattern Formation. Lecture Notes on Mathematical Modelling in the Life Sciences, pp. 117–143. Available at: http://dx.doi.org/10.1007/978-3-319-19500-1_7."
+
+[6]: <Haas, P.A. and Goldstein, R.E., 2021. Turing’s diffusive threshold in random reaction-diffusion systems. Physical Review Letters, 126(23), p.238101.> "https://www.condmatjclub.org/uploads/2021/01/JCCM_January_2021_01.pdf"
+
+1. [Turing, A. “The Chemical Basis of Morphogenesis.” Bulletin of Mathematical Biology, vol. 52, no. 1–2, Jan. 1990, pp. 153–97.](https://royalsocietypublishing.org/doi/10.1098/rstb.1952.0012)
+2. [Wikipedia Contributors. “Fick’s Laws of Diffusion.” Wikipedia, Wikimedia Foundation, 14 Nov. 2023, en.wikipedia.org/wiki/Fick%27s_laws_of_diffusion#Fick. Accessed 18 Nov. 2023.](https://en.wikipedia.org/wiki/Fick%27s_laws_of_diffusion#Fick's_second_law)
+
+3. [Strogatz, Steven, author. Nonlinear Dynamics and Chaos : with Applications to Physics, Biology, Chemistry, and Engineering. Boulder, CO :Westview Press, a member of the Perseus Books Group, 2015.](https://www.biodyn.ro/course/literatura/Nonlinear_Dynamics_and_Chaos_2018_Steven_H._Strogatz.pdf)
+
+
+4. [Bois, J and Elowitz, M (2019) 'Turing patterns' CalTech](http://be150.caltech.edu/2019/handouts/21_turing.html#:~:text=21_turing.%20Reaction,is%20a%20stable)
+
+
+5. [Perthame, B. 2015. Linear Instability, Turing Instability and Pattern Formation. Lecture Notes on Mathematical Modelling in the Life Sciences, pp. 117–143.](https://link.springer.com/chapter/10.1007/978-3-319-19500-1_7#:~:text=In%20his%20seminal%20paper%2C%20A,also%20called%20%E2%80%98diffusion%20driven%20instabilities%E2%80%99)
+
+6. [Haas, P.A. and Goldstein, R.E., 2021. Turing’s diffusive threshold in random reaction-diffusion systems. Physical Review Letters, 126(23), p.238101.](https://www.condmatjclub.org/uploads/2021/01/JCCM_January_2021_01.pdf)

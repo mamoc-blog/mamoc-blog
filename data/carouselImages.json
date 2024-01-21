@@ -3,14 +3,14 @@
     "src": "/carousel/cam_new-blog_1.png",
     "author": "cam",
     "blogPostTitle": "new blog",
-    "blogPostUrl": "/posts/new-blog.mdx",
+    "blogPostUrl": "/posts/new-blog",
     "imageNumber": "1"
   },
   {
     "src": "/carousel/cam_new-blog_2.png",
     "author": "cam",
     "blogPostTitle": "new blog",
-    "blogPostUrl": "/posts/new-blog.mdx",
+    "blogPostUrl": "/posts/new-blog",
     "imageNumber": "2"
   }
 ]
