@@ -3,7 +3,7 @@ import { getAllPostIds, getPostData } from '../../lib/posts';
 import Head from 'next/head';
 import Date from '../../components/date';
 import utilStyles from '../../styles/utils.module.css';
-import dynamic from 'next/dynamic';
+import { serialize } from 'next-mdx-remote/serialize'
 
 export default function Post({ postData }) {
   return (
@@ -30,9 +30,10 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   const postData = await getPostData(params.id);
+  const mdxSerialized = await serialize(postData)
   return {
     props: {
-      postData,
+      mdxSerialized,
     },
   };
 }
