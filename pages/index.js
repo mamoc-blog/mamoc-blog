@@ -46,7 +46,7 @@ export default function Home({ allPostsData, carouselProps }) {
             <div className={utilStyles2.blogLeft}>
               Cameron Michie
               <ul className={utilStyles.list}>
-                {allPostsData.filter(post => post.author === 'cam').map(({ id, date, title }) => (
+                {allPostsData.filter(post => post.author === 'Cameron Michie').map(({ id, date, title }) => (
                   <li className={utilStyles.listItem} key={id}>
                     <Link href={`/posts/${id}`}>{title}</Link>
                     <br />
@@ -60,7 +60,7 @@ export default function Home({ allPostsData, carouselProps }) {
             <div className={utilStyles2.blogRight}>
               Alex Cheetham
               <ul className={utilStyles.list}>
-                {allPostsData.filter(post => post.author === 'alex').map(({ id, date, title }) => (
+                {allPostsData.filter(post => post.author === 'Alex Cheetham').map(({ id, date, title }) => (
                   <li className={utilStyles.listItem} key={id}>
                     <Link href={`/posts/${id}`}>{title}</Link>
                     <br />

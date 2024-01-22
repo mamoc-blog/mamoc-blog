@@ -4,6 +4,9 @@ import Head from 'next/head';
 import Date from '../../components/date';
 import utilStyles from '../../styles/utils.module.css';
 import dynamic from 'next/dynamic';
+import 'katex/dist/katex.min.css'
+import { MDXRemote } from 'next-mdx-remote';
+
 
 export default function Post({ postData }) {
   return (
@@ -11,12 +14,14 @@ export default function Post({ postData }) {
       <Head>
         <title>{postData.title}</title>
       </Head>
+      <article>
         <h1 className={utilStyles.headingXl}>{postData.title}</h1>
         <div className={utilStyles.lightText}>
           <Date dateString={postData.date} />
         </div>
-        <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
-    </Layout>
+        <MDXRemote {...postData.mdxSource}/>
+      </article>
+   </Layout>
   );
 }
 
