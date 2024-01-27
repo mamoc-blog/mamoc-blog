@@ -51,3 +51,34 @@
   color: #666;
 }
 
+
+.postMetadata {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.authorContainer {
+  display: flex;
+  align-items: center;
+}
+
+.authorName {
+  margin-left: 10px;
+}
+
+.summarySection {
+  background-color: #f0f2f5;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.postImageContainer {
+  margin: 20px 0;
+}
+
+.postContent {
+  margin-top: 20px;
+}

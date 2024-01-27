@@ -8,7 +8,7 @@ import { SettingsProvider } from '../Theme';
 import {DarkModeToggle} from '../DarkModeToggle';
 
 const name = '';
-export const siteTitle = 'MAMOC';
+export const siteTitle = 'mamoc-blog';
 
 export default function Layout({ children, home }) {
   return  (
@@ -22,28 +22,14 @@ export default function Layout({ children, home }) {
             <div className={styles.layoutContainer}>
               <div className={styles.centeredComponents}>
                 <div className={styles.component}>
-                  <Image
-                    priority
-                    src="/images/cam.png"
-                    className={utilStyles.borderCircle}
-                    height={75}
-                    width={75}
-                    alt={name}
-                  />
+                  
                 </div>
                 <div className={styles.component}>
-                  <Image
-                    priority
-                    src="/images/alex.png"
-                    className={utilStyles.borderCircle}
-                    height={75}
-                    width={75}
-                    alt={name}
-                  />
+                 
                 </div>
               </div>
-              <div className={styles.before}>
-              <h2>mamoc</h2>
+              <div className={styles.title}>
+                <h1>mamoc</h1>
               </div>
               <div>
                 <DarkModeToggle/>

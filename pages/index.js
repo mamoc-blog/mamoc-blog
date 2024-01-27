@@ -41,24 +41,27 @@ export default function Home({ allPostsData, carouselProps }) {
         </div>
       </section>
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
-        <h2 className={utilStyles.headingLg}>Blog</h2>
           <div className={utilStyles2.blogContainer}>
             <div className={utilStyles2.blogLeft}>
-              Cameron Michie
+            <h2 className={utilStyles.headingLg}>Cameron Michie</h2>
               <ul className={utilStyles.list}>
-                {allPostsData.filter(post => post.author === 'Cameron Michie').map(({ id, date, title }) => (
+                {allPostsData.filter(post => post.author === 'Cameron Michie').map(({ id, date, title, summary, imageSrc }) => (
                   <li className={utilStyles.listItem} key={id}>
                     <Link href={`/posts/${id}`}>{title}</Link>
                     <br />
                     <small className={utilStyles.lightText}>
                       <Date dateString={date} />
                     </small>
+                    <br/>
+                    <small className={utilStyles.socials}>
+                      {summary}
+                    </small>
                   </li>
                 ))}
               </ul>
             </div>
             <div className={utilStyles2.blogRight}>
-              Alex Cheetham
+            <h2 className={utilStyles.headingLg}>Alex Cheetham</h2>
               <ul className={utilStyles.list}>
                 {allPostsData.filter(post => post.author === 'Alex Cheetham').map(({ id, date, title }) => (
                   <li className={utilStyles.listItem} key={id}>

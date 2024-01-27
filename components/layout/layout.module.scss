@@ -26,6 +26,10 @@
   
 } 
 
+.h1 {
+  // font-size: 4rem;
+}
+
 .content {
   display: flex;
   align-items: center;
@@ -44,8 +48,8 @@
   align-items: center;
   width: 100%; // Adjust for a smaller width
   margin: auto; // Center the container
-  padding: 10px; // Add some padding inside the box
-  border: 2px solid #ccc; // Add a border
+  padding: 5px; // Add some padding inside the box
+  // border: 2px solid #ccc; // Add a border
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // Optional: add a subtle shadow
   position: relative;
   box-sizing: border-box; // Include padding and border in the width
@@ -70,7 +74,7 @@
   h2 {
     font-size: 5rem;
     color: rgba(0, 0, 0, 0.9);
-    filter: blur(2px);
+    // filter: blur(2px);
     // animation: fadeInOut 8s ease-in-out infinite;
     // text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 

@@ -12,5 +12,12 @@
     "blogPostTitle": "new blog",
     "blogPostUrl": "/posts/new-blog",
     "imageNumber": "2"
+  },
+  {
+    "src": "/carousel/cam_spatial-ecology_1.png",
+    "author": "cam",
+    "blogPostTitle": "spatial ecology",
+    "blogPostUrl": "/posts/spatial-ecology",
+    "imageNumber": "1"
   }
 ]
