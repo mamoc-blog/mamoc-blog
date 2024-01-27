@@ -1,0 +1,66 @@
+.tableOfContents {
+    margin-bottom: 20px;
+  }
+  
+  .collapseButton {
+    margin: 10px 0;
+    cursor: pointer;
+  }
+  
+  .heading1 {
+    scroll-margin-top: 100px; 
+  }
+  
+  .heading2 {
+    scroll-margin-top: 100px;
+  }
+  
+  .heading3 {
+    scroll-margin-top: 100px;
+  }
+  
+  /* Add styles for ToC list items based on their level */
+  .h1, .h2, .h3 {
+    margin-left: 0;
+  }
+  
+  .h2 {
+    margin-left: 10px;
+  }
+  
+  .h3 {
+    margin-left: 20px;
+  }
+  
+
+.postMetadata {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .authorContainer {
+    display: flex;
+    align-items: center;
+  }
+  
+  .authorName {
+    margin-left: 10px;
+  }
+  
+  .summarySection {
+    background-color: #f0f2f5;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .postImageContainer {
+    margin: 20px 0;
+  }
+  
+  .postContent {
+    margin-top: 20px;
+  }
+  
