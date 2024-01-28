@@ -8,6 +8,7 @@ body {
   font-family: "Fira Code", monospace;
   background: var(--color-white);
   color: var(--color-black);
+  font-size: clamp(14px, 2vw, 16px);
 }
 
 :root {
@@ -133,6 +134,12 @@ body {
   --spacing-l: #{$spacing-large};
   --spacing-xl: #{$spacing-x-large};
   --spacing-xxl: #{$spacing-2x-large};
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 80%; /* Reduce font size to 90% of its original size */
+  }
 }
 
 .dark {

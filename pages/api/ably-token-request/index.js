@@ -4,7 +4,7 @@ export default async function (req, res) {
     if (req.method === 'POST') {
         const ably = new Ably.Rest( process.env.ABLY_API_KEY );
         const tokenRequestData = await ably.auth.createTokenRequest({ clientId: 'tester-client-id' });
-
+        console.log("Ably token requested");
         res.status(200).json(tokenRequestData);
     } else {
         // Handle any other HTTP method

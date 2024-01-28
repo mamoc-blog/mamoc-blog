@@ -1,0 +1,112 @@
+
+.tableOfContents {
+    flex:1;
+  }
+  
+  .collapseButton {
+    margin: 10px 0;
+    cursor: pointer;
+  }
+  
+  .heading1 {
+    scroll-margin-top: 100px; 
+  }
+  
+  .heading2 {
+    scroll-margin-top: 100px;
+  }
+  
+  .heading3 {
+    scroll-margin-top: 100px;
+  }
+  
+  /* Add styles for ToC list items based on their level */
+  .h1, .h2, .h3 {
+    margin-left: 0;
+  }
+  
+  .h2 {
+    margin-left: 10px;
+  }
+  
+  .h3 {
+    margin-left: 20px;
+  }
+  
+
+.postMetadata {
+    flex: 1;
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  
+  .authorContainer {
+    display: flex;
+    align-items: center;
+    align-items: flex-end;
+    padding-right: 1rem;
+  }
+  
+  .authorName {
+    color: var(--color-primary);
+  }
+  
+  .summarySection {
+    background-color: var(--color-gray-vvvlight);
+    padding: 15px;
+    border-radius: 8px;
+    // flex: 1;
+    margin-bottom: 20px;
+  }
+  .dark .summarySection {
+    background-color: #333; // Example dark mode background color
+    // Define other dark mode styles as needed
+  }
+  .postImageContainer {
+    display:flex;
+    justify-content: center;
+    // padding-left: 30%;
+  }
+  
+  .postContent {
+    margin-top: 50px;
+    padding-left: 10%;
+    padding-right: 10%;
+    
+    @media (max-width: 1000px) {
+      body {
+        padding-right: 0%;
+      }
+    }
+  }
+  @media (max-width: 768px) {
+    .postContent {
+      padding-right: 0; /* Overrides the default padding for screens smaller than 768px */
+    }
+  }
+  
+  .contentRow {
+    display: flex; // Enables Flexbox
+    justify-content: space-between; // Spreads the child divs to occupy the full width
+    align-items: flex-start; // Aligns items at the start of the cross axis, keeping them at the top
+    gap: 20px; // Adjust the gap between the children
+  
+    // Optional: Use media queries for responsive design if necessary
+    @media (max-width: 768px) {
+      flex-direction: column; // Stacks items vertically on smaller screens
+    }
+  }
+  
+  .summarySection {
+    flex: 1; 
+  }
+  
+  .postImageContainer {
+    height: 100%; /* Make the image fill the container height */
+    width: auto; /* Maintain aspect ratio */
+    object-fit: cover;
+    flex: 1;
+  }
+  

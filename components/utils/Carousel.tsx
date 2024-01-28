@@ -118,7 +118,7 @@ const _Carousel = ({
                 <Link href={blogUrl}>
                     <SquareContainer className={cs(style.square_container)}>
                       <CarouselFrame borderWidth={0} >
-                        <Image priority src={src} alt={blogTitles[idx]} height={500} width={500} />
+                        <Image priority src={src} alt={blogTitles[idx]} height={1000} width={1000} />
                       </CarouselFrame>
                     </SquareContainer>
                 </Link>

@@ -1,7 +1,7 @@
 import style from "./CarouselFrame.module.scss"
 import cs from "classnames"
 import { PropsWithChildren, useContext } from "react"
-import { SettingsContext } from "../Theme"
+import { SettingsContext } from "../utils/Theme"
 import React from "react"
 
 interface Props {
