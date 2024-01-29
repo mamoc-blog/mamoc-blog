@@ -1,21 +1,19 @@
 import Layout from '../../components/layout/layout';
+import Figure from '/components/frames/Figure';
+import ButtonTimer from '/components/interactive/ButtonTimer';
+import LotkaVolterra from '/components/interactive/LotkaVolterra';
 import { getAllPostIds, getPostData } from '../../lib/posts';
 import Head from 'next/head';
 import Date from '../../components/date';
 import utilStyles from '../../styles/utils.module.css';
-<<<<<<< Updated upstream
 import dynamic from 'next/dynamic';
 import 'katex/dist/katex.min.css'
 import { MDXRemote } from 'next-mdx-remote';
-
-
-export default function Post({ postData }) {
-=======
 import styles from '../../styles/post.module.scss';
 import {useState, useEffect} from 'react';
 import 'katex/dist/katex.min.css'
-import { MDXRemote } from 'next-mdx-remote';
 import Link from 'next/link';
+import Image from 'next/image';
 // import {CustomH1, CustomH2, CustomH3} from '../../components/mdx/customHN';
 // import your component
 
@@ -24,9 +22,10 @@ const components = {
   Image,
   Figure,
   ButtonTimer,
-
+  LotkaVolterra,
   // whatever component you want
 };
+
 export default function Post({ postData }) {
   const [toc, setToc] = useState([]);
 
@@ -35,7 +34,7 @@ export default function Post({ postData }) {
     const headings = Array.from(document.querySelectorAll('article h2, article h3, article h4, article h5, article h6'));
     const tocItems = headings.map((heading) => {
       const level = parseInt(heading.tagName.substring(1), 10); // Extract level number from tagName
-      const bars = '|'.repeat(level - 3); // Generate a string of '|' characters based on heading level
+      const bars = '|'.repeat(level - 2); // Generate a string of '|' characters based on heading level
   
       return {
         id: heading.id,
@@ -50,7 +49,7 @@ export default function Post({ postData }) {
   const linkedinUrl = postData.author.toLowerCase() === "cameron michie" ? "https://www.linkedin.com/in/cameron-michie/" : "https://www.linkedin.com/in/alexandercheetham/";
   const githubUrl = postData.author.toLowerCase() === "cameron michie" ? "https://github.com/cameron-michie" : "https://github.com/alexander-cheetham";
   const cvLink = "/"+(postData.author.toLowerCase() === "cameron michie" ? "cam" : "alex")+".pdf";
->>>>>>> Stashed changes
+
   return (
     <Layout>
       <Head>
@@ -58,10 +57,6 @@ export default function Post({ postData }) {
       </Head>
       <article>
         <h1 className={utilStyles.headingXl}>{postData.title}</h1>
-<<<<<<< Updated upstream
-        <div className={utilStyles.lightText}>
-          <Date dateString={postData.date} />
-=======
         <div className={styles.summarySection}>
           <div className={styles.contentRow}>
             <div className={styles.postMetadata}>
@@ -116,7 +111,6 @@ export default function Post({ postData }) {
           
 
           <div className={styles.tableOfContents}>
-            {/* Table of Contents */}
             {toc.map(item => (
               <div key={item.id}>
                 <a href={`#${item.id}`}>
@@ -138,9 +132,7 @@ export default function Post({ postData }) {
           </div>
         <div className={styles.postContent}>
           <MDXRemote {...postData.mdxSource} components={components}/>
->>>>>>> Stashed changes
         </div>
-        <MDXRemote {...postData.mdxSource}/>
       </article>
    </Layout>
   );

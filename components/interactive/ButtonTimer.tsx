@@ -2,7 +2,7 @@ import React from "react";
 import {useState, useEffect} from "react";
 import * as Ably from 'ably';
 import {AblyProvider} from "ably/react";
-import Game from "./Game";
+import DisplayImg from "./DisplayImg";
 
 function triggerAzureFunction() {
   const url = 'https://spatial-ecology-no-users.azurewebsites.net/api/GameRunner?code=c41DwAgrjEXGAGHV-yVeWvkKVLbH_S0SEDnrsOFg8M5JAzFu2AzDvw==';
@@ -28,7 +28,6 @@ const ButtonTimer = () => {
     const [count, setCount] = useState(0);
     const [isActive, setIsActive] = useState(false);
     const [client, setClient] = useState<InstanceType<typeof Ably.Realtime.Promise> | null>(null);
-
   
     useEffect(() => {
       let timer;
@@ -93,7 +92,7 @@ const ButtonTimer = () => {
           {client 
             ? (
               <AblyProvider client={client}>
-                <Game />
+                <DisplayImg />
               </AblyProvider>
             )
             : <img src={"/images/press-start.png"} className="bigger-image" />
@@ -102,4 +101,4 @@ const ButtonTimer = () => {
       </>
     );
   };
-export default ButtonTimer
+export default ButtonTimer;
