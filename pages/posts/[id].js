@@ -1,7 +1,6 @@
 import Layout from '../../components/layout/layout';
 import Figure from '/components/frames/Figure';
 import ButtonTimer from '/components/interactive/ButtonTimer';
-import LotkaVolterra from '/components/interactive/LotkaVolterra';
 import { getAllPostIds, getPostData } from '../../lib/posts';
 import Head from 'next/head';
 import Date from '../../components/date';
@@ -16,7 +15,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 // import {CustomH1, CustomH2, CustomH3} from '../../components/mdx/customHN';
 // import your component
-
+const LotkaVolterra = dynamic(() => import('/components/interactive/LotkaVolterra'), {
+  ssr: false, 
+});
 
 const components = {
   Image,

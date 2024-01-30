@@ -1,13 +1,9 @@
 ---
 title: The Spatial Ecology of Predator-Prey Systems.
 date: '2023-11-18'
-math: true
 summary: The emergent properties of predator prey systems, analysed computationally through reaction-diffusion systems and agent based models.
 author: "Cameron Michie"
-commentable: false
-image:
-  placement: 2
-  caption: "./spatialEcology/mamoc2a4.png"
+imageSrc: "/posts/spatial-ecology/featured.png"
 ---
 
 ## Abstract
@@ -15,13 +11,6 @@ image:
 This study focuses on two methods of computationally modelling systems of many interacting particles of two species. The first method is the general idea of reaction-diffusion systems, which are mathematical differential constructs that describe how spatial and temporal patterns can emerge from the interactions between mathematical species and their environment. Also considered are agent based models, which instead only use hyper-local information and do not rely on macroscopic differential equations at all. In particular, the predator prey system is considered from both perspectives. By coupling local interaction rules with movement, these models elucidate the dynamics of population spread, predator-prey relationships, and the emergence of patterns in ecosystems.
 
 ## Introduction to reaction-diffusion systems
-=======
-### Abstract 
-
-This study focuses on two methods of computationally modelling systems of many interacting particles of two species. The first method is the general idea of reaction-diffusion systems, which are mathematical differential constructs that describe how spatial and temporal patterns can emerge from the interactions between mathematical species and their environment. Also considered are agent based models, which instead only use hyper-local information and do not rely on macroscopic differential equations at all. In particular, the predator prey system is considered from both perspectives. By coupling local interaction rules with movement, these models elucidate the dynamics of population spread, predator-prey relationships, and the emergence of patterns in ecosystems.
-
-### Introduction to reaction-diffusion systems
->>>>>>> Stashed changes
 
 Theoretical ecology is a mathematical framework for understanding how the interactions of individual organisms with each other and with the environment determine the distribution of populations and the structure of communities. Many different models are needed, each based on some set of hypotheses about the scale and structure of the spatial environment and the way that organisms disperse through it. When many agents interact in simple ways, sometimes emergent properties can be observed in their collective, such as the propagation of wavefronts or the formation of patterns. These patterns are glimpses of structure from chaos, and have prompted countless minds to become fascinated by the connections between maths and biology.
 
@@ -115,11 +104,11 @@ $$
 \dot x_1 = \alpha x_1 (1 - x_1 / \eta_{1}) - \beta x_1 x_2,
 $$
 $$
-\dot x_2 = \gamma x_2 (1 - x_2 / \eta_{2}) - \delta x_1 x_2
+\dot x_2 =  - \gamma * x_2 - \delta x_1 x_2
 $$
 
 introduces the notion of independent growth limitation on the individual populations $x_1$ and $x_2$ to
-the system through the Logistic model. The advantages is this allows one species to “win”, in addition to cases where both populations settle on fixed values. But there are limitations. The periodic/cyclic nature of the original Lotka-Volterra model is lost.
+the system through the Logistic model. The terms $\eta_1$ and $\eta_2$ represent the carrying capacities, a concept from ecology that refers to the maximum population size of a species that the environment can sustain indefinitely, given the food, habitat, water, and other necessities available in the environment. In mathematical models like this one, the carrying capacity limits the growth of a population by introducing a term that reduces the growth rate as the population size approaches the carrying capacity. The advantages is this allows one species to “win”, in addition to cases where both populations settle on fixed values. But there are limitations. The periodic/cyclic nature of the original Lotka-Volterra model is lost.
 
 
 #### Adding spatial dependence

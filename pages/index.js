@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import Layout, { siteTitle } from '../components/layout/layout';
+import styles from '../styles/post.module.scss';
 import utilStyles from '../styles/utils.module.css';
 import utilStyles2 from '../styles/utils2.module.scss';
 import { getSortedPostsData } from '../lib/posts';
@@ -40,9 +41,9 @@ export default function Home({ allPostsData, carouselProps }) {
         </div>
       </section>
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
-        <div className={utilStyles2.blogContainer}/>
+        <div className={utilStyles2.blogContainer}>
           <div className={utilStyles2.blogLeft}>
-          <h2 className={`${utilStyles.headingLg} ${styles.authorName}`}>Cameron Michie</h2>
+            <h2 className={`${utilStyles.headingLg} ${styles.authorName}`}>Cameron Michie</h2>
             <div className={styles.authorContainer}>
               <Link href='.'>
                 <Image
@@ -99,63 +100,65 @@ export default function Home({ allPostsData, carouselProps }) {
               ))}
             </ul>
           </div>
-          <div className={utilStyles2.blogRight}>
-            <h2 className={`${utilStyles.headingLg} ${styles.authorName}`}>Alex Cheetham</h2>
-            <div className={styles.authorContainer}>
-              <Link href='.'>
-                <Image
-                  priority
-                  src={"/images/alex.png"}
-                  height={50}
-                  width={50}
-                  alt={"Alex Cheetham"}
-                  className={utilStyles.borderCircle}
-                />
-              </Link>
-              <Link href={"https://github.com/alexander-cheetham"}>
-                <Image
-                  priority
-                  src={"/images/github.png"}
-                  height={50}
-                  width={50}
-                  alt={"Github"}
-                  className={utilStyles.borderCircle}
-                />
-              </Link>
-              <Link href={"https://www.linkedin.com/in/alexander-cheetham/"}>
-                <Image
-                  priority
-                  src={"/images/linkedin.png"}
-                  height={50}
-                  width={50}
-                  alt={"Linkedin"}
-                  className={utilStyles.borderCircle}
-                />
-              </Link>
-              <a href={"/cv/alex.pdf"}>
-                <Image
-                  priority
-                  src={"/images/cv.png"}
-                  height={50}
-                  width={50}
-                  alt={"CV"}
-                  className={utilStyles.borderCircle}
-                />
-              </a>
-            </div>
-          <ul className={utilStyles.list}>
-            {allPostsData.filter(post => post.author === 'Alex Cheetham').map(({ id, date, title, summary }) => (
-              <li className={utilStyles.listItem} key={id}>
-                <Link href={`/posts/${id}`}>{title}</Link>
-                <br />
-                <span>{summary}</span>
-                <small className={utilStyles.lightText}>
-                  <Date dateString={date} />
-                </small>
-                
-              </li>
-            ))}
-          </ul>
+          <div/>
+            <div className={utilStyles2.blogRight}>
+              <h2 className={`${utilStyles.headingLg} ${styles.authorName}`}>Alex Cheetham</h2>
+              <div className={styles.authorContainer}>
+                <Link href='.'>
+                  <Image
+                    priority
+                    src={"/images/alex.png"}
+                    height={50}
+                    width={50}
+                    alt={"Alex Cheetham"}
+                    className={utilStyles.borderCircle}
+                  />
+                </Link>
+                <Link href={"https://github.com/alexander-cheetham"}>
+                  <Image
+                    priority
+                    src={"/images/github.png"}
+                    height={50}
+                    width={50}
+                    alt={"Github"}
+                    className={utilStyles.borderCircle}
+                  />
+                </Link>
+                <Link href={"https://www.linkedin.com/in/alexander-cheetham/"}>
+                  <Image
+                    priority
+                    src={"/images/linkedin.png"}
+                    height={50}
+                    width={50}
+                    alt={"Linkedin"}
+                    className={utilStyles.borderCircle}
+                  />
+                </Link>
+                <a href={"/cv/alex.pdf"}>
+                  <Image
+                    priority
+                    src={"/images/cv.png"}
+                    height={50}
+                    width={50}
+                    alt={"CV"}
+                    className={utilStyles.borderCircle}
+                  />
+                </a>
+              </div>
+            <ul className={utilStyles.list}>
+              {allPostsData.filter(post => post.author === 'Alex Cheetham').map(({ id, date, title, summary }) => (
+                <li className={utilStyles.listItem} key={id}>
+                  <Link href={`/posts/${id}`}>{title}</Link>
+                  <br />
+                  <span>{summary}</span>
+                  <small className={utilStyles.lightText}>
+                    <Date dateString={date} />
+                  </small>
+                  
+                </li>
+              ))}
+            </ul>
+          </div> 
         </div>
       </section>
     </Layout>

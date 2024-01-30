@@ -12,6 +12,7 @@
     "@next/mdx": "^14.1.0",
     "@types/mdx": "^2.0.10",
     "ably": "^1.2.48",
+    "chartjs-plugin-zoom": "^2.0.1",
     "classnames": "^2.5.1",
     "date-fns": "^2.29.3",
     "gray-matter": "^4.0.3",
@@ -36,6 +37,7 @@
     "node": ">=18"
   },
   "devDependencies": {
+    "@types/chart.js": "^2.9.41",
     "@types/react": "^18.2.48"
   }
 }
