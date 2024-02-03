@@ -1,16 +1,30 @@
 [
   {
-    "src": "/carousel/cam_new-blog_1.png",
-    "author": "cam",
-    "blogPostTitle": "new blog",
-    "blogPostUrl": "/posts/new-blog",
-    "imageNumber": "1"
-  },
-  {
     "src": "/carousel/cam_spatial-ecology_1.png",
     "author": "cam",
     "blogPostTitle": "spatial ecology",
     "blogPostUrl": "/posts/spatial-ecology",
     "imageNumber": "1"
+  },
+  {
+    "src": "/carousel/cam_spatial-ecology_2.png",
+    "author": "cam",
+    "blogPostTitle": "spatial ecology",
+    "blogPostUrl": "/posts/spatial-ecology",
+    "imageNumber": "2"
+  },
+  {
+    "src": "/carousel/cam_spatial-ecology_3.png",
+    "author": "cam",
+    "blogPostTitle": "spatial ecology",
+    "blogPostUrl": "/posts/spatial-ecology",
+    "imageNumber": "3"
+  },
+  {
+    "src": "/carousel/cam_spatial-ecology_4.gif",
+    "author": "cam",
+    "blogPostTitle": "spatial ecology",
+    "blogPostUrl": "/posts/spatial-ecology",
+    "imageNumber": "4"
   }
 ]
