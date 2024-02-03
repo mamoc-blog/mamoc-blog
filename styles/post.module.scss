@@ -68,6 +68,15 @@
     display:flex;
     justify-content: center;
     // padding-left: 30%;
+    @media (min-width: 768px) { /* Adjust breakpoint as needed */
+      .postImageContainer {
+        width: 20rem; /* Fixed size for desktop */
+        height: 20rem; /* Fixed size for desktop */
+      }
+      .container { /* Adjust the div container class if it has one */
+        flexDirection: 'row'; /* Use row layout for desktop */
+      }
+    }
   }
   
   .postContent {

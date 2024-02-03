@@ -81,30 +81,35 @@ const RK4ReactionDiffusion = () => {
   return (
     
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-around', padding:'1rem' }}> {/* Adjust layout */}
-      <canvas
-        key={displayType}
-        className={styles.postImageContainer}
-        ref={canvasRef}
-        width="600"
-        height="600"
-        style={{ padding: '1rem' }}
-      />
-        <img src={imgSrc} className={styles.postImageContainer} width="600" height="600" style={{padding:"1rem"}}/>
-     </div>  
+      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-around', padding: '1rem', alignItems: 'center' }}> {/* Adjust layout for mobile first */}
+        <canvas
+          key={displayType}
+          className={styles.postImageContainer}
+          ref={canvasRef}
+          style={{ padding: '1rem', width: '100%', maxWidth: '20rem', height: 'auto', aspectRatio: '1 / 1' }} // Use percentage for width and auto for height to maintain aspect ratio, with a max-width for larger screens
+        />
+        <img
+          src={imgSrc}
+          className={styles.postImageContainer}
+          style={{ padding: '1rem', width: '100%', maxWidth: '20rem', height: 'auto' }} // Use percentage for width and auto for height to maintain aspect ratio, with a max-width for larger screens
+        />
+      </div>
       <div className={styles.summarySection}>
         <label>
           Alpha:
           <input type="range" min="0" max="2" step="0.01" value={parameters.alpha} onChange={(e) => handleParameterChange('alpha', e.target.value)} />
         </label>
+        <br></br>
         <label>
           Beta:
           <input type="range" min="0" max="2" step="0.01" value={parameters.beta} onChange={(e) => handleParameterChange('beta', e.target.value)} />
         </label>
+        <br></br>
         <label>
           Gamma:
           <input type="range" min="0" max="2" step="0.01" value={parameters.gamma} onChange={(e) => handleParameterChange('gamma', e.target.value)} />
         </label>
+        <br></br>
         <label>
           Delta:
           <input type="range" min="0" max="2" step="0.01" value={parameters.delta} onChange={(e) => handleParameterChange('delta', e.target.value)} />
@@ -114,6 +119,7 @@ const RK4ReactionDiffusion = () => {
           D1 (Diffusion x1):
           <input type="range" min="0" max="1" step="0.01" value={parameters.D1} onChange={(e) => handleParameterChange('D1', e.target.value)} />
         </label>
+        <br></br>
         <label>
           D2 (Diffusion x2):
           <input type="range" min="0" max="1" step="0.01" value={parameters.D2} onChange={(e) => handleParameterChange('D2', e.target.value)} />

@@ -23,8 +23,8 @@ const Figure = ({ src, caption, number }) => {
 
             <style>{`
                 figure {
-                    padding-left: 10rem;
-                    padding-right: 10rem;
+                    // padding-left: 10rem;
+                    // padding-right: 10rem;
                     margin: 20px 0;
                     text-align: center; /* Center the caption and images */
                 }
