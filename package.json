@@ -30,14 +30,14 @@
     "rehype-slug": "^6.0.0",
     "remark-gfm": "3.0.0",
     "remark-math": "5.1.1",
-    "remark-mdx": "^3.0.0",
-    "sass": "^1.70.0"
+    "remark-mdx": "^3.0.0"
   },
   "engines": {
     "node": ">=18"
   },
   "devDependencies": {
     "@types/chart.js": "^2.9.41",
-    "@types/react": "^18.2.48"
+    "@types/react": "^18.2.48",
+    "sass": "^1.70.0"
   }
 }

@@ -1,6 +1,7 @@
 import Layout from '../../components/layout/layout';
 import Figure from '/components/frames/Figure';
 import ButtonTimer from '/components/interactive/ButtonTimer';
+import RK4ReactionDiffusion from '/components/interactive/RK4ReactionDiffusion';
 import { getAllPostIds, getPostData } from '../../lib/posts';
 import Head from 'next/head';
 import Date from '../../components/date';
@@ -24,6 +25,7 @@ const components = {
   Figure,
   ButtonTimer,
   LotkaVolterra,
+  RK4ReactionDiffusion,
   // whatever component you want
 };
 

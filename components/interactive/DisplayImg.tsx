@@ -2,11 +2,14 @@ import React, {useState} from 'react';
 import { useChannel } from 'ably/react';
 import * as Ably from 'ably';
 
+
 export default function DisplayImg () {
     const [imageSrc, setImageSrc] = useState('');
+
     const {channel} = useChannel("spatial-ecology-game", (message: Ably.Types.Message) => {
       if (message.name == 'image-message') {
-        setImageSrc(message.data);
+        var img = message.data;
+        setImageSrc(img);
       }
     });
   
@@ -17,7 +20,7 @@ export default function DisplayImg () {
         <style>
           {`
             .bigger-image {
-              width: 700px;
+              width: 30rem;
               image-rendering: pixelated;
             }
           `}

@@ -71,6 +71,7 @@
   }
   
   .postContent {
+    font-size: 85%;
     margin-top: 50px;
     padding-left: 10%;
     padding-right: 10%;
@@ -81,7 +82,7 @@
       }
     }
   }
-  @media (max-width: 768px) {
+  @media (max-width: 1000px) {
     .postContent {
       padding-right: 0; /* Overrides the default padding for screens smaller than 768px */
     }

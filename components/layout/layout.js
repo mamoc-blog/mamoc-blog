@@ -13,7 +13,7 @@ export const siteTitle = 'MAMOC';
 
 export default function Layout({ children, home }) {
   const { darkTheme } = useSettingsContext();
-  const mamocImgSrc = "/images/mamoc-text" + (darkTheme ? "-dark" : "") + ".png";
+  const mamocImgSrc = "/images/mamoc-text" + (darkTheme ? "-dark" :"") + ".png";
 
   return  (
     <SettingsProvider>
@@ -45,7 +45,7 @@ export default function Layout({ children, home }) {
         <div className={utilStyles2.imageContainer}>
           <Image
             priority
-            src="/images/artwork3.svg"
+            src="/images/artwork4.svg"
             alt="placeholder"
             width={1500} // Adjust as needed
             height={500} // This sets the height of the image

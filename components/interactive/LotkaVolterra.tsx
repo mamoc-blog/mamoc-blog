@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Line } from 'react-chartjs-2';
 import ZoomPlugin from 'chartjs-plugin-zoom'; 
+import styles from '/styles/post.module.scss';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -47,8 +48,6 @@ const LotkaVolterra = () => {
   const [useModifiedEquations, setUseModifiedEquations] = useState(false);
   const [initialPrey, setInitialPrey] = useState(10);
   const [initialPredators, setInitialPredators] = useState(5);
-  const [zoomLevel, setZoomLevel] = useState(1); // Start with a default zoom level of 1
-  const chartRef = useRef(null);
   const [data, setData] = useState<ChartState>({
     labels: [],
     datasets: [
@@ -69,52 +68,65 @@ const LotkaVolterra = () => {
     ],
   });
 
+  function LVModified(t:number, [x1, x2]: number[], alpha: number, beta: number, gamma: number, delta: number, eta1: number): [number, number] {
+    const dx1 = alpha * x1 * (1 - x1 / eta1) - beta * x1 * x2;
+    const dx2 = -gamma * x2 + delta * x1 * x2;
+    return [dx1, dx2];
+  }
+
+  function LV(t:number, [x1, x2]: number[], alpha: number, beta: number, gamma: number, delta: number): [number, number] {
+    const dx1 = (alpha * x1 - beta * x1 * x2);
+    const dx2 = (delta * x1 * x2 - gamma * x2);
+    return [dx1, dx2];
+  }
+
+  function rk4Step(t: number, y: number[], h: number, derivatives: Function, ...params: number[]): number[] {
+    const k1 = derivatives(t, y, ...params);
+    const k2 = derivatives(t + h / 2, y.map((y_i, i) => y_i + h / 2 * k1[i]), ...params);
+    const k3 = derivatives(t + h / 2, y.map((y_i, i) => y_i + h / 2 * k2[i]), ...params);
+    const k4 = derivatives(t + h, y.map((y_i, i) => y_i + h * k3[i]), ...params);
+    return y.map((y_i, i) => y_i + h / 6 * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]));
+  }
+
   useEffect(() => {
-    simulate(alpha, beta, gamma, delta, eta1, eta2, initialPrey, initialPredators, useModifiedEquations);
-  }, [alpha, beta, gamma, delta, eta1, eta2, initialPrey, initialPredators, useModifiedEquations]);
+    simulate(alpha, beta, gamma, delta, eta1, initialPrey, initialPredators, useModifiedEquations);
+  }, [alpha, beta, gamma, delta, eta1, initialPrey, initialPredators, useModifiedEquations]);
 
-  const simulate = (alpha, beta, gamma, delta, eta1, eta2, x1, x2, useModified) => {
-      const dt = 0.1;
-      const steps = 100;
-      const x1Data: number[] = [];
-      const x2Data: number[] = [];
-      const timeData: number[] = [];
-
-      for (let t = 0; t <= steps; t++) {
-          let dx1, dx2;
-          if (useModified) {
-              // Modified equations
-              dx1 = alpha * x1 * (1 - x1 / eta1) - beta * x1 * x2;
-              dx2 = - gamma * x2  + delta * x1 * x2;
-          } else {
-              // Original Lotka-Volterra equations
-              dx1 = (alpha * x1 - beta * x1 * x2) * dt;
-              dx2 = (delta * x1 * x2 - gamma * x2) * dt;
-          }
-
-          x1 += dx1;
-          x2 += dx2;
-          // x1 = Math.max(5, Math.min(x1, 100)); 
-          // x2 = Math.max(0, Math.min(x2, 100));
-          x1Data.push(x1);
-          x2Data.push(x2);
-          timeData.push(Math.round(t * dt * 10) / 10); // Round to one decimal place
-      }
-
-      setData({
-          labels: timeData,
-          datasets: [
-              {
-                  ...data.datasets[0],
-                  data: x1Data,
-              },
-              {
-                  ...data.datasets[1],
-                  data: x2Data,
-              },
-          ],
-      });
+  const simulate = (alpha, beta, gamma, delta, eta1, x1, x2, useModified) => {
+    const dt = 0.1;
+    const steps = 1000;
+    const x1Data: number[] = [];
+    const x2Data: number[] = [];
+    const timeData: number[] = [];
+  
+    for (let t = 0; t <= steps; t++) {
+      const derivatives = useModified ? LVModified : LV;
+      const nextState = rk4Step(t, [x1, x2], dt, derivatives, alpha, beta, gamma, delta, eta1);
+  
+      // Ensure populations do not go negative (this check is redundant with max in rk4Step but kept for safety)
+      x1 = Math.max(0, nextState[0]);
+      x2 = Math.max(0, nextState[1]);
+  
+      x1Data.push(x1);
+      x2Data.push(x2);
+      timeData.push(t * dt); // No need to round for display as the chart can handle floating point
+    }
+  
+    setData({
+      labels: timeData,
+      datasets: [
+        {
+          ...data.datasets[0],
+          data: x1Data,
+        },
+        {
+          ...data.datasets[1],
+          data: x2Data,
+        },
+      ],
+    });
   };
+  
 
   const options = {
     scales: {
@@ -122,56 +134,14 @@ const LotkaVolterra = () => {
         type: 'linear',
         position: 'bottom',
       },
-      y: {
-        min: 0, // Set the minimum suggested value to 0
-        suggestedMax: 50, // Adjust the maximum suggested value according to your data range
-        max: 100,
-        ticks: {
-          callback: function(val:number, index, ticks) {
-            if (Math.abs(val) < 1e-3 ) return 0;
-            return val;
-          }
-        }
-      },
-    },
-    plugins: {
-      zoom: {
-        pan: {
-          enabled: true,
-          mode: 'x',
-        },
-        zoom: {
-          wheel: {
-            enabled: true,
-          },
-          pinch: {
-            enabled: true,
-          },
-          mode: 'x',
-        },
-      },
-    },
-    // Use the afterUpdate hook to adjust tick configuration
-    onAfterUpdate: function(chart) {
-      const xScale = chart.scales.x;
-      const range = xScale.max - xScale.min; // Determine the current range of the x-axis
-  
-      // Adjust tick step size based on the range
-      if (range > 20) { // Example condition, adjust based on your data and requirements
-        xScale.options.ticks.stepSize = 10; // Increase step size for wider range
-      } else {
-        xScale.options.ticks.stepSize = 1; // Default step size for closer range
-      }
-      // chart.update();
-      // You might need to call chart.update() if changing the tick options directly doesn't take effect,
-      // but be cautious as it can cause an infinite loop if not handled correctly.
     },
   } as ChartOptions<"line">;
 
   return (
     <>
+    <div className={styles.summarySection}>
       <div style={{ margin: '20px' }}>
-        <label>Alpha (Prey birth rate): {alpha}</label>
+        <label> Alpha (Prey birth rate): {alpha}</label>
         <input
           type="range"
           min="0"
@@ -265,7 +235,7 @@ const LotkaVolterra = () => {
         </div>
         </>
       }
-
+    </div>
       <Line data={data} options={options} />
     </>
   );
