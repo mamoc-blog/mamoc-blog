@@ -83,7 +83,7 @@ const ButtonTimer = () => {
             }
 
             .bigger-image {
-              width: 30rem;
+              width: 50rem;
               image-rendering: pixelated;
             }`
           }

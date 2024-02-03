@@ -20,7 +20,7 @@ export default function DisplayImg () {
         <style>
           {`
             .bigger-image {
-              width: 30rem;
+              width: 50rem;
               image-rendering: pixelated;
             }
           `}

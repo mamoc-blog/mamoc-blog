@@ -1,7 +1,7 @@
 import Layout from '../../components/layout/layout';
 import Figure from '/components/frames/Figure';
-import Note from '/components/frames/Note';
 import ButtonTimer from '/components/interactive/ButtonTimer';
+import CharacteristicLengthCalculator from '/components/interactive/CharacteristicLengthCalculator';
 import RK4ReactionDiffusion from '/components/interactive/RK4ReactionDiffusion';
 import { getAllPostIds, getPostData } from '../../lib/posts';
 import Head from 'next/head';
@@ -27,7 +27,8 @@ const components = {
   ButtonTimer,
   LotkaVolterra,
   RK4ReactionDiffusion,
-  Note,
+  Link,
+  CharacteristicLengthCalculator
   // whatever component you want
 };
 

@@ -14,6 +14,7 @@ const RK4ReactionDiffusion = () => {
     const [grid, setGrid] = useState<GridCell[][]>([]);
     const [gridHistory, setGridHistory] = useState<GridCell[][][]>([]); // To store history of grids
     const [historyIndex, setHistoryIndex] = useState<number>(0); // To track the current position in history
+    const [displayType, setDisplayType] = useState(0);
     const [parameters, setParameters] = useState({
       alpha: 1.1,
       beta: 0.1,
@@ -33,16 +34,16 @@ const RK4ReactionDiffusion = () => {
       const canvas = canvasRef.current;
       if (canvas) {
         const ctx = canvas.getContext('2d');
-        const ctx2 = canvasRef2.current?.getContext('2d'); // Get context for second canvas
-
         if (ctx) {
-          renderGrid(grid, ctx, GRID_SIZE, GRID_SIZE);
+          ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas before re-rendering
+          if (displayType === 0) {
+            renderGrid(grid, ctx, GRID_SIZE, GRID_SIZE);
+          } else {
+            renderGridSeeThrough(grid, ctx, GRID_SIZE, GRID_SIZE);
+          }
         }
-        if (ctx2) {      
-          renderGridSeeThrough(grid, ctx2, GRID_SIZE, GRID_SIZE); // Render second grid
       }
-      }
-    }, [grid]);
+    }, [displayType, grid]);
   
     const handleParameterChange = (parameter: keyof typeof parameters, value: string) => {
       setParameters((prevParameters) => ({ ...prevParameters, [parameter]: parseFloat(value) }));
@@ -55,21 +56,18 @@ const RK4ReactionDiffusion = () => {
       setHistoryIndex(0); // Reset history index
     };
 
-  const advanceFrame = () => {
-    const nextGrid = rk4UpdateGrid(grid, parameters, GRID_SIZE, GRID_SIZE);
-    applyRandomFluctuations(nextGrid, 0.01); // Apply small fluctuations with each frame
-    setGrid(nextGrid);
-    const newHistory = gridHistory.slice(0, historyIndex + 1); // Remove "future" states if we went back before
-    setGridHistory([...newHistory, nextGrid]);
-    setHistoryIndex(newHistory.length); // Update index to the latest
-  };
+    const advanceFrame = () => {
+      const nextGrid = rk4UpdateGrid(grid, parameters, GRID_SIZE, GRID_SIZE);
+      applyRandomFluctuations(nextGrid, 0.01); // Apply small fluctuations with each frame
+      setGrid(nextGrid);
+      const newHistory = gridHistory.slice(0, historyIndex + 1); // Remove "future" states if we went back before
+      setGridHistory([...newHistory, nextGrid]);
+      setHistoryIndex(newHistory.length); // Update index to the latest
+    };
 
-  function clickAdvanceFrameFiveTimes() {
-    for (let i = 0; i < 50; i++) {
-      setTimeout(advanceFrame, i * 120); // Adjust the delay (in milliseconds) as needed
+    const changeRender = () => {
+      setDisplayType((displayType===0 ? 1 : 0));
     }
-  }
-
 
     const revertFrame = () => {
       if (historyIndex > 0) {
@@ -77,11 +75,22 @@ const RK4ReactionDiffusion = () => {
         setHistoryIndex(historyIndex - 1);
       }
     };
+    const imgSrc = displayType === 1
+    ? '/posts/spatial-ecology/colourmapping-lightmode-render2.png'
+    : '/posts/spatial-ecology/colourmapping-lightmode.png';
   return (
+    
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-around', padding:'1rem' }}> {/* Adjust layout */}
-        <canvas className={styles.postImageContainer} ref={canvasRef} width="600" height="600" style={{padding:"1rem"}}></canvas>
-        <canvas className={styles.postImageContainer} ref={canvasRef2} width="600" height="600" style={{padding:"1rem"}}></canvas>
+      <canvas
+        key={displayType}
+        className={styles.postImageContainer}
+        ref={canvasRef}
+        width="600"
+        height="600"
+        style={{ padding: '1rem' }}
+      />
+        <img src={imgSrc} className={styles.postImageContainer} width="600" height="600" style={{padding:"1rem"}}/>
      </div>  
       <div className={styles.summarySection}>
         <label>
@@ -111,9 +120,9 @@ const RK4ReactionDiffusion = () => {
         </label>
       </div>
       <button onClick={advanceFrame}>Forward Frame</button>
-      <button onClick={clickAdvanceFrameFiveTimes}>Forward Five Frames</button>
       <button onClick={revertFrame} disabled={historyIndex === 0}>Backward Frame</button>
       <button onClick={resetGrid}>Reset Grid</button>
+      <button onClick={changeRender}>Change Render Style</button>
     </div>
   );
 };
@@ -175,6 +184,8 @@ function calculateLaplacian(grid, i, j, variable) {
   
     return w1 * directNeighbors + w2 * diagonalNeighbors - (w1 * 4 + w2 * 4) * grid[i][j][variable];
   }
+
+  
   
   function renderGrid(grid: GridCell[][], ctx: CanvasRenderingContext2D, width: number, height: number) {
     const cellWidth = ctx.canvas.width / width;

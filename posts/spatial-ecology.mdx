@@ -132,19 +132,29 @@ We have found our set of reaction-diffusion equations for the predator-prey mode
 This set of differential equations can be modelled computationally on a randomised initial population to show the progression of the non-linear system. The Runge-Kutta (RK4) method is used for executing this progression by a timestep $dt$. As before, the colour green represents prey, and the colour red represents predators.
 
 <RK4ReactionDiffusion />
-<Figure src="" caption="On the left, the red and green colours are added to each other, so that an impression of the densities of both species can be found. On the right, only the species with the greater density is rendered, in a first-past-the-post system." number='2'/>
+<Figure src="" caption="By default, the red and green colours are added to each other, so that an impression of the densities of both species can be found. A colour mapping is provided on the right, so you can see what relatives densities the colours represent.Clicking 'Change Render Style' will update the colours to a first-past-the-post system, where only the colour of the dominant species is displayed." number='2'/>
 
-<Note> <p>Be careful!</p> </Note>
+You may have to click through some blanker periods, but a gif of the progression is given <Link href={"#conclusion"}>at the bottom of the page</Link>.
 
+Some interesting patterns can be seen to form. There seems to be at times stripes and dots with a characteristic length, and we recall the Turing patterns mentioned before. Are these Turing patterns that we are seeing? 
 
-The patterns of dots and stripes that form and then disappear are reminiscent of Turing patterns, and in the appendix, we will consider whether these are Turing patterns, how they form, and why they also seem to disperse over time.
+Another unignorable characteristic is the end result of the horizontal stripes. This may be a fragment of the simulation when discretised into a grid, or a quirk of the RK4 method, or a by-product of the simplified Laplacian in the setting of the 2D grid.
 
 #### Turing patterns in the spatial Lotka-Volterra equations
 
 ##### When do Turing patterns occur?
 
-Patterns seem to form in the spatial Lotka reaction-diffusion simulation for predators and prey in a 2D grid. These patterns seem similar to Turing patterns commonly seen in nature. The equations I have called the spatial Lotka-Volterra equations were formed by adding in diffusive Laplacian terms to the classic Lotka-Volterra equations.
+Turing patterns occur due to a mathematical feature of the system's governing differential equations. 'Turing instability' is a measure of the tendency of a homogeneous state in such systems to become unstable and spontaneously give rise to spatial patterns.
 
+For Turing instability, we need [[6]]:
+- the homogeneous system to be stable without diffusion, which we proved in the linear stability analysis <Link href="#without-spatial-dependence">in the previous section</Link>,
+- and the diffusion terms to destabilize the homogeneous steady state.
+
+This second condition is possible to prove by linearising the differential equation system, and finding its eigenvalues. Assuming $u$ and $v$ have solutions of the form  $e^{\lambda t + ik\cdot r}$, we can solve the characteristic equation to get a disperstion relation between $\lambda$ and $k^2$. We will have achieved condition 2 and proved the existence of diffusion-driven instability if we can show that the real part of $\lambda$ is at any point positive for some range of $k^2$.
+
+##### Are we seeing Turing patterns?
+
+Let's remind ourselves of our reaction-diffusion system. 
 $$
 \begin{equation}
 \frac{\partial x_1}{\partial t} = \alpha x_1 - \beta x_1 x_2 + D_1 \nabla^2 x_1 
@@ -221,7 +231,7 @@ $$
 
 Now we look for solutions in the form of $ e^{\lambda t + ik\cdot r} $, where $ \lambda $ is the growth rate of the perturbation, $ k $ is the wave number, and $ r $ is the position vector.
 
-We substitute this form into the linearized system and solve for $ \lambda $. The dispersion relation is obtained by setting the determinant of the matrix minus $ \lambda I $ to zero:
+We substitute this form into the linearized system and solve for $ \lambda $. Given the reaction-diffusion system is now linearised, we can now find the eiganvalues, $\lambda$, and this ends up giving us a *dispertion relation* for the perturbation:
 
 $$
 \begin{equation}
@@ -249,11 +259,9 @@ $$
 $$
 where $ h(k^2) = D_1 D_2 k^4 - \gamma D_1 k^2 - \alpha \gamma$.
 
-For Turing instability, we need [[6]]:
-- the homogeneous system to be stable without diffusion, which we proved in the linear stability analysis in the previous section,
-- and the diffusion terms to destabilize the homogeneous steady state, meaning the real part of $ \lambda $ must be positive for some range of $k^2$.
 
-And so, one way to find evidence of Turing instability would be to look for any sign change in the real part of $\lambda (k^2)$, which would indicate there exists a range of wavenumbers for which patterns will emerge.
+
+<Link href={"#when-do-turing-patterns-occur"}>As outlined here</Link>, if we look for a sign change in the real part of $\lambda (k^2)$, this indicate there exists a range of wavenumbers for which patterns will emerge. The range for which it is positive will give us the characteristic length of the Turing pattern.
 
 Instead, we will reason that if we have $h(k^2) < 0$ for some $k^2$, it must be true that $ \lambda(k^2)$ is positive for that same interval of $k^2$, because of the positive $\lambda$ coefficients in $\lambda^2 - \lambda(D_1 k^2 + D_2 k^2 - \gamma) + h(k^2) = 0.$ 
 
@@ -275,11 +283,32 @@ $$
 
 Since $ \alpha, \gamma, D_1, D_2 $ are necessarily $>0$, we have proved that for $h(k^2)$ is necessarily negative for some range of $k^2$, and that $\lambda $ is positive for that same range of $k^2$. 
 
+By solving for the roots of equation (17), we find that $k^2$ is positive for the range:
+
+$$
+\begin{equation}
+\frac{D_1 \gamma - \sqrt{D_1 \gamma (D_1 \gamma + 4 D_2 \alpha)}}{2 D_1 D_2} < k^2 < \frac{D_1 \gamma + \sqrt{D_1 \gamma (D_1 \gamma + 4 D_2 \alpha)}}{2 D_1 D_2}.
+\end{equation}
+$$
+
+The characteristic length of the Turing patterns in our system is therefore:
+
+$$
+\begin{equation}
+L_c = \frac{\sqrt{D_1 \gamma (D_1 \gamma + 4 D_2 \alpha)}}{D_1 D_2}.
+\end{equation}
+$$
+
+<CharacteristicLengthCalculator/>
+
 ### Conclusion
 
 [Feel free to check out my github.](https://github.com/cameron-michie/).
 
 The agent based model was the most enjoyable, the most challenging, and took the most time. For performance reasons, the backend had to be rewritten in C#, and is now hosted on Azure so it can be run on demand. The graphing occurs via saving the image to a binary array and then displaying it simply as a base-64 encoded string. This model could easily be used for further research or study. For instance, agent based models have recently become hugely important in predicting the mature structure of bacterial biofilms, particularly to mirror how biofilms react to stimuli in lab scenarios.
+
+Modelling the reaction diffusion equations in the browser was an interesting challenge. As promised, here is the `.gif` of the progression of the simulation.
+
 
 ### References
 
@@ -304,3 +333,5 @@ The agent based model was the most enjoyable, the most challenging, and took the
 5. [Perthame, B. 2015. Linear Instability, Turing Instability and Pattern Formation. Lecture Notes on Mathematical Modelling in the Life Sciences, pp. 117–143.](https://link.springer.com/chapter/10.1007/978-3-319-19500-1_7#:~:text=In%20his%20seminal%20paper%2C%20A,also%20called%20%E2%80%98diffusion%20driven%20instabilities%E2%80%99)
 
 6. [Haas, P.A. and Goldstein, R.E., 2021. Turing’s diffusive threshold in random reaction-diffusion systems. Physical Review Letters, 126(23), p.238101.](https://www.condmatjclub.org/uploads/2021/01/JCCM_January_2021_01.pdf)
+
+<img src="/posts/spatial-ecology/RK4simulation.gif" alt="RK4 simulation"/>
