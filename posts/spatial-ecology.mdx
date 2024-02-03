@@ -127,9 +127,15 @@ $$
 
 We have found our set of reaction-diffusion equations for the predator-prey model, with the reaction part handled by the Lotka-Volterra.
 
-This set of differential equations can be modelled computationally on a randomised initial population to show the progression of the non-linear system. We can use an Euler-esque method for executing this progression, by multiplying our differential equations by a timestep $dt$ to get a $dX$, and adding that to $X$ each iterative timestep $t$. 
+##### Reaction-diffusion simulation using RK4
+
+This set of differential equations can be modelled computationally on a randomised initial population to show the progression of the non-linear system. The Runge-Kutta (RK4) method is used for executing this progression by a timestep $dt$. As before, the colour green represents prey, and the colour red represents predators.
 
 <RK4ReactionDiffusion />
+<Figure src="" caption="On the left, the red and green colours are added to each other, so that an impression of the densities of both species can be found. On the right, only the species with the greater density is rendered, in a first-past-the-post system." number='2'/>
+
+<Note> <p>Be careful!</p> </Note>
+
 
 The patterns of dots and stripes that form and then disappear are reminiscent of Turing patterns, and in the appendix, we will consider whether these are Turing patterns, how they form, and why they also seem to disperse over time.
 

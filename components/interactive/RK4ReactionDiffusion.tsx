@@ -23,6 +23,7 @@ const RK4ReactionDiffusion = () => {
       D2: 0.1,
     });
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const canvasRef2 = useRef<HTMLCanvasElement | null>(null); 
   
     useEffect(() => {
       resetGrid();
@@ -32,9 +33,14 @@ const RK4ReactionDiffusion = () => {
       const canvas = canvasRef.current;
       if (canvas) {
         const ctx = canvas.getContext('2d');
+        const ctx2 = canvasRef2.current?.getContext('2d'); // Get context for second canvas
+
         if (ctx) {
           renderGrid(grid, ctx, GRID_SIZE, GRID_SIZE);
         }
+        if (ctx2) {      
+          renderGridSeeThrough(grid, ctx2, GRID_SIZE, GRID_SIZE); // Render second grid
+      }
       }
     }, [grid]);
   
@@ -48,16 +54,23 @@ const RK4ReactionDiffusion = () => {
       setGridHistory([initialGrid]); // Reset history with only the initial grid
       setHistoryIndex(0); // Reset history index
     };
-  
-    const advanceFrame = () => {
-      const nextGrid = rk4UpdateGrid(grid, parameters, GRID_SIZE, GRID_SIZE);
-      applyRandomFluctuations(nextGrid, 0.01); // Apply small fluctuations with each frame
-      setGrid(nextGrid);
-      const newHistory = gridHistory.slice(0, historyIndex + 1); // Remove "future" states if we went back before
-      setGridHistory([...newHistory, nextGrid]);
-      setHistoryIndex(newHistory.length); // Update index to the latest
-    };
-  
+
+  const advanceFrame = () => {
+    const nextGrid = rk4UpdateGrid(grid, parameters, GRID_SIZE, GRID_SIZE);
+    applyRandomFluctuations(nextGrid, 0.01); // Apply small fluctuations with each frame
+    setGrid(nextGrid);
+    const newHistory = gridHistory.slice(0, historyIndex + 1); // Remove "future" states if we went back before
+    setGridHistory([...newHistory, nextGrid]);
+    setHistoryIndex(newHistory.length); // Update index to the latest
+  };
+
+  function clickAdvanceFrameFiveTimes() {
+    for (let i = 0; i < 50; i++) {
+      setTimeout(advanceFrame, i * 120); // Adjust the delay (in milliseconds) as needed
+    }
+  }
+
+
     const revertFrame = () => {
       if (historyIndex > 0) {
         setGrid(gridHistory[historyIndex - 1]);
@@ -66,7 +79,10 @@ const RK4ReactionDiffusion = () => {
     };
   return (
     <div>
-      <canvas className={styles.postImageContainer} ref={canvasRef} width="600" height="600"></canvas>
+      <div style={{ display: 'flex', justifyContent: 'space-around', padding:'1rem' }}> {/* Adjust layout */}
+        <canvas className={styles.postImageContainer} ref={canvasRef} width="600" height="600" style={{padding:"1rem"}}></canvas>
+        <canvas className={styles.postImageContainer} ref={canvasRef2} width="600" height="600" style={{padding:"1rem"}}></canvas>
+     </div>  
       <div className={styles.summarySection}>
         <label>
           Alpha:
@@ -95,6 +111,7 @@ const RK4ReactionDiffusion = () => {
         </label>
       </div>
       <button onClick={advanceFrame}>Forward Frame</button>
+      <button onClick={clickAdvanceFrameFiveTimes}>Forward Five Frames</button>
       <button onClick={revertFrame} disabled={historyIndex === 0}>Backward Frame</button>
       <button onClick={resetGrid}>Reset Grid</button>
     </div>
@@ -177,5 +194,34 @@ function calculateLaplacian(grid, i, j, variable) {
       }
     }
   }
+
+  function renderGridSeeThrough(grid: GridCell[][], ctx: CanvasRenderingContext2D, width: number, height: number) {
+    const cellWidth = ctx.canvas.width / width;
+    const cellHeight = ctx.canvas.height / height;
+    const threshold = 0.5; // Define your threshold value here
+  
+    for (let i = 0; i < height; i++) {
+      for (let j = 0; j < width; j++) {
+        if (!grid[i] || !grid[i][j]) {
+          continue; // Skip if the grid cell is not defined
+        }
+  
+        let color = 'rgb(0, 0, 0)'; // Default color, in case needed
+        const { x1, x2 } = grid[i][j];
+  
+        if (x1 > x2) {
+          // If x1 is dominant and greater than the threshold, use dark green, otherwise light green
+          color = x1 > threshold ? 'rgb(0, 100, 0)' : 'rgb(0, 255, 0)';
+        } else {
+          // If x2 is dominant and greater than the threshold, use dark red, otherwise light red
+          color = x2 > threshold ? 'rgb(100, 0, 0)' : 'rgb(255, 0, 0)';
+        }
+  
+        ctx.fillStyle = color;
+        ctx.fillRect(j * cellWidth, i * cellHeight, cellWidth, cellHeight);
+      }
+    }
+  }
+  
   
   export default RK4ReactionDiffusion;
