@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from "/styles/post.module.scss";
+import { useSettingsContext } from '../utils/Theme';
 
 const GRID_SIZE = 120;
 const DELTA_T = 0.1;
@@ -75,9 +76,14 @@ const RK4ReactionDiffusion = () => {
         setHistoryIndex(historyIndex - 1);
       }
     };
+
+    const { darkTheme } = useSettingsContext();
+
     const imgSrc = displayType === 1
-    ? '/posts/spatial-ecology/colourmapping-lightmode-render2.png'
-    : '/posts/spatial-ecology/colourmapping-lightmode.png';
+      ? `/posts/spatial-ecology/colourmapping-${darkTheme ? 'dark' : 'light'}mode-render2.png`
+      : `/posts/spatial-ecology/colourmapping-${darkTheme ? 'dark' : 'light'}mode.png`;
+    
+
   return (
     
     <div>
@@ -86,12 +92,12 @@ const RK4ReactionDiffusion = () => {
           key={displayType}
           className={styles.postImageContainer}
           ref={canvasRef}
-          style={{ padding: '1rem', width: '100%', maxWidth: '20rem', height: 'auto', aspectRatio: '1 / 1' }} // Use percentage for width and auto for height to maintain aspect ratio, with a max-width for larger screens
+          style={{ padding: '1rem', width: '100%', maxWidth: '50%', height: 'auto', aspectRatio: '1 / 1' }} // Use percentage for width and auto for height to maintain aspect ratio, with a max-width for larger screens
         />
         <img
           src={imgSrc}
           className={styles.postImageContainer}
-          style={{ padding: '1rem', width: '100%', maxWidth: '20rem', height: 'auto' }} // Use percentage for width and auto for height to maintain aspect ratio, with a max-width for larger screens
+          style={{ padding: '1rem', width: '100%', maxWidth: '50%', height: 'auto' }} // Use percentage for width and auto for height to maintain aspect ratio, with a max-width for larger screens
         />
       </div>
       <div className={styles.summarySection}>

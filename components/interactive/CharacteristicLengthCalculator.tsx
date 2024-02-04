@@ -46,7 +46,7 @@ function CharacteristicLengthCalculator() {
         Characteristic length of the Turing pattern: {Math.round(calculateResult())} px.
       </div>
       </div>
-
+      <br></br>
     </div>
   );
 }

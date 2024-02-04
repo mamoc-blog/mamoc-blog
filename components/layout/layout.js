@@ -13,8 +13,11 @@ export const siteTitle = 'MAMOC';
 
 export default function Layout({ children, home }) {
   const { darkTheme } = useSettingsContext();
-  const mamocImgSrc = "/images/mamoc-text" + (darkTheme ? "-dark" :"") + ".png";
 
+  const mamocImgSrc = darkTheme
+    ? "/images/mamoc-text-dark.png"
+    : "/images/mamoc-text.png";
+  
   return  (
     <SettingsProvider>
       <Head>
@@ -30,7 +33,7 @@ export default function Layout({ children, home }) {
               <Link href='/'>
                 <div className={styles.centeredComponents}>
                   <Image
-                    key={darkTheme ? 'dark' : 'light'} // Force re-render by changing ke
+                    key={mamocImgSrc} 
                     src={mamocImgSrc}
                     alt="mamoc"
                     width={200}

@@ -70,9 +70,12 @@ const ButtonTimer = () => {
   
     return (
       <>
-        <button onClick={handleClick}>
-          {isActive ? `Hide (Countdown: ${count}s)` : 'Start'}
+      <div className="button-container">
+        <button className="myButton" onClick={handleClick}>
+            {isActive ? `Hide (Countdown: ${count}s)` : 'Start'}
         </button>
+      </div>
+
         <style>
           {
             `.container {
@@ -81,9 +84,23 @@ const ButtonTimer = () => {
               align-items: center;
             }
 
+            .button-container {
+              display: flex; /* Use Flexbox */
+              justify-content: center; /* Center horizontally */
+              align-items: center; /* Center vertically */
+            }
+
             .bigger-image {
               width: 50rem;
               image-rendering: pixelated;
+            }
+            
+            .myButton {
+              padding: 20px 40px; /* Increase padding to make the button larger */
+              font-size: 20px; /* Increase font size */
+              border: 4px solid #000; /* Stronger border with 4px thickness */
+              border-radius: 10px; /* Optional: Adds rounded corners to your button */
+              cursor: pointer; /* Changes the cursor to a pointer when you hover over the button */
             }`
           }
         </style>
@@ -97,6 +114,7 @@ const ButtonTimer = () => {
             : <img src={"/images/press-start.png"} className="bigger-image" />
           }
         </div>
+        <br></br>
       </>
     );
   };
