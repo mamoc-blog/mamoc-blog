@@ -11,6 +11,10 @@
   .left, .right {
     flex: 1; /* This will make both the left and right sides take up equal space */
   }
+
+  .pink {
+    color:var(--color-primary )
+  }
   
   .left {
     display: flex;
@@ -27,6 +31,7 @@
     flex-direction: row;
     gap: 10px;
     align-items: flex-start; /* Adjust as needed */
+    flex-wrap: wrap;
   }
   
   

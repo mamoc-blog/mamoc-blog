@@ -81,7 +81,7 @@ const RK4ReactionDiffusion = () => {
   return (
     
     <div>
-      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-around', padding: '1rem', alignItems: 'center' }}> {/* Adjust layout for mobile first */}
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around', alignItems: 'center' }}> {/* Adjust layout for mobile first */}
         <canvas
           key={displayType}
           className={styles.postImageContainer}

@@ -58,43 +58,37 @@
     padding: 15px;
     border-radius: 8px;
     // flex: 1;
-    margin-bottom: 20px;
+    // margin-bottom: 20px;
+    margin-inline: 5%;
   }
   .dark .summarySection {
     background-color: #333; // Example dark mode background color
     // Define other dark mode styles as needed
   }
+
   .postImageContainer {
-    display:flex;
-    justify-content: center;
-    // padding-left: 30%;
-    @media (min-width: 768px) { /* Adjust breakpoint as needed */
-      .postImageContainer {
-        width: 20rem; /* Fixed size for desktop */
-        height: 20rem; /* Fixed size for desktop */
-      }
-      .container { /* Adjust the div container class if it has one */
-        flexDirection: 'row'; /* Use row layout for desktop */
-      }
+    display: flex;
+    justify-content: center; // Center the image horizontally
+    align-items: center;     // Center the image vertically
+    flex: 0 0 auto;          // Prevent the image from growing or shrinking
+  
+    @media (max-width: 768px) { // Adjust this breakpoint as needed
+      width: 100%;           // Make the container take the full width
+      max-width: 100%;       // Ensure the container doesn't exceed the screen width
+      height: auto;          // Allow the height to adjust proportionally
+    }
+  
+    img {
+      max-width: 100%;       // Ensure the image doesn't exceed the container width
+      height: auto;          // Allow the image height to adjust proportionally
     }
   }
+  
   
   .postContent {
     font-size: 85%;
     margin-top: 50px;
-    padding-left: 10%;
-    padding-right: 10%;
     
-    @media (max-width: 1000px) {
-      body {
-        padding-right: 0%;
-      }
-    }
-  }
-  @media (max-width: 1000px) {
-    .postContent {
-      padding-right: 0; /* Overrides the default padding for screens smaller than 768px */
-    }
   }
   
   .contentRow {
@@ -113,10 +107,10 @@
     flex: 1; 
   }
   
-  .postImageContainer {
-    height: 100%; /* Make the image fill the container height */
-    width: auto; /* Maintain aspect ratio */
-    object-fit: cover;
-    flex: 1;
-  }
+  // .postImageContainer {
+  //   height: 100%; /* Make the image fill the container height */
+  //   width: auto; /* Maintain aspect ratio */
+  //   object-fit: cover;
+  //   flex: 1;
+  // }
   

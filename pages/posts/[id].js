@@ -7,6 +7,7 @@ import { getAllPostIds, getPostData } from '../../lib/posts';
 import Head from 'next/head';
 import Date from '../../components/date';
 import utilStyles from '../../styles/utils.module.css';
+import utilStyles2 from '../../styles/utils2.module.scss';
 import dynamic from 'next/dynamic';
 import 'katex/dist/katex.min.css'
 import { MDXRemote } from 'next-mdx-remote';
@@ -28,7 +29,7 @@ const components = {
   LotkaVolterra,
   RK4ReactionDiffusion,
   Link,
-  CharacteristicLengthCalculator
+  CharacteristicLengthCalculator,
   // whatever component you want
 };
 
@@ -62,72 +63,73 @@ export default function Post({ postData }) {
         <title>{postData.title}</title>
       </Head>
       <article>
-        <h1 className={utilStyles.headingXl}>{postData.title}</h1>
-        <div className={styles.summarySection}>
-          <div className={styles.contentRow}>
-            <div className={styles.postMetadata}>
-              <span className={`${styles.authorName} ${utilStyles.headingMd}`}><b>{postData.author}</b></span>
-              <div className={`${utilStyles.lightText}`}>
-                <Date dateString={postData.date} />  
+        <h1 className={`${utilStyles.headingXl} ${utilStyles2.pink}`}>{postData.title}</h1>
+        <div style={{ display: "flex", flexWrap: "wrap" }}>
+          <div className={styles.summarySection}>
+            <div className={styles.contentRow}>
+              <div className={styles.postMetadata}>
+                <span className={`${styles.authorName} ${utilStyles.headingMd}`}><b>{postData.author}</b></span>
+                <div className={`${utilStyles.lightText}`}>
+                  <Date dateString={postData.date} />  
+                </div>
+                <p><b>{postData.summary}</b></p>
+                <div className={styles.authorContainer}>
+                  <Link href='.'>
+                    <Image
+                      priority
+                      src={authorImageSrc}
+                      height={50}
+                      width={50}
+                      alt={postData.author}
+                      className={utilStyles.borderCircle}
+                    />
+                  </Link>
+                  <Link href={githubUrl}>
+                    <Image
+                      priority
+                      src={"/images/github.png"}
+                      height={50}
+                      width={50}
+                      alt={postData.author}
+                      className={utilStyles.borderCircle}
+                    />
+                  </Link>
+                  <Link href={linkedinUrl}>
+                    <Image
+                      priority
+                      src={"/images/linkedin.png"}
+                      height={50}
+                      width={50}
+                      alt={postData.author}
+                      className={utilStyles.borderCircle}
+                    />
+                  </Link>
+                  <a href={"/cv/cam.pdf"}>
+                    <Image
+                      priority
+                      src={"/images/cv.png"}
+                      height={50}
+                      width={50}
+                      alt={postData.author}
+                      className={utilStyles.borderCircle}
+                    />
+                  </a>
+                </div>
               </div>
-              <p><b>{postData.summary}</b></p>
-              <div className={styles.authorContainer}>
-                <Link href='.'>
-                  <Image
-                    priority
-                    src={authorImageSrc}
-                    height={50}
-                    width={50}
-                    alt={postData.author}
-                    className={utilStyles.borderCircle}
-                  />
-                </Link>
-                <Link href={githubUrl}>
-                  <Image
-                    priority
-                    src={"/images/github.png"}
-                    height={50}
-                    width={50}
-                    alt={postData.author}
-                    className={utilStyles.borderCircle}
-                  />
-                </Link>
-                <Link href={linkedinUrl}>
-                  <Image
-                    priority
-                    src={"/images/linkedin.png"}
-                    height={50}
-                    width={50}
-                    alt={postData.author}
-                    className={utilStyles.borderCircle}
-                  />
-                </Link>
-                <a href={"/cv/cam.pdf"}>
-                  <Image
-                    priority
-                    src={"/images/cv.png"}
-                    height={50}
-                    width={50}
-                    alt={postData.author}
-                    className={utilStyles.borderCircle}
-                  />
-                </a>
-              </div>
-            </div>
-          
+            
 
-          <div className={styles.tableOfContents}>
-            {toc.map(item => (
-              <div key={item.id}>
-                <a href={`#${item.id}`}>
-                  <small>{item.title}</small>
-                </a>
-              </div>
-            ))}
+            <div className={styles.tableOfContents}>
+              {toc.map(item => (
+                <div key={item.id}>
+                  <a href={`#${item.id}`}>
+                    <small>{item.title}</small>
+                  </a>
+                </div>
+              ))}
+            </div>
+            </div>
           </div>
-        </div>
-        </div>
-        <div className={styles.postImageContainer}>
+          <div className={styles.postImageContainer}>
             <Image 
               priority
               src={postData.imageSrc}
@@ -136,6 +138,7 @@ export default function Post({ postData }) {
               height={500}
             />
           </div>
+        </div>
         <div className={styles.postContent}>
           <MDXRemote {...postData.mdxSource} components={components}/>
         </div>

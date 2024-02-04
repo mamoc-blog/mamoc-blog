@@ -79,7 +79,6 @@ const ButtonTimer = () => {
               display: flex;
               justify-content: center;
               align-items: center;
-              height: 100vh; /* Adjust this value as needed */
             }
 
             .bigger-image {
