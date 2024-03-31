@@ -1,0 +1,57 @@
+#wfc-container {
+    width: 60%;
+    height: 40%;
+    position: relative;
+  }
+  .box-container {
+    /* width: 60%;
+    height: 50%; */
+    position: relative;
+    width: 60vw; /* 60% of viewport width */
+    height: 50vh; /* 50% of viewport height */
+    background-color: #63606017;
+    border: 1px solid #bb2020;
+    text-align: center;
+    overflow: hidden;
+    max-height: 50vh; ;
+  }
+  .resetButton {
+    position: absolute;
+    bottom: 2%;
+    left: 0;
+    right: 0;
+    width:fit-content;
+    margin: auto;
+  }
+
+  .images {
+    border: 1px solid #bb2020;
+    width: 90%;
+    max-height: 35vh;
+    margin:auto;
+    
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    overflow: auto;
+  }
+
+  .image-container {
+    border: 1px solid #bb2020;
+    /* position: relative;
+    width:40%; */
+    margin:2%;
+    button, img {
+      /* Constrain width and height to 100% of the container */
+      margin: auto;
+      padding: 2%;
+      max-width: 80%;
+      max-height: 30%;
+      width: 100%;
+      height: auto;
+      overflow-wrap: break-word;
+    }
+  }
+
+
+  

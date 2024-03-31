@@ -6,6 +6,8 @@ module.exports = (async () => {
   const rehypeSlug = await import('rehype-slug');
   const rehypeAutolinkHeadings = await import('rehype-autolink-headings');
 
+  
+
   const withMDX = require('@next/mdx')({
     extension: /\.mdx?$/,
     options: {
@@ -15,8 +17,22 @@ module.exports = (async () => {
     },
   });
 
+
   return withMDX({
     pageExtensions: ['js', 'jsx', 'md', 'mdx'],
-    // other next.js config
+    webpack(config) {
+      config.resolve.fallback = {
+  
+        // if you miss it, all the other options in fallback, specified
+        // by next.js will be dropped.
+        ...config.resolve.fallback,  
+  
+        fs: false, // the solution
+        path:false,
+      };
+      
+       return config;
+    },
   });
 })();
+

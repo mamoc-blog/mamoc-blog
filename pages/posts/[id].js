@@ -1,6 +1,7 @@
 import Layout from '../../components/layout/layout';
 import Figure from '/components/frames/Figure';
 import ButtonTimer from '/components/interactive/ButtonTimer';
+import WFCCONTAINER from '../../components/WFC_components/WFCCONTAINER';
 import CharacteristicLengthCalculator from '/components/interactive/CharacteristicLengthCalculator';
 import RK4ReactionDiffusion from '/components/interactive/RK4ReactionDiffusion';
 import { getAllPostIds, getPostData } from '../../lib/posts';
@@ -16,6 +17,8 @@ import {useState, useEffect} from 'react';
 import 'katex/dist/katex.min.css'
 import Link from 'next/link';
 import Image from 'next/image';
+import fs from 'fs'
+import path from 'path'
 // import {CustomH1, CustomH2, CustomH3} from '../../components/mdx/customHN';
 // import your component
 const LotkaVolterra = dynamic(() => import('/components/interactive/LotkaVolterra'), {
@@ -30,10 +33,11 @@ const components = {
   RK4ReactionDiffusion,
   Link,
   CharacteristicLengthCalculator,
+  WFCCONTAINER,
   // whatever component you want
 };
 
-export default function Post({ postData }) {
+export default function Post({ postData,wfc_paths }) {
   const [toc, setToc] = useState([]);
 
   useEffect(() => {
@@ -139,6 +143,11 @@ export default function Post({ postData }) {
             />
           </div>
         </div>
+        <div hidden id="imageholder">
+        {wfc_paths.map((image) => (
+          <img  src={image} alt={image} />
+        ))}
+        </div>
         <div className={styles.postContent}>
           <MDXRemote {...postData.mdxSource} components={components}/>
         </div>
@@ -155,11 +164,31 @@ export async function getStaticPaths() {
   };
 }
 
+export function* readAllFiles(dir) {
+  const files = fs.readdirSync(dir, { withFileTypes: true });
+
+  for (const file of files) {
+    if (file.isDirectory()) {
+      yield* readAllFiles(path.join(dir, file.name));
+    } else {
+      yield path.join(dir, file.name);
+    }
+  }
+}
+
 export async function getStaticProps({ params }) {
   const postData = await getPostData(params.id);
+  var wfc_paths = []
+  if(postData.title=='Creating Maps with Wave Function Collapse') {
+    for (const file of readAllFiles('./public/posts/WFC/')) {
+    wfc_paths.push(file.split('public')[1])
+  }
+  }
+  
   return {
     props: {
-      postData,
+       postData,
+       wfc_paths,
     },
   };
 }

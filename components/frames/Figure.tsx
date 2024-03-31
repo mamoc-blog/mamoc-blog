@@ -1,4 +1,5 @@
 import React from 'react';
+import KaTeX from '../utils/KaTeX';
 
 const Figure = ({ src, caption, number }) => {
     // Function to render images or skip rendering if src is empty
@@ -19,7 +20,10 @@ const Figure = ({ src, caption, number }) => {
     return (
         <figure>
             {renderImages()}
-            <figcaption>Figure {number}: {caption}</figcaption>
+            <figcaption>
+                <div style={{ fontWeight: '800' , display:'inline'}}>Figure {number}: </div>
+                {caption}
+            </figcaption>
 
             <style>{`
                 figure {

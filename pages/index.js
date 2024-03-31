@@ -10,6 +10,7 @@ import { Carousel } from '../components/utils/Carousel';
 import carouselImages from '../data/carouselImages.json';
 import { useState } from 'react';
 import Image from 'next/image';
+import { DateTime } from 'Luxon';
 
 
 export default function Home({ allPostsData, carouselProps }) {
@@ -88,7 +89,11 @@ export default function Home({ allPostsData, carouselProps }) {
             </div>
             <ul className={utilStyles.list}>
               {
-              allPostsData.filter(post => post.author === 'Cameron Michie').map(({ id, date, title, summary }) => (
+              allPostsData.filter(post => post.author === 'Cameron Michie').sort((a, b) => {
+                const beforeDate = DateTime.fromFormat(a.date, 'yyyy-mm-dd')
+                const afterDate = DateTime.fromFormat(b.date, 'yyyy-mm-dd')
+                return afterDate - beforeDate
+              }).map(({ id, date, title, summary }) => (
                 
                 <li className={utilStyles.listItem} key={id}>
                   <Link href={`/posts/${id}`}>{title}</Link>
@@ -146,15 +151,17 @@ export default function Home({ allPostsData, carouselProps }) {
                 </a>
               </div>
             <ul className={utilStyles.list}>
-              {allPostsData.filter(post => post.author === 'Alex Cheetham').map(({ id, date, title, summary }) => (
-                <li className={utilStyles.listItem} key={id}>
+              {allPostsData.filter(post => post.author === 'Alex Cheetham').sort((a, b) => {
+                  const beforeDate = DateTime.fromFormat(a.date, 'yyyy-mm-dd')
+                  const afterDate = DateTime.fromFormat(b.date, 'yyyy-mm-dd')
+                  return afterDate - beforeDate
+                }).map(({ id, date, title, summary }) => (
+                  <li className={utilStyles.listItem} key={id}>
                   <Link href={`/posts/${id}`}>{title}</Link>
                   <br />
-                  <span>{summary}</span>
-                  <small className={utilStyles.lightText}>
-                    <Date dateString={date} />
-                  </small>
-                  
+                  <small className={utilStyles.lightText}> <Date dateString={date} /> </small>
+                  <br></br>
+                  <small className={utilStyles.descriptionText}>{summary}</small>
                 </li>
               ))}
             </ul>
