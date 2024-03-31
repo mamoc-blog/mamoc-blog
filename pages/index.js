@@ -10,7 +10,7 @@ import { Carousel } from '../components/utils/Carousel';
 import carouselImages from '../data/carouselImages.json';
 import { useState } from 'react';
 import Image from 'next/image';
-import { DateTime } from 'Luxon';
+import { DateTime } from 'luxon';
 
 
 export default function Home({ allPostsData, carouselProps }) {
