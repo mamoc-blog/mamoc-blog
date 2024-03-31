@@ -145,7 +145,7 @@ export default function Post({ postData,wfc_paths }) {
         </div>
         <div hidden id="imageholder">
         {wfc_paths.map((image) => (
-          <img  src={image} alt={image} />
+          <img  src={image} key={image} alt={image} />
         ))}
         </div>
         <div className={styles.postContent}>
