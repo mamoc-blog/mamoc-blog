@@ -35,15 +35,19 @@ if (filename.endsWith('.svg')||filename.endsWith('.png')) { // Check if it's an 
 });
 
 function  startWFC() {
-  if (tileset.includes('CITY')){
+  try {
     bslider.remove()
+  }
+  catch (TypeError) {
+    var bslider;
+  }
+  if (tileset.includes('CITY')){
     bslider = createSlider(1, 8,2);
     bslider.parent("wfc-container")
     bslider.position(0,0.41*h);
     bslider.size(0.2*w);
   }
   else {
-    bslider.remove()
     bslider = createSlider(1, 30,2);
     bslider.parent("wfc-container")
     bslider.position(0,0.41*h);
