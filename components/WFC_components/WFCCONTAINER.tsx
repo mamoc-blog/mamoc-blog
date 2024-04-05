@@ -12,9 +12,9 @@ export default function WFCCONTAINER() {
   return (
     <div>
     <div>
-    <link rel="stylesheet" type="text/css" href="/WFC_CODE/wfc.css" />
+    <link rel="stylesheet" type="text/css" href="/WFC_code/wfc.css" />
     <Script src="https://cdn.jsdelivr.net/npm/p5@1.8.0/lib/p5.js" />
-    <Script type="text/javascript" src="/WFC_CODE/wfc.js" />
+    <Script type="text/javascript" src="/WFC_code/wfc.js" />
     <Script type="text/javascript"  src="https://cdn.jsdelivr.net/npm/jsxgraph/distrib/jsxgraphcore.js"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/jsxgraph/distrib/jsxgraph.css" />
   </div>
@@ -40,7 +40,7 @@ export default function WFCCONTAINER() {
       <button className="resetButton"  id="resetButton">↺ Reset</button>
       </div>
     </div>
-    <Script type="text/javascript" src="/WFC_CODE/wfc_flow.js" />
+    <Script type="text/javascript" src="/WFC_code/wfc_flow.js" />
     <br/>
     <br/>
   </div>
