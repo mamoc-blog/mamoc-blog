@@ -40,6 +40,7 @@ function  startWFC() {
   }
   catch (TypeError) {
     var bslider;
+    bslider.remove()
   }
   if (tileset.includes('CITY')){
     bslider = createSlider(1, 8,2);
