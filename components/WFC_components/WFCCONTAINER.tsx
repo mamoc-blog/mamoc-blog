@@ -10,8 +10,8 @@ export default function WFCCONTAINER() {
   return (
     <div>
       <Head>
-      <script src="/WFC_CODE/wfc.js" ></script>
-      <script src="/WFC_CODE/wfc_flow.js" ></script>
+      <script src="%PUBLIC_URL%/WFC_CODE/wfc.js" ></script>
+      <script src="%PUBLIC_URL%/WFC_CODE/wfc_flow.js" ></script>
       </Head>
     <div>
     <link rel="stylesheet" type="text/css" href="/WFC_CODE/wfc.css" />
