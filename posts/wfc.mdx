@@ -20,8 +20,10 @@ WFC is an algorithm from the larger procedural generation[^Procgen] family that 
 The WFC algorithm actually has very little to with quantum physics and is more accurately framed as a constraint satisfaction problem[^CSP] solver.
 Furthermore, it is important to note that Wave Function Collapse (WFC) invented by Gumin[^Gumin] has a sister algorithm Model Synthesis that predates it.
 WFC generates options from an input image whereas Model Synthesis utilises a predefined set of options. 
-## Implementation
-## The Algorithm:
+## <ins>Implementation</ins>
+<br />
+<br />
+### The Algorithm:
 In the Algorithm below, items coloured red are implemented in my approach and items coloured in blue will be discussed further later.
 
 - Preliminary: for each option, create a set containing **each other option that can be adjacent to that option**. We call this set the cell's domain.
@@ -32,12 +34,12 @@ In the Algorithm below, items coloured red are implemented in my approach and it
 2. Fix the selected cell's domain:
     - Select an option from the selected cell's domain by sampling from the options probability distribution,
     - Remove all the other options from the cell's domain,
-3. For each remaining grid cell in the grid update their domains based on the newly reduced domain of the selected cell. If there is a cell that has an empty domain:
+3. For each remaining grid cell in the grid, update their domains based on the newly reduced domain of the selected cell. If there is a cell that has an empty domain:
     - **RESET** the grid,
     - <span style={{color:'red'}}>**BACKTRACKING:** </span>
         - Return to the last cell to be fixed,
         - Reset its domain to before it was fixed,
-        - Remove the tile that was just tried,
+        - Remove the tile that was just tried from its domain,
         - Resample from the options probability distribution and fix a new option.
 ### Probabilistic Biome Generation and Shannon Entropy
 Throughout the article the idea of 'lowest entropy' has been referred to, in this section the concept will be expanded upon.
@@ -49,11 +51,11 @@ $$
 H(\mathbf{X})=-\sum_{\mathcal{x}\in \mathcal{X}}p(\mathcal{x})log(p(\mathcal{x}))
 $$
  When Shannon Entropy is "low" (close to zero) there is high certainty about the variable and vice versa. This means 
-Shannon Entropy can be used as the cell selection heuristic because selecting the cell with the fewest options (implying low entropy) increases the chances of filling the cell correctly.
+Shannon Entropy can be used as the cell selection heuristic because selecting the cell with the fewest options (implying low entropy) decreases the chances of creating a degenerate grid(one where a grid cell has no options in its domain).
 
 
 Furthermore, custom probability distributions can  be crafted (in the case of the [City Tileset](#tilesets)) for each "Biome" (Grassland, Lagoon, Ocean, Sand or Cave). These "biomes" are 
-subsets of the options that can be organised into a single group by some similar attribute, in the case of the CITY tileset this is what type of land the tile is. 
+subsets of the options organised by some similar attribute, in the case of the CITY tileset this is what type of land the tile is. 
 This allows the user to customise the "maps" that they are creating by weighting biomes differently. **This is accomplished by splitting all the options into one of the biomes
 and calculating its shannon entropy with the probability associated to the biome**. So for example by boosting 'Sand' and 'Lagoon' biomes the user is more likely to get a sandy beach 
 or island instead of a grassland area with lots of caves.
@@ -72,7 +74,7 @@ video game esque maps up to the 8x8 grid size.
 ## Increasing generality
 The astute readers may have noticed that, when changing tileset from Red Grid to City, the maximum grid size is reduced from
 30 down to 8, this is because the City tileset is considerably more prone to reaching unsolvable states due to the significantly
-larger set of tiles and inherent incompatibility between tiles from different biomes. In order to remedy this Merrell, in his Ph.D. Thesis[^Thesis] 
+larger set of tiles and inherent incompatibility between tiles from different biomes. In order to remedy this Merrell, in his Ph.D. Thesis[^Thesis], 
 describes an adapation to the WFC algorithm that allows it to drastically increase its chances of solving large grid sizes.
 The adaptation is called 'Modification in Blocks' and solves the problem by breaking down the grid into smaller subsections
 then performing the following:

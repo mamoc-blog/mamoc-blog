@@ -129,7 +129,7 @@ for (let i = 0; i < grid_array.length; i++) {
   // Display text information for each square:
   fill('white');         // White text for visibility
   strokeWeight(0);       // No stroke for text
-  options_coords = grid_array[i].options.length.toString().concat(' ').concat(grid_array[i].position.toString());
+  options_coords = grid_array[i].options.length.toString() //.concat(' ').concat(grid_array[i].position.toString());
   // Display number of options and position coordinates
   text(options_coords, (x + 0.1) * grid_w, (y + 0.1) * grid_h, grid_w, grid_h);
 }
@@ -303,24 +303,6 @@ while (queue.length > 0){
     var split_adj = [[],[],[],[],[],[],[],[]];
     var split_cur = [];
 
-  // go through the adjacent_visited array and for each gridsquare we reduce current cells options based on the adjacent cell
-  // if (tileset.includes('CITY')) {
-  //   console.log(unvisited_dir)
-  //
-  //   var split_adj = [[],[],[],[],[],[],[],[]];
-  //   var split_cur = [];
-  //   unvisited_dir.forEach(direction => {
-  //     indexes =  directionstoindex[direction.toString()]
-  //     console.log('GRRR')
-  //     indexes.forEach(adj_index=>{
-  //       split_adj[adj_index] = ['G','Y','LB','DB','WL','WR','WU','WD',]
-  //       console.log(adj_index,'GRRR')
-  //     });
-  //
-  //
-  //     })
-  //
-  // }
   total_indices = [];
   old_options = JSON.stringify(current_cell.options)
   adjacent_visited.forEach(pair => {
@@ -330,8 +312,6 @@ while (queue.length > 0){
 
     if (tileset.includes('CITY')){
 
-      //TODO IF EDGE,CORNER,CORNER MATCH THEN  REDUCE
-      //console.log(adjacent_cell.options,current_cell.options)
 
       cur_indexes =  directionstoindex[direction.toString()]
       //total_indices.concat(cur_indexes)
@@ -523,7 +503,6 @@ for (const [value, string_value] of data) {
     return value;
   }
 }
-console.log('BADDDDDDD')
 return null; // Indicate value not found using a clear signal
 
 }
@@ -555,7 +534,6 @@ if (tileset.includes('CITY')){
 // Iterate through each direction:
 directions.forEach(direction => {
   // Check for a valid neighboring cell in that direction
-  //console.log('preerror',direction, bad_cell, grid_array)
   result = checkDirection(direction, bad_cell, grid_array, [new gridSquare([-100, -100], 'FG')]);
 
   // If a valid neighbor is found:
