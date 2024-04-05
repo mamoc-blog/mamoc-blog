@@ -1,22 +1,20 @@
 
 import React from "react";
 import Script from 'next/script'
-import Head from "next/head"
+
+
 
 
 export default function WFCCONTAINER() {
+  
     
 
   return (
     <div>
-      <Head>
-      <script src="%PUBLIC_URL%/WFC_CODE/wfc.js" ></script>
-      <script src="%PUBLIC_URL%/WFC_CODE/wfc_flow.js" ></script>
-      </Head>
     <div>
     <link rel="stylesheet" type="text/css" href="/WFC_CODE/wfc.css" />
     <Script src="https://cdn.jsdelivr.net/npm/p5@1.8.0/lib/p5.js" />
-   
+    <Script type="text/javascript" src="/WFC_CODE/wfc.js" />
     <Script type="text/javascript"  src="https://cdn.jsdelivr.net/npm/jsxgraph/distrib/jsxgraphcore.js"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/jsxgraph/distrib/jsxgraph.css" />
   </div>
@@ -42,7 +40,7 @@ export default function WFCCONTAINER() {
       <button className="resetButton"  id="resetButton">↺ Reset</button>
       </div>
     </div>
-    
+    <Script type="text/javascript" src="/WFC_CODE/wfc_flow.js" />
     <br/>
     <br/>
   </div>
