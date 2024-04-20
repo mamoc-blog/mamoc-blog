@@ -1,5 +1,47 @@
 [
   {
+    "src": "/carousel/alex_neuroev_1.jpg",
+    "author": "alex",
+    "blogPostTitle": "neuroev",
+    "blogPostUrl": "/posts/neuroev",
+    "imageNumber": "1"
+  },
+  {
+    "src": "/carousel/alex_neuroev_2.jpeg",
+    "author": "alex",
+    "blogPostTitle": "neuroev",
+    "blogPostUrl": "/posts/neuroev",
+    "imageNumber": "2"
+  },
+  {
+    "src": "/carousel/alex_pinns_1.gif",
+    "author": "alex",
+    "blogPostTitle": "pinns",
+    "blogPostUrl": "/posts/pinns",
+    "imageNumber": "1"
+  },
+  {
+    "src": "/carousel/alex_pinns_2.gif",
+    "author": "alex",
+    "blogPostTitle": "pinns",
+    "blogPostUrl": "/posts/pinns",
+    "imageNumber": "2"
+  },
+  {
+    "src": "/carousel/alex_wfc_1.png",
+    "author": "alex",
+    "blogPostTitle": "wfc",
+    "blogPostUrl": "/posts/wfc",
+    "imageNumber": "1"
+  },
+  {
+    "src": "/carousel/alex_wfc_2.gif",
+    "author": "alex",
+    "blogPostTitle": "wfc",
+    "blogPostUrl": "/posts/wfc",
+    "imageNumber": "2"
+  },
+  {
     "src": "/carousel/cam_spatial-ecology_1.png",
     "author": "cam",
     "blogPostTitle": "spatial ecology",

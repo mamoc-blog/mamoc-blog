@@ -25,9 +25,28 @@ fs.writeFileSync(
 );
 
 // Generating arrays for Carousel component props
-const authors = imageFiles.map(item => item.author);
-const blogTitles = imageFiles.map(item => item.blogPostTitle);
-const blogUrls = imageFiles.map(item => item.blogPostUrl);
+const combinedArray = imageFiles.map(item => ({
+  author: item.author,
+  blogPostTitle: item.blogPostTitle,
+  blogPostUrl: item.blogPostUrl
+}));
 
-// Export the arrays (or handle them as needed for your setup)
+// Function to shuffle the array
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]]; // ES6 destructuring swap
+  }
+}
+
+// Shuffle the combined array
+shuffleArray(combinedArray);
+
+// Extract the data into separate arrays
+const authors = combinedArray.map(item => item.author);
+const blogTitles = combinedArray.map(item => item.blogPostTitle);
+const blogUrls = combinedArray.map(item => item.blogPostUrl);
+
+
+// Export the arrays
 module.exports = { authors, blogTitles, blogUrls };

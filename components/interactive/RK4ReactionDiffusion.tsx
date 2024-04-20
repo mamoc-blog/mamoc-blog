@@ -3,7 +3,7 @@ import styles from "/styles/post.module.scss";
 import { useSettingsContext } from '../utils/Theme';
 
 const GRID_SIZE = 120;
-const DELTA_T = 0.1;
+const DELTA_T = 0.2;
 
 type GridCell = {
   x1: number;
