@@ -50,14 +50,21 @@ export default function Layout({ children, home }) {
       {home && 
       <section className={utilStyles2.imageSection}>
         <div className={utilStyles2.imageContainer}>
-          <Image
+          {/* <Image
             priority
             src="/images/artwork4.svg"
             alt="placeholder"
             width={1500} // Adjust as needed
             height={500} // This sets the height of the image
-          />
+          /> */}
+
+          {/* <iframe src="" width="1500" height="500"></iframe> */}
+          <div  className={utilStyles2.iframeContainer}>
+            <iframe src="https://ipfs.io/ipfs/QmZF6U1tExhq3peqaimnJ8zmQ4VCQ1a5hK1oSTW9HT7qVv/?fxhash=opMTaimRHSdr2t6MR5jfAs9fZ98Dbfw8FQKWshLcwKgNLuJ5yUz&fxiteration=172&fxminter=tz1fg4gu3agTw4BYwySKAq5cMYMnw6wfqrQx&fxparams=0c3fe333333333333340180000000000003fe199999999999a033fe00000000000003fc999999999999a3f9eb851eb851eb83fd0a3d70a3d70a43fb1eb851eb851ec" frameborder="0"></iframe>
         </div>
+        </div>
+
+        
       </section>}
       <main >
         <div className={styles.container}>

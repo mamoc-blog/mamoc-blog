@@ -10,6 +10,7 @@
   
   .left, .right {
     flex: 1; /* This will make both the left and right sides take up equal space */
+    padding: 5%;
   }
 
   .pink {
@@ -131,3 +132,18 @@
   height: auto; /* Keep aspect ratio */
 }
 
+.iframeContainer {
+  overflow: hidden;
+  position: relative;
+  width: 100vw; // 100% of the viewport width
+  height: 33.33vw; // Maintains a 3:1 aspect ratio
+
+  iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%; 
+    height: 300%;
+    transform: translate(-50%, -50%) ;
+  }
+}
