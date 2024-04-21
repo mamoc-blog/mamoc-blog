@@ -147,3 +147,10 @@
     transform: translate(-50%, -50%) ;
   }
 }
+
+
+.spacer {
+  width: 100%;      /* Takes full width of the container */
+  height: 50px;     /* 50 pixels high */
+  background-color: transparent; /* Ensures the div is invisible */
+}

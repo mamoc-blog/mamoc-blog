@@ -50,13 +50,6 @@ export default function Layout({ children, home }) {
       {home && 
       <section className={utilStyles2.imageSection}>
         <div className={utilStyles2.imageContainer}>
-          {/* <Image
-            priority
-            src="/images/artwork4.svg"
-            alt="placeholder"
-            width={1500} // Adjust as needed
-            height={500} // This sets the height of the image
-          /> */}
 
           {/* <iframe src="" width="1500" height="500"></iframe> */}
           <div  className={utilStyles2.iframeContainer}>
@@ -76,6 +69,20 @@ export default function Layout({ children, home }) {
             <Link href="/">← Back to home</Link>
           </div>
         )}
+        <div className={utilStyles2.spacer}></div>
+        <div className={utilStyles2.spacer}></div>
+        <div className={utilStyles2.spacer}></div>
+        <div className={utilStyles2.imageContainer}>
+        <Image
+            priority
+            src="/images/artwork4.svg"
+            alt="placeholder"
+            width={1500} // Adjust as needed
+            height={500} // This sets the height of the image
+            style={{ opacity: 0.3 }} 
+          />
+        </div>
+
     </SettingsProvider>
   );
 }
