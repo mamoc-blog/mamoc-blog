@@ -9,7 +9,7 @@ import {DarkModeToggle} from '../utils/DarkModeToggle';
 import { useSettingsContext } from '../utils/Theme';
 
 const name = '';
-export const siteTitle = 'MAMOC';
+export const siteTitle = 'mamoc';
 
 export default function Layout({ children, home }) {
   const { darkTheme } = useSettingsContext();
