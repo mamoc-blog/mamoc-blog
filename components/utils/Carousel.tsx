@@ -141,7 +141,7 @@ const _Carousel = ({
                   <div className={style.infos_text}>
                     <Link href={blogUrl} className={style.title_url}>
                         <h4>
-                          {blogTitle}{" "}
+                          / posts / {blogTitle}{" "}
                           <span className={style.iteration}>
                           </span>
                         </h4>
