@@ -3,6 +3,7 @@ import {useState, useEffect} from "react";
 import * as Ably from 'ably';
 import {AblyProvider} from "ably/react";
 import DisplayImg from "./DisplayImg";
+import { useSettingsContext } from '../utils/Theme';
 
 function triggerAzureFunction() {
   const url = 'https://spatial-ecology-no-users.azurewebsites.net/api/GameRunner?code=c41DwAgrjEXGAGHV-yVeWvkKVLbH_S0SEDnrsOFg8M5JAzFu2AzDvw==';
@@ -28,6 +29,10 @@ const ButtonTimer = () => {
     const [count, setCount] = useState(0);
     const [isActive, setIsActive] = useState(false);
     const [client, setClient] = useState<InstanceType<typeof Ably.Realtime.Promise> | null>(null);
+    const { darkTheme } = useSettingsContext();
+    const imgSrc = darkTheme
+              ? `/posts/spatial-ecology/press-start-dark.png`
+              : `/posts/spatial-ecology/press-start.png`;
   
     useEffect(() => {
       let timer;
@@ -111,7 +116,7 @@ const ButtonTimer = () => {
                 <DisplayImg />
               </AblyProvider>
             )
-            : <img src={"/images/press-start.png"} className="bigger-image" />
+            : <img src={imgSrc} className="bigger-image" />            
           }
         </div>
         <br></br>
