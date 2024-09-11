@@ -1,38 +1,48 @@
 ---
-title: WIP NixOS ARTICLE
+title: Windows Closed, Nix Open. 
 date: "2024-06-30"
 math: true
-summary: A showcase and explanation of my transition to NixOS
+summary: A summary of my experience switching to NixOS and using Nix for project package management.
 author: Alex Cheetham
 commentable: true;
-imageSrc: "/nixos/featured.png"
+imageSrc: "/nixos/featured.svg"
 ---
 ## Introduction
-In the wake of the recent Windows Copilot scandal, where concerns over privacy and data security have been raised yet again, I found myself reevaluating my operating system choices. As someone deeply invested in technology and privacy, the revelations were unsettling. That's when I discovered NixOS – a Linux distribution renowned not only for its robust security and privacy-centric design but also for its revolutionary approach to system configuration and package management.
-
-![NixOS Logo](https://example.com/nixos-logo.png)
-
-NixOS stands apart from traditional Linux distributions by offering a fundamentally different philosophy: immutability and declarative configuration. Instead of the conventional method where system changes are made incrementally and often result in complex states that are hard to reproduce, NixOS takes a snapshot-based approach. This means every change to the system is treated as a whole, ensuring consistency and predictability across different environments.
+In the wake of the recent [Windows Copilot Plus](https://blogs.microsoft.com/blog/2024/05/20/introducing-copilot-pcs/)
+ controversy, where [concerns over privacy and data security](https://www.bbc.co.uk/news/articles/cd11rje1mrro) were raised, I found myself reevaluating my operating system choices. After researching the options for a day, I made the decision to try NixOS – a Linux distribution with a unique approach to system configuration and package management.
 
 ## What is NixOS?
-[NixOS](https://nixos.org/) is a Linux distribution built around the Nix package manager, emphasizing immutability, reproducibility, and declarative configuration. Unlike traditional distributions, NixOS defines the entire system configuration in a single file, enabling precise control and reliable system upgrades.
+NixOS is a Linux distribution (set of pre-installed programs, settings and a package management system that sit on top of the Linux kernel) that provides the following key features: immutability, reproducibility, declarative configuration and atomic upgrades. 
+- **Immutability**: When a package is installed into the Nix store it is given a unique hash, this means that even a small change in a package's definition results in a new hash in the store when rebuilt. All packages in the store have precise dependencies, referencing the hashes of other packages exclusively. This allows multiple versions of a package to coexist in the store and be used interchangeably.
 
-## Flakes: Simplifying Package Management
-One of the standout features of NixOS is **Flakes**. Flakes introduce a new way to manage Nix projects and configurations with a focus on reproducibility and ease of use. By leveraging Flakes, I can specify my system configuration and packages in a modular and composable manner.
+- **Reproducibility** (deterministic): First of all, Nix [does not guarantee reproducibility](https://github.com/NorfairKing/nix-does-not-guarantee-reproducibility) in all cases. It does however, as a functional programming language, guarantee that if you give $\colorbox{Gray}{\texttt{nix build}}$, or associated nix function, the same inputs it will produce consistent output.
 
-## Overlays: Customizing System Packages
-**Overlays** in NixOS allow me to extend and customize the set of packages available in my system without modifying the global package set. This approach ensures that my customizations remain isolated and reproducible across different environments.
+- **Declarative configuration**: The declarative nature of Nix is one of, if not the most powerful feature of Nix. In an imperative language you would install a package with a command like $\colorbox{Gray}{\texttt{apt-get install package-name}}$, in NixOS you would edit your system configuration file $\colorbox{Gray}{\texttt{/etc/nixos/configuration.nix}}$ and add $\colorbox{Gray}{\texttt{package-name.enable=true;}}$.This is a huge advantage for reproducibility as it means if you want to give someone the exact same OS or dev env you only need to give them the configuration file and they can install the same packages as you. 
 
-## nix-shell: Creating Reproducible Development Environments
-With `nix-shell`, I can create isolated and reproducible development environments for my projects. This feature ensures that all dependencies are precisely defined and consistent across different machines, eliminating dependency hell and ensuring smooth development workflows.
+- **Atomic upgrades**: Configuration changes, updates or package builds will never get stuck in intermediary states, i.e in the case of unforeseen shutdown mid installation, the change succeeds or fails. Furthermore, Nix features a rollback feature that allows you to revert to the state before the change was made.
 
-## Hyprland: Exploring a New Desktop Environment
-As part of my transition, I discovered **Hyprland**, a lightweight and customizable desktop environment designed for NixOS. Hyprland offers a modern and efficient user interface while aligning with NixOS's principles of immutability and declarative configuration.
+## How I've used Nix
 
-## Home-manager: Managing User Configuration
-**Home-manager** simplifies the management of user-specific configurations such as dotfiles and application settings. With Home-manager, I can declaratively specify my preferred configurations and effortlessly replicate them across different machines.
+### Developer Environments
+While working on a proof of concept project at work, I encountered the need for reproducible development builds on both Ubuntu and Windows Subsystem for Linux (WSL). Notably both are still "x86_64-linux". Ensuring consistency across these environments was critical to the project's success, as it allowed our team to avoid the "it works on my machine" problem.
 
-## Conclusion
-Transitioning to NixOS has been a transformative experience, offering unparalleled control over my system configuration and enhancing my development workflows. By adopting NixOS, I embrace a more secure and transparent computing environment while distancing myself from proprietary solutions like Windows Copilot.
+Using Nix, I was able to define a development environment that could be consistently reproduced by my team and on WSL for the delivery machine. This ensured that all team members were working with the same versions of tools and dependencies, which significantly reduced integration issues. In particular, it automated the CUDA setup allowing users to have CUDA pytorch from the onset (I knew all machines would have NVIDIA hardware in advance).
+#### Flakes
+Nix Flakes are an experimental feature for the Nix Package Manager, they are used to generate outputs such as: packages, NixOS systems, templates, developer environments and helper functions. They utilise $\colorbox{Gray}{\texttt{flake.lock}}$ and $\colorbox{Gray}{\texttt{flake.nix}}$ files in the root directory of a project to pin dependency versions to a specific commit or tarball allowing even greater reproducibility. 
 
-Whether you're a developer looking for reproducible environments or a privacy-conscious user seeking control over your digital footprint, NixOS presents a compelling alternative worth exploring.
+inputs/ouputs/description - basic nix file
+
+
+
+Here’s how I utilized Flakes to manage our development environments:
+
+### Desktop OS
+
+#### Overrides
+#### Stylix
+#### Showcase
+
+
+
+
+
