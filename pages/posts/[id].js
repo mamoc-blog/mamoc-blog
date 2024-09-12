@@ -59,7 +59,7 @@ export default function Post({ postData,wfc_paths }) {
   const authorImageSrc = postData.author.toLowerCase() === "cameron michie" ? "/images/cam.png" : "/images/alex.png";
   const linkedinUrl = postData.author.toLowerCase() === "cameron michie" ? "https://www.linkedin.com/in/cameron-michie/" : "https://www.linkedin.com/in/alexandercheetham/";
   const githubUrl = postData.author.toLowerCase() === "cameron michie" ? "https://github.com/cameron-michie" : "https://github.com/alexander-cheetham";
-  const cvLink = "/"+(postData.author.toLowerCase() === "cameron michie" ? "cam" : "alex")+".pdf";
+  const cvLink = "/cv/"+(postData.author.toLowerCase() === "cameron michie" ? "cam" : "alex")+".pdf";
 
   return (
     <Layout>
@@ -108,7 +108,7 @@ export default function Post({ postData,wfc_paths }) {
                       className={utilStyles.borderCircle}
                     />
                   </Link>
-                  <a href={"/cv/cam.pdf"}>
+                  <a href={cvLink}>
                     <Image
                       priority
                       src={"/images/cv.png"}
@@ -138,8 +138,10 @@ export default function Post({ postData,wfc_paths }) {
               priority
               src={postData.imageSrc}
               alt={`Cover image for ${postData.title}`}
-              width={500}
-              height={500}
+              width={0}
+              height={0}
+              sizes="100vw"
+              style={{ width: '100%', height: 'auto', maxWidth: '50%' }} // optional
             />
           </div>
         </div>
