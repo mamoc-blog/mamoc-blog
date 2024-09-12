@@ -93,16 +93,35 @@ One of the powerful aspects of NixOS is how easy it is to override packages to f
 This allowed me to tailor my environment exactly to my preferences without altering the upstream sources. Overrides like this provide a powerful way to adapt packages to fit your specific needs, from fonts to window managers and beyond.
 #### Stylix
 
-For desktop customization, I turned to Stylix, a Nix-based ecosystem that integrates various UI/UX enhancements. Stylix allowed me to apply themes and visual tweaks to the system effortlessly. I set it up by importing the Stylix configuration into my configuration.nix file:
+For desktop customization, I turned to Stylix, a Nix-based ecosystem that integrates various UI/UX enhancements. Stylix allowed me to apply themes and visual tweaks system-wide. I set it up by importing the Stylix configuration into my configuration.nix file:
 
 ```nix
-imports = [
-  ./nixosfiles/stylix/stylix.nix
-];
+  stylix.enable = true;
+  stylix.autoEnable = true;
+  stylix.polarity = "dark";
+  
+  stylix.image =  ../wallpapers/mac-background.jpg;
+  stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/atelier-cave.yaml"; 
+  stylix.cursor.package = pkgs.capitaine-cursors;
+  stylix.cursor.name = "capitaine-cursors";
+  stylix.cursor.size = 10;
+
+  stylix.opacity.terminal = 0.7;
+   
 ```
-Through Stylix, I was able to manage and customize everything from the window decorations to icon sets. It integrated seamlessly with Hyprland, giving my desktop a sleek and consistent look. The best part is that all my theming customizations were codified, meaning I could easily replicate this setup on another machine by simply sharing my NixOS configuration.
+Through Stylix, I was able to manage and customize everything from the terminal opacity to fonts. It integrated seamlessly with Hyprland, giving my desktop a sleek and consistent look.
 #### Showcase
-<img style={{ display: 'block', width:'80%', margin: '0 auto'}}src="/nixos/specs.png" caption="Gradient descent as steps on a misty hill" numbered="true" />
+
+Below is an image showcasing my NixOS desktop setup with Hyprland, Waybar, and Stylix customizations. The terminal is configured with a semi-transparent background and a personalized Zsh prompt powered by p10k, providing a minimal yet functional workspace.
+
+<img style={{ display: 'block', width:'80%', margin: '0 auto'}}src="/nixos/specs.png" caption="" numbered="true" />
+
+## Conclusion
+
+Switching to NixOS has been an enjoyable experience. The declarative nature of Nix, combined with the power of flakes, has allowed me to create reproducible development environments and a highly customized desktop experience. Whether it's managing Python dependencies, configuring development shells, or creating Docker containers, Nix has streamlined my workflow across various platforms.
+
+While Nix does require an initial time investment into learning the syntax, the benefits of a consistent, reproducible, and customizable environment far outweigh the challenges. With tools like Home Manager, Stylix, and Hyprland, my NixOS setup is tailored exactly to my needs and provides a sleek, modern Linux desktop experience. For anyone looking for a powerful, flexible, and deterministic system, I highly recommend giving NixOS a try.
+
 
 
 
