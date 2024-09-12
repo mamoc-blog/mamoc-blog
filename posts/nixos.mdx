@@ -41,7 +41,7 @@ Nix Flakes are an experimental feature for the Nix Package Manager, they are use
     **2. Development Shells:** 
         - I set up development shells (devShells) for both native Linux and WSL environments to provide consistent development environments for the team, ensuring that everyone had the same tools and configurations. 
     
-        - In the configuration, the default shell and the wsl shell are built with the same core flakepackages, but customised for their specific environments. For example, in the WSL shell, the **`LD_LIBRARY_PATH`** and other environment variables are configured to work with WSL’s unique structure, while the native shell is optimized for Linux environments.
+        - In the configuration, the default shell and the wsl shell are built with the same core flakepackages, but customised for their specific environments. For example, in the WSL shell, the **`LD_LIBRARY_PATH`** and other environment variables are configured to work with WSL’s unique structure, while the native shell is optimised for Linux environments.
     
         - The shellHook allows environment variables like **`CUDA_PATH`**  and **`OLLAMA_MAX_LOADED_MODELS`**  to be set automatically when entering the shell. This ensures that every developer has the correct CUDA setup from the start, essential for GPU-accelerated tasks in machine learning with PyTorch.
     
@@ -112,7 +112,7 @@ For desktop customisation, I turned to Stylix, a Nix-based ecosystem that integr
 Through Stylix, I was able to manage and customise everything from the terminal opacity to fonts. It integrated seamlessly with Hyprland, giving my desktop a sleek and consistent look.
 #### Showcase
 
-Below is an image showcasing my NixOS desktop setup with Hyprland, Waybar, and Stylix customisations. The terminal is configured with a semi-transparent background and a personalized Zsh prompt powered by p10k, providing a minimal yet functional workspace.
+Below is an image showcasing my NixOS desktop setup with Hyprland, Waybar, and Stylix customisations. The terminal is configured with a semi-transparent background and a personalised Zsh prompt powered by p10k, providing a minimal yet functional workspace.
 <br />
 <img style={{ display: 'block', width:'80%', margin: '0 auto'}}src="/posts/nixos/desktop.png" caption="" numbered="true" />
 <br />
