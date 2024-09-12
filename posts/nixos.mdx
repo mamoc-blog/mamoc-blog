@@ -33,7 +33,7 @@ Nix Flakes are an experimental feature for the Nix Package Manager, they are use
     **1. Python Packages:** 
         - To manage the Python dependencies across our environments, I used Nix’s capability to specify and override Python packages. This was particularly helpful in ensuring consistency between development and production environments. 
     
-        - In the Flake configuration, I defined a set of Python packages $\colorbox{Gray}{\texttt{python-packages}}$ which included essential libraries for machine learning and data science like $\colorbox{Gray}{\texttt{torch-bin}}$, $\colorbox{Gray}{\texttt{scikit-learn}}$, $\colorbox{Gray}{\texttt{transformers}}$, and $\colorbox{Gray}{\texttt{pandas}}$. I also customized the behavior of some packages. For instance, I overrode the default attributes of $\colorbox{Gray}{\texttt{streamlit}}$ to ensure we were using a specific version (1.37.0) from PyPI with a pinned checksum, ensuring reproducibility and avoiding dependency conflicts.
+        - In the Flake configuration, I defined a set of Python packages $\colorbox{Gray}{\texttt{python-packages}}$ which included essential libraries for machine learning and data science like $\colorbox{Gray}{\texttt{torch-bin}}$, $\colorbox{Gray}{\texttt{scikit-learn}}$, $\colorbox{Gray}{\texttt{transformers}}$, and $\colorbox{Gray}{\texttt{pandas}}$. I also customised the behavior of some packages. For instance, I overrode the default attributes of $\colorbox{Gray}{\texttt{streamlit}}$ to ensure we were using a specific version (1.37.0) from PyPI with a pinned checksum, ensuring reproducibility and avoiding dependency conflicts.
     
         - Additionally, custom-built Python packages were integrated. For example, $\colorbox{Gray}{\texttt{sentence-transformers}}$ was fetched directly from GitHub and built with Nix. This flexibility made it easy to pin versions and source libraries directly from upstream repositories, ensuring that every team member was working with the exact same dependencies and versions.Nix’s ability to override attributes of Python packages allowed me to tailor packages for our specific needs while keeping the dependency tree reproducible and stable.
 
@@ -41,7 +41,7 @@ Nix Flakes are an experimental feature for the Nix Package Manager, they are use
     **2. Development Shells:** 
         - I set up development shells (devShells) for both native Linux and WSL environments to provide consistent development environments for the team, ensuring that everyone had the same tools and configurations. 
     
-        - In the configuration, the default shell and the wsl shell are built with the same core flakepackages, but customized for their specific environments. For example, in the WSL shell, the **`LD_LIBRARY_PATH`** and other environment variables are configured to work with WSL’s unique structure, while the native shell is optimized for Linux environments.
+        - In the configuration, the default shell and the wsl shell are built with the same core flakepackages, but customised for their specific environments. For example, in the WSL shell, the **`LD_LIBRARY_PATH`** and other environment variables are configured to work with WSL’s unique structure, while the native shell is optimized for Linux environments.
     
         - The shellHook allows environment variables like **`CUDA_PATH`**  and **`OLLAMA_MAX_LOADED_MODELS`**  to be set automatically when entering the shell. This ensures that every developer has the correct CUDA setup from the start, essential for GPU-accelerated tasks in machine learning with PyTorch.
     
@@ -68,14 +68,14 @@ programs.hyprland = {
   xwayland.enable = true;
 };
 ```
-This allowed me to customize my window manager and integrate all necessary packages for an efficient workflow, like wofi for application launching, pavucontrol for managing sound, and waybar as the status bar. Finally, I utilise the "hypr" family for screenshots(hyprshot), screen locking (hyprlock) and wallpaper management (hyprpaper).
+This allowed me to customise my window manager and integrate all necessary packages for an efficient workflow, like wofi for application launching, pavucontrol for managing sound, and waybar as the status bar. Finally, I utilise the "hypr" family for screenshots(hyprshot), screen locking (hyprlock) and wallpaper management (hyprpaper).
 
 #### Home Manager Setup
 
 To manage my dotfiles and user-specific configurations, I use Home Manager, a Nix-based tool that integrates with NixOS to manage user environments. Using Home Manager, I can easily manage my Hyprland configuration files, including those for waybar and dunst. Additionally, my Zsh setup is tailored with useful plugins like fzf, z, and p10k for a visually appealing prompt. The integration of Home Manager allows me to maintain consistent and easily reproducible user configurations across systems.
 
 #### Overrides
-One of the powerful aspects of NixOS is how easy it is to override packages to fit specific needs. I made several customizations by leveraging overlays. For example, I needed to install and configure some custom fonts, such as SF Mono and SF Pro from the Apple family. I utilized Nix's override system to include these fonts as derivations:
+One of the powerful aspects of NixOS is how easy it is to override packages to fit specific needs. I made several customisations by leveraging overlays. For example, I needed to install and configure some custom fonts, such as SF Mono and SF Pro from the Apple family. I utilised Nix's override system to include these fonts as derivations:
 
 ```nix
 (final: prev: {
@@ -93,7 +93,7 @@ One of the powerful aspects of NixOS is how easy it is to override packages to f
 This allowed me to tailor my environment exactly to my preferences without altering the upstream sources. Overrides like this provide a powerful way to adapt packages to fit your specific needs, from fonts to window managers and beyond.
 #### Stylix
 
-For desktop customization, I turned to Stylix, a Nix-based ecosystem that integrates various UI/UX enhancements. Stylix allowed me to apply themes and visual tweaks system-wide. I set it up by importing the Stylix configuration into my configuration.nix file:
+For desktop customisation, I turned to Stylix, a Nix-based ecosystem that integrates various UI/UX enhancements. Stylix allowed me to apply themes and visual tweaks system-wide. I set it up by importing the Stylix configuration into my configuration.nix file:
 
 ```nix
   stylix.enable = true;
@@ -109,10 +109,10 @@ For desktop customization, I turned to Stylix, a Nix-based ecosystem that integr
   stylix.opacity.terminal = 0.7;
    
 ```
-Through Stylix, I was able to manage and customize everything from the terminal opacity to fonts. It integrated seamlessly with Hyprland, giving my desktop a sleek and consistent look.
+Through Stylix, I was able to manage and customise everything from the terminal opacity to fonts. It integrated seamlessly with Hyprland, giving my desktop a sleek and consistent look.
 #### Showcase
 
-Below is an image showcasing my NixOS desktop setup with Hyprland, Waybar, and Stylix customizations. The terminal is configured with a semi-transparent background and a personalized Zsh prompt powered by p10k, providing a minimal yet functional workspace.
+Below is an image showcasing my NixOS desktop setup with Hyprland, Waybar, and Stylix customisations. The terminal is configured with a semi-transparent background and a personalized Zsh prompt powered by p10k, providing a minimal yet functional workspace.
 <br />
 <img style={{ display: 'block', width:'80%', margin: '0 auto'}}src="/posts/nixos/desktop.png" caption="" numbered="true" />
 <br />
@@ -121,9 +121,9 @@ Below is an image showcasing my NixOS desktop setup with Hyprland, Waybar, and S
 
 ## Conclusion
 
-Switching to NixOS has been an enjoyable experience. The declarative nature of Nix, combined with the power of flakes, has allowed me to create reproducible development environments and a highly customized desktop experience. Whether it's managing Python dependencies, configuring development shells, or creating Docker containers, Nix has streamlined my workflow across various platforms.
+Switching to NixOS has been an enjoyable experience. The declarative nature of Nix, combined with the power of flakes, has allowed me to create reproducible development environments and a highly customised desktop experience. Whether it's managing Python dependencies, configuring development shells, or creating Docker containers, Nix has streamlined my workflow across various platforms.
 
-While Nix does require an initial time investment into learning the syntax, the benefits of a consistent, reproducible, and customizable environment far outweigh the challenges. With tools like Home Manager, Stylix, and Hyprland, my NixOS setup is tailored exactly to my needs and provides a sleek, modern Linux desktop experience. For anyone looking for a powerful, flexible, and deterministic system, I highly recommend giving NixOS a try.
+While Nix does require an initial time investment into learning the syntax, the benefits of a consistent, reproducible, and customisable environment far outweigh the challenges. With tools like Home Manager, Stylix, and Hyprland, my NixOS setup is tailored exactly to my needs and provides a sleek, modern Linux desktop experience. For anyone looking for a powerful, flexible, and deterministic system, I highly recommend giving NixOS a try.
 
 
 
