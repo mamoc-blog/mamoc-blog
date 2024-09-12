@@ -5,7 +5,7 @@ math: true
 summary: A summary of my experience switching to NixOS and using Nix for project package management.
 author: Alex Cheetham
 commentable: true;
-imageSrc: "/nixos/featured.svg"
+imageSrc: "/posts/nixos/featured.svg"
 ---
 ## Introduction
 In the wake of the recent [Windows Copilot Plus](https://blogs.microsoft.com/blog/2024/05/20/introducing-copilot-pcs/)
@@ -15,7 +15,7 @@ In the wake of the recent [Windows Copilot Plus](https://blogs.microsoft.com/blo
 NixOS is a Linux distribution (set of pre-installed programs, settings and a package management system that sit on top of the Linux kernel) that provides the following key features: immutability, reproducibility, declarative configuration and atomic upgrades. 
 - **Immutability**: When a package is installed into the Nix store it is given a unique hash, this means that even a small change in a package's definition results in a new hash in the store when rebuilt. All packages in the store have precise dependencies, referencing the hashes of other packages exclusively. This allows multiple versions of a package to coexist in the store and be used interchangeably.
 
-- **Reproducibility** (deterministic): First of all, Nix [does not guarantee reproducibility](https://github.com/NorfairKing/nix-does-not-guarantee-reproducibility) in all cases. It does however, as a functional programming language, guarantee that if you give $\colorbox{Gray}{\texttt{nix build}}$, or associated nix function, the same inputs it will produce consistent output.
+- **Reproducibility** (deterministic): First of all, Nix [does not guarantee reproducibility](https://github.com/NorfairKing/nix-does-not-guarantee-reproducibility) in all cases. It does however, as a functional programming language, guarantee that if you give $\colorbox{Gray}{\texttt{nix build}}$, or any associated nix function, the same inputs it will produce consistent output.
 
 - **Declarative configuration**: The declarative nature of Nix is one of, if not the most powerful feature of Nix. In an imperative language you would install a package with a command like $\colorbox{Gray}{\texttt{apt-get install package-name}}$, in NixOS you would edit your system configuration file $\colorbox{Gray}{\texttt{/etc/nixos/configuration.nix}}$ and add $\colorbox{Gray}{\texttt{package-name.enable=true;}}$.This is a huge advantage for reproducibility as it means if you want to give someone the exact same OS or dev env you only need to give them the configuration file and they can install the same packages as you. 
 
@@ -113,8 +113,11 @@ Through Stylix, I was able to manage and customize everything from the terminal 
 #### Showcase
 
 Below is an image showcasing my NixOS desktop setup with Hyprland, Waybar, and Stylix customizations. The terminal is configured with a semi-transparent background and a personalized Zsh prompt powered by p10k, providing a minimal yet functional workspace.
+<br />
+<img style={{ display: 'block', width:'80%', margin: '0 auto'}}src="/posts/nixos/desktop.png" caption="" numbered="true" />
+<br />
+<br />
 
-<img style={{ display: 'block', width:'80%', margin: '0 auto'}}src="/nixos/specs.png" caption="" numbered="true" />
 
 ## Conclusion
 
