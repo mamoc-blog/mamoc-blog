@@ -54,7 +54,7 @@ Nix Flakes are an experimental feature for the Nix Package Manager, they are use
     **4. Mixed Stable/Unstable NixPkgs:**
         - One of the strengths of Nix is its ability to mix stable and unstable packages seamlessly. For our project, we needed certain tools and libraries that were only available in the nixpkgs-unstable channel.
     
-        - To achieve this, I used a mixed approach, importing both the stable nixpkgs and the nixpkgs-unstable channels in the flake.nix configuration. This allowed me to selectively pull in packages from the unstable channel when necessary while relying on the more stable packages for other components. For example, the ollama package was sourced from nixpkgs-unstable to ensure we had the latest version. This allows usage of models with more complicated
+        - To achieve this, I used a mixed approach, importing both the stable nixpkgs and the nixpkgs-unstable channels in the flake.nix configuration. This allowed me to selectively pull in packages from the unstable channel when necessary while relying on the more stable packages for other components. For example, the ollama package was sourced from nixpkgs-unstable to ensure we had the latest version. This allows usage of models with more complicated architectures, e.g. Mistral Nemo.
     
         - By mixing stable and unstable channels, I could balance stability with access to the latest features and libraries. The configuration also ensured that all packages, whether from stable or unstable sources, were locked to specific versions via flake.lock, guaranteeing that the environment remained reproducible even as upstream packages evolved.
 
