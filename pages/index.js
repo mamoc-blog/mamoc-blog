@@ -107,7 +107,7 @@ export default function Home({ allPostsData, carouselProps }) {
           </div>
           <div/>
             <div className={utilStyles2.blogRight}>
-              <h2 className={`${utilStyles.headingLg} ${styles.authorName}`}>Alex Cheetham</h2>
+              <h2 className={`${utilStyles.headingLg} ${styles.authorName}`}>Alexander Cheetham</h2>
               <div className={styles.authorContainer}>
                 <Link href='.'>
                   <Image
@@ -129,7 +129,7 @@ export default function Home({ allPostsData, carouselProps }) {
                     className={utilStyles.borderCircle}
                   />
                 </Link>
-                <Link href={"https://www.linkedin.com/in/alexander-cheetham/"}>
+                <Link href={"https://www.linkedin.com/in/alexandercheetham/"}>
                   <Image
                     priority
                     src={"/images/linkedin.png"}
