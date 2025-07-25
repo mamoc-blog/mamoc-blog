@@ -6,9 +6,16 @@ body {
   padding: 0;
   margin: 0;
   font-family: "Fira Code", monospace;
-  background: var(--color-white);
+  background: linear-gradient(180deg, var(--color-gray-vvvvlight), var(--color-gray-vvlight));
   color: var(--color-black);
   font-size: clamp(14px, 2vw, 16px);
+  min-height: 100vh;
+  scroll-behavior: smooth;
+}
+
+body.dark {
+  background: linear-gradient(180deg, var(--color-gray-vvlight), var(--color-gray-vdark));
+  color: var(--color-white);
 }
 
 :root {
