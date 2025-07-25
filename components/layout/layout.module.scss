@@ -11,7 +11,10 @@
   flex-direction: column;
   align-items: center;
   z-index: 1;
-  background-color: var(--color-gray-vvvlight);
+  padding: 1rem 0;
+  background: #000;
+  color: #0f0;
+  box-shadow: none;
 }
 
 .backToHome {
@@ -45,12 +48,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%; // Adjust for a smaller width
-  margin: auto; // Center the container
-  padding: 10px; // Add some padding inside the box
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // Optional: add a subtle shadow
+  width: 90%;
+  margin: auto;
+  padding: 0.5rem 0;
   position: relative;
-  box-sizing: border-box; // Include padding and border in the width
+  box-sizing: border-box;
 
   .component {
     height: 75px; // Reduced size

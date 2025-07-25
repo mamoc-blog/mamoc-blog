@@ -1,16 +1,23 @@
 @import "../styles/variables.scss";
 
+.hero {
+  padding: 3rem 0;
+}
+
 .container {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    align-items: center;
-    justify-content: space-between; /* This ensures elements are spaced out */
-  }
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+}
   
-  .left, .right {
-    flex: 1; /* This will make both the left and right sides take up equal space */
-    padding: 5%;
+  .left,
+  .right {
+    flex: 1;
+    padding: 0 1rem;
   }
 
   .pink {
@@ -37,37 +44,22 @@
   
   
   .text {
-    padding-bottom: 48px;
-    padding-top: 30px;
-  
+    padding: 2rem 0;
+
     h1 {
-      font-weight: bold;
+      font-weight: 700;
       max-width: 480px;
     }
   }
-.text {
-  padding-bottom: 48px;
-  padding-top: 30px;
-  h1 {
-    font-weight: bold;
-    max-width: 480px;
-  }
-  .socials {
-    margin-top: 32px;
-    color: var(--color-gray);
-    font-size: var(--font-size-small);
-  }
-  .description {
-    margin-top: 18px;
-    font-size: var(--font-size-regular);
-    line-height: 1.33;
-    max-width: 400px;
-  }
-  .button {
-    width: fit-content;
-    margin-top: 48px;
-  }
+
+.heroTitle {
+  font-size: 3rem;
+  background: linear-gradient(90deg, var(--color-secondary), var(--color-primary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1rem;
 }
+
 
 .articles {
   border-top: 1px solid var(--color-gray-vlight);

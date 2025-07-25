@@ -1,0 +1,29 @@
+.shellContainer {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background: #000;
+  color: #0f0;
+  font-family: "Fira Code", monospace;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+}
+
+.prompt {
+  color: #0ff;
+  margin-right: 0.5rem;
+}
+
+.dropdown {
+  margin-top: 1rem;
+}
+
+.shellContainer :global(summary) {
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+}
+
+.shellContainer :global(li) {
+  margin: 0.25rem 0;
+}
