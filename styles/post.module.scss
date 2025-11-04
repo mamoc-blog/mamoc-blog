@@ -34,14 +34,45 @@
   }
   
 
-.postMetadata {
-    flex: 1;
-    display: flex;
+.summaryGrid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: minmax(0, 1fr);
+    gap: clamp(1rem, 2vw, 2.5rem);
     align-items: stretch;
-    flex-direction: column;
-    justify-content: flex-end;
+
+    @media (max-width: 900px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @media (max-width: 640px) {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.5rem;
+    }
   }
-  
+
+  .metadataColumn,
+  .tocColumn,
+  .imageColumn {
+    padding-inline: clamp(0.75rem, 2vw, 1.5rem);
+  }
+
+  .summaryGrid > :not(:last-child) {
+    border-right: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  @media (max-width: 900px) {
+    .summaryGrid > :not(:last-child) {
+      border-right: none;
+    }
+  }
+
+  .metadataColumn {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.75rem, 2vw, 1.4rem);
+  }
+ 
   .authorContainer {
     display: flex;
     align-items: center;
@@ -57,30 +88,40 @@
     background-color: var(--color-gray-vvvlight);
     padding: 15px;
     border-radius: 8px;
-    // flex: 1;
-    // margin-bottom: 20px;
-    margin-inline: 5%;
+    margin-inline: 0;
   }
   .dark .summarySection {
     background-color: #333; // Example dark mode background color
     // Define other dark mode styles as needed
   }
 
-  .postImageContainer {
+  .metadataColumn,
+  .tocColumn,
+  .imageColumn {
     display: flex;
-    justify-content: center; // Center the image horizontally
-    align-items: center;     // Center the image vertically
-    flex: 0 0 auto;          // Prevent the image from growing or shrinking
-  
-    @media (max-width: 768px) { // Adjust this breakpoint as needed
-      width: 100%;           // Make the container take the full width
-      max-width: 100%;       // Ensure the container doesn't exceed the screen width
-      height: auto;          // Allow the height to adjust proportionally
-    }
-  
-    img {
-      max-width: 100%;       // Ensure the image doesn't exceed the container width
-      height: auto;          // Allow the image height to adjust proportionally
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  .tocColumn {
+    align-self: stretch;
+  }
+
+  .imageColumn {
+    align-items: center;
+  }
+
+  .summaryImage {
+    width: 100%;
+    max-width: clamp(220px, 22vw, 300px);
+    border-radius: 16px;
+    box-shadow: 0 14px 30px rgba(0,0,0,0.08);
+    height: auto;
+    object-fit: cover;
+
+    @media (max-width: 768px) {
+      max-width: min(420px, 80vw);
     }
   }
   
@@ -89,22 +130,6 @@
     font-size: 85%;
     margin-top: 50px;
     
-  }
-  
-  .contentRow {
-    display: flex; // Enables Flexbox
-    justify-content: space-between; // Spreads the child divs to occupy the full width
-    align-items: flex-start; // Aligns items at the start of the cross axis, keeping them at the top
-    gap: 20px; // Adjust the gap between the children
-  
-    // Optional: Use media queries for responsive design if necessary
-    @media (max-width: 768px) {
-      flex-direction: column; // Stacks items vertically on smaller screens
-    }
-  }
-  
-  .summarySection {
-    flex: 1; 
   }
   
   // .postImageContainer {

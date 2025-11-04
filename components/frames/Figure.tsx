@@ -1,19 +1,54 @@
 import React from 'react';
 import KaTeX from '../utils/KaTeX';
 
-const Figure = ({ src, caption, number }) => {
-    // Function to render images or skip rendering if src is empty
+const sizeWidthMap: Record<string, string> = {
+    wide: '80%',
+    standard: '60%',
+    compact: '45%'
+};
+
+type FigureProps = {
+    src: string | string[];
+    caption: string;
+    number: number;
+    size?: string;
+    width?: string;
+};
+
+const Figure = ({ src, caption, number, size, width }: FigureProps) => {
+    const resolvedWidth = () => {
+        if (width) {
+            return width;
+        }
+        if (size) {
+            return sizeWidthMap[size] || size;
+        }
+        return '100%';
+    };
+
+    const maxWidth = resolvedWidth();
+
     const renderImages = () => {
-        // Check if src is an array with at least one non-empty string
         if (Array.isArray(src) && src.some(imageSrc => imageSrc)) {
             return src.map((imageSrc, index) => (
-                // Render each non-empty src as an image or GIF
-                imageSrc ? <img key={index} src={imageSrc} alt={caption} style={{ maxWidth: '50%', height: 'auto', display: 'inline-block' }} /> : null
+                imageSrc ? (
+                    <img
+                        key={index}
+                        src={imageSrc}
+                        alt={caption}
+                        style={{ width: '100%', height: 'auto', maxWidth }}
+                    />
+                ) : null
             ));
-        } else if (src) { // Check if src is a non-empty string
-            return <img src={src} alt={caption} style={{ maxWidth: '100%', height: 'auto' }} />;
+        } else if (src) {
+            return (
+                <img
+                    src={src}
+                    alt={caption}
+                    style={{ width: '100%', height: 'auto', maxWidth }}
+                />
+            );
         }
-        // Return null if src is an empty string or an array of empty strings
         return null;
     };
 
@@ -21,16 +56,14 @@ const Figure = ({ src, caption, number }) => {
         <figure>
             {renderImages()}
             <figcaption>
-                <div style={{ fontWeight: '800' , display:'inline'}}>Figure {number}: </div>
+                <div style={{ fontWeight: '800', display: 'inline' }}>Figure {number}: </div>
                 {caption}
             </figcaption>
 
             <style>{`
                 figure {
-                    // padding-left: 10rem;
-                    // padding-right: 10rem;
                     margin: 20px 0;
-                    text-align: center; /* Center the caption and images */
+                    text-align: center;
                 }
                 figcaption {
                     margin-top: 8px;

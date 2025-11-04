@@ -68,81 +68,80 @@ export default function Post({ postData,wfc_paths }) {
       </Head>
       <article>
         <h1 className={`${utilStyles.headingXl} ${utilStyles2.pink}`}>{postData.title}</h1>
-        <div style={{ display: "flex", flexWrap: "wrap" }}>
-          <div className={styles.summarySection}>
-            <div className={styles.contentRow}>
-              <div className={styles.postMetadata}>
-                <span className={`${styles.authorName} ${utilStyles.headingMd}`}><b>{postData.author}</b></span>
-                <div className={`${utilStyles.lightText}`}>
-                  <Date dateString={postData.date} />  
-                </div>
-                <p><b>{postData.summary}</b></p>
-                <div className={styles.authorContainer}>
-                  <Link href='.'>
-                    <Image
-                      priority
-                      src={authorImageSrc}
-                      height={50}
-                      width={50}
-                      alt={postData.author}
-                      className={utilStyles.borderCircle}
-                    />
-                  </Link>
-                  <Link href={githubUrl}>
-                    <Image
-                      priority
-                      src={"/images/github.png"}
-                      height={50}
-                      width={50}
-                      alt={postData.author}
-                      className={utilStyles.borderCircle}
-                    />
-                  </Link>
-                  <Link href={linkedinUrl}>
-                    <Image
-                      priority
-                      src={"/images/linkedin.png"}
-                      height={50}
-                      width={50}
-                      alt={postData.author}
-                      className={utilStyles.borderCircle}
-                    />
-                  </Link>
-                  <a href={cvLink}>
-                    <Image
-                      priority
-                      src={"/images/cv.png"}
-                      height={50}
-                      width={50}
-                      alt={postData.author}
-                      className={utilStyles.borderCircle}
-                    />
-                  </a>
-                </div>
+        <div className={styles.summarySection}>
+          <div className={styles.summaryGrid}>
+            <div className={styles.metadataColumn}>
+              <span className={`${styles.authorName} ${utilStyles.headingMd}`}><b>{postData.author}</b></span>
+              <div className={`${utilStyles.lightText}`}>
+                <Date dateString={postData.date} />
               </div>
-            
+              <p><b>{postData.summary}</b></p>
+              <div className={styles.authorContainer}>
+                <Link href='.'>
+                  <Image
+                    priority
+                    src={authorImageSrc}
+                    height={50}
+                    width={50}
+                    alt={postData.author}
+                    className={utilStyles.borderCircle}
+                  />
+                </Link>
+                <Link href={githubUrl}>
+                  <Image
+                    priority
+                    src={"/images/github.png"}
+                    height={50}
+                    width={50}
+                    alt={postData.author}
+                    className={utilStyles.borderCircle}
+                  />
+                </Link>
+                <Link href={linkedinUrl}>
+                  <Image
+                    priority
+                    src={"/images/linkedin.png"}
+                    height={50}
+                    width={50}
+                    alt={postData.author}
+                    className={utilStyles.borderCircle}
+                  />
+                </Link>
+                <a href={cvLink}>
+                  <Image
+                    priority
+                    src={"/images/cv.png"}
+                    height={50}
+                    width={50}
+                    alt={postData.author}
+                    className={utilStyles.borderCircle}
+                  />
+                </a>
+              </div>
+            </div>
 
-            <div className={styles.tableOfContents}>
-              {toc.map(item => (
-                <div key={item.id}>
-                  <a href={`#${item.id}`}>
-                    <small>{item.title}</small>
-                  </a>
-                </div>
-              ))}
+            <div className={styles.tocColumn}>
+              <div className={styles.tableOfContents}>
+                {toc.map(item => (
+                  <div key={item.id}>
+                    <a href={`#${item.id}`}>
+                      <small>{item.title}</small>
+                    </a>
+                  </div>
+                ))}
+              </div>
             </div>
+
+            <div className={styles.imageColumn}>
+              <Image
+                priority
+                src={postData.imageSrc}
+                alt={`Cover image for ${postData.title}`}
+                width={640}
+                height={480}
+                className={styles.summaryImage}
+              />
             </div>
-          </div>
-          <div className={styles.postImageContainer}>
-            <Image 
-              priority
-              src={postData.imageSrc}
-              alt={`Cover image for ${postData.title}`}
-              width={0}
-              height={0}
-              sizes="100vw"
-              style={{ width: '100%', height: 'auto', maxWidth: '50%' }} // optional
-            />
           </div>
         </div>
         <div hidden id="imageholder">
