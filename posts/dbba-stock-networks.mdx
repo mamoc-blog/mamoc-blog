@@ -10,7 +10,7 @@ imageSrc: "/posts/dbba-stock-networks/ego_stock_projection_comparison.png"
 
 ## Why map Microsoft's network?
 
-To brief DBBA Capital on Microsoft (MSFT), I rebuilt the original LaTeX report as an article that traces how the stock sits inside a global investor–stock network. The study spans quarterly holdings (2016–2023) and monthly returns (2018–2024), looking for structures that could justify confidence in, or hedging against, MSFT. The workflow kept the project’s emphasis on investor behaviour, network topology, and the unusual conditions created by COVID-19.
+To brief DBBA Capital on Microsoft (MSFT), this article traces how the stock sits inside a global investor–stock network. The study spans quarterly holdings (2016–2023) and monthly returns (2018–2024), looking for structures that could justify confidence in, or hedging against, MSFT. Theproject’s emphasis is on investor behaviour, network topology, and the unusual conditions created by COVID-19.
 
 ## Building the bipartite investor–stock graph
 
@@ -33,7 +33,7 @@ partitions = nx.algorithms.community.louvain_communities(
 )
 ```
 
-<Figure src="/posts/dbba-stock-networks/bipartite.png" number='1' caption="Bipartite investor–stock graph. Nodes are coloured by Louvain community and edges are weighted by quarters invested."  width="80%" />
+<Figure src="/posts/dbba-stock-networks/bipartite.png" number='1' caption="Bipartite investor–stock graph. Nodes are coloured by Louvain community and edges are weighted by quarters invested."  width="70%" />
 
 The layout makes two immediate points. First, most investors concentrate on a narrow slice of the market, reinforcing the concept of a high-conviction “safe” stock set. Second, MSFT already appears central because high-weight edges radiate from its community.
 
@@ -41,11 +41,11 @@ The layout makes two immediate points. First, most investors concentrate on a na
 
 An MSFT-centred ego network on the bipartite graph (EGO1) retains investor identities, so each edge encodes the number of quarters an investor held MSFT.[^golbeck] Roughly 43% of investors held MSFT at least once, but the holding lengths vary widely (mean 6.17 quarters, standard deviation 8.78), highlighting divergent risk tolerances.
 
-<Figure src="/posts/dbba-stock-networks/ego_comparison.png" number='2' caption="Bipartite ego graph (EGO1) centred on MSFT, with edge colour marking holding length."  width="80%" />
+<Figure src="/posts/dbba-stock-networks/ego_comparison.png" number='2' caption="Bipartite ego graph (EGO1) centred on MSFT, with edge colour marking holding length."  width="70%" />
 
 Projecting the network onto the stock side (EGO2) replaces investors with stocks that share investors. MSFT suddenly has hundreds of neighbours, yet most edges have weight one, meaning those stocks only share a single investor.
 
-<Figure src="/posts/dbba-stock-networks/ego_stock_projection_comparison.png" number='3' caption="Stock-side ego projection (EGO2). MSFT is surrounded by dense technology and finance cliques."  width="80%" />
+<Figure src="/posts/dbba-stock-networks/ego_stock_projection_comparison.png" number='3' caption="Stock-side ego projection (EGO2). MSFT is surrounded by dense technology and finance cliques."  width="70%" />
 
 <table style={{ margin: '1.5rem auto', borderCollapse: 'collapse', width: '100%', maxWidth: '780px' }}>
   <thead>
@@ -84,7 +84,7 @@ The comparison shows why EGO1 is better for reading the depth of conviction by i
 
 The full stock projection contains 1,529 stocks and 108,956 edges. To make the structure interpretable I applied thresholding on degree (> 400) and shared-investor weight (> 5). That removes weak ties and exposes a dense core of technology and finance names tightly connected to MSFT.
 
-<Figure src="/posts/dbba-stock-networks/stock_projection_comparison.png" number='4' caption="Stock-side projection before and after thresholding. The filtered version highlights the high-conviction clique around MSFT."  width="80%" />
+<Figure src="/posts/dbba-stock-networks/stock_projection_comparison.png" number='4' caption="Stock-side projection before and after thresholding. The filtered version highlights the high-conviction clique around MSFT."  width="70%" />
 
 The filtered graph suggests DBBA Capital can treat MSFT as a proxy for a larger tech-finance block: META, GOOGL, AMZN, JPM, and UNH all sit in the immediate neighbourhood and share investor flows.
 
@@ -167,9 +167,9 @@ Eigenvector centrality therefore became the primary measure of “influence” i
 
 To study monthly return correlations I built a minimum spanning tree (MST) on the stock network. In normal periods MSFT is the hub of a technology cluster, but during the pandemic it moves to the periphery while crashed sectors (waste management, transportation, defence) take over the backbone.
 
-<Figure src="/posts/dbba-stock-networks/fullspantree.png" number='7' caption="Spanning tree built from positive return correlations prior to filtering."  width="80%" />
+<Figure src="/posts/dbba-stock-networks/fullspantree.png" number='7' caption="Spanning tree built from positive return correlations prior to filtering."  width="60%" />
 
-<Figure src="/posts/dbba-stock-networks/covid_span.png" number='8' caption="Spanning trees before, during, and after COVID-19. MSFT loses hub status during the pandemic but regains it post-crisis."  width="80%" />
+<Figure src="/posts/dbba-stock-networks/covid_span.png" number='8' caption="Spanning trees before, during, and after COVID-19. MSFT loses hub status during the pandemic but regains it post-crisis."  width="60%" />
 
 The shift aligns with price data: MSFT’s correlations barely move (≈10% change) while vulnerable sectors swing by ~45%, placing them at the centre of the crisis-era MST.[^yahoofinance] The resilience of MSFT and its clique reinforces the “safe stock” interpretation, echoing the company’s pandemic-era financial disclosures.[^microsoftresults]
 

@@ -27,6 +27,50 @@ const Figure = ({ src, caption, number, size, width }: FigureProps) => {
     };
 
     const maxWidth = resolvedWidth();
+    const deriveMobileWidth = (value: string) => {
+        const match = value.trim().match(/^([\d.]+)(px|%|rem|em)$/);
+        if (!match) {
+            return '100%';
+        }
+
+        const numericValue = parseFloat(match[1]);
+        const unit = match[2];
+
+        if (Number.isNaN(numericValue)) {
+            return '100%';
+        }
+
+        switch (unit) {
+            case '%': {
+                if (numericValue >= 95) {
+                    return `${numericValue}%`;
+                }
+                return '90%';
+            }
+            case 'px': {
+                const expanded = Math.max(numericValue, 560);
+                return `min(100%, ${expanded}px)`;
+            }
+            case 'rem':
+            case 'em': {
+                const expanded = Math.max(numericValue, 35);
+                return `min(100%, ${expanded}${unit})`;
+            }
+            default:
+                return '100%';
+        }
+    };
+
+    const mobileMaxWidth = deriveMobileWidth(maxWidth);
+    const figureStyle = {
+        '--figure-max-width': maxWidth,
+        '--figure-mobile-max-width': mobileMaxWidth
+    } as React.CSSProperties;
+
+    const imageStyle = {
+        width: '100%',
+        height: 'auto'
+    } as React.CSSProperties;
 
     const renderImages = () => {
         if (Array.isArray(src) && src.some(imageSrc => imageSrc)) {
@@ -36,7 +80,7 @@ const Figure = ({ src, caption, number, size, width }: FigureProps) => {
                         key={index}
                         src={imageSrc}
                         alt={caption}
-                        style={{ width: '100%', height: 'auto', maxWidth }}
+                        style={imageStyle}
                     />
                 ) : null
             ));
@@ -45,7 +89,7 @@ const Figure = ({ src, caption, number, size, width }: FigureProps) => {
                 <img
                     src={src}
                     alt={caption}
-                    style={{ width: '100%', height: 'auto', maxWidth }}
+                    style={imageStyle}
                 />
             );
         }
@@ -53,7 +97,7 @@ const Figure = ({ src, caption, number, size, width }: FigureProps) => {
     };
 
     return (
-        <figure>
+        <figure data-figure style={figureStyle}>
             {renderImages()}
             <figcaption>
                 <div style={{ fontWeight: '800', display: 'inline' }}>Figure {number}: </div>
@@ -61,13 +105,23 @@ const Figure = ({ src, caption, number, size, width }: FigureProps) => {
             </figcaption>
 
             <style>{`
-                figure {
+                figure[data-figure] {
                     margin: 20px 0;
                     text-align: center;
                 }
-                figcaption {
+                figure[data-figure] figcaption {
                     margin-top: 8px;
                     font-style: italic;
+                }
+                figure[data-figure] img {
+                    width: 100%;
+                    height: auto;
+                    max-width: var(--figure-max-width);
+                }
+                @media (max-width: 900px) {
+                    figure[data-figure] img {
+                        max-width: var(--figure-mobile-max-width, var(--figure-max-width));
+                    }
                 }
             `}</style>
         </figure>

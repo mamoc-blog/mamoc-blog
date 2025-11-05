@@ -10,13 +10,13 @@ imageSrc: "/posts/dbba-btc-agent-model/price_Data.png"
 
 ## Project overview
 
-This article converts the second DBBA LaTeX project into a blog post, keeping the original objective: design an agent-based Bitcoin market (BTC/GBP) inside a limit order book (LOB) and test whether it reproduces core stylised facts — heavy-tailed returns, volatility clustering, and a unit-root price process. The market mixes rule-based chartists with noise traders, extends Cocco et al.’s specification ([Cocco et al., 2019](https://doi.org/10.1109/ACCESS.2019.2907880)), and benchmarks the output against real BTC data.
+This article covers the design of an agent-based Bitcoin market (BTC/GBP) inside a limit order book (LOB) and test whether it reproduces core stylised facts — heavy-tailed returns, volatility clustering, and a unit-root price process. The market mixes rule-based chartists with noise traders, extends Cocco et al.’s specification ([Cocco et al., 2019](https://doi.org/10.1109/ACCESS.2019.2907880)), and benchmarks the output against real BTC data.
 
 ## Agent architecture
 
 All agents inherit from an abstract base class that holds cash and crypto balances, a handle to the market, and helpers for opening or closing positions.
 
-<Figure src="/posts/dbba-btc-agent-model/agent.jpg" number='1' caption="Abstract agent UML diagram. Italic labels denote abstract methods."  width="45%" />
+<Figure src="/posts/dbba-btc-agent-model/agent.jpg" number='1' caption="Abstract agent UML diagram. Italic labels denote abstract methods."  width="20%" />
 
 ### Chartists
 
@@ -84,7 +84,7 @@ if self.open_pos is None and mom:
     self.place_order(action, trunc(quantity), price)
 ```
 
-<Figure src="/posts/dbba-btc-agent-model/Chartist.jpg" number='2' caption="Chartist UML structure showing the shared base class and subtype behaviour."  width="45%" />
+<Figure src="/posts/dbba-btc-agent-model/Chartist.jpg" number='2' caption="Chartist UML structure showing the shared base class and subtype behaviour."  width="20%" />
 
 ### Noise traders
 
@@ -142,7 +142,7 @@ producing net-neutral pressure in expectation while amplifying return variance.
 
 ## Market design
 
-<Figure src="/posts/dbba-btc-agent-model/limit-order-book.png" number='3' caption="Kautenja's price-time priority limit order book used as the market core."  width="60%" />
+<Figure src="/posts/dbba-btc-agent-model/limit-order-book.png" number='3' caption="Kautenja's price-time priority limit order book used as the market core."  width="30%" />
 
 The market wraps Kautenja’s LOB implementation, enabling partial order fills and price-time matching. Three key adaptations were required to satisfy cryptocurrency constraints:
 
@@ -150,7 +150,7 @@ The market wraps Kautenja’s LOB implementation, enabling partial order fills a
 2. **Position flexibility:** Agents may submit any sequence of buys and sells subject to available balances—no enforced “flat” state.
 3. **Fractional price response:** The price impact function drops the floor operator so the tick size is continuous ([Petrov, 2019](https://www.zora.uzh.ch/id/eprint/195131)). `r_n(ΔN_n) = α · sgn(ΔN_n) · √(|ΔN_n|)`.
 
-<Figure src="/posts/dbba-btc-agent-model/market.drawio.png" number='4' caption="Market class UML diagram showing interactions between agents and the LOB."  width="60%" />
+<Figure src="/posts/dbba-btc-agent-model/market.drawio.png" number='4' caption="Market class UML diagram showing interactions between agents and the LOB."  width="20%" />
 
 The `simulate_step` routine shuffles agents each turn, lets them trade, applies the price impact rule, and appends the updated price to history. Wealth injections of 10% emulate capital inflows observed in crypto markets and help trigger momentum. Baseline supply, address counts, and price levels follow January 1st 2020 observations of the BTC network ([BitInfoCharts](https://bitinfocharts.com/comparison/bitcoin-activeaddresses.html); [Blockchain.com](https://www.blockchain.com/explorer/charts/total-bitcoins); [Yahoo Finance](https://uk.finance.yahoo.com/quote/BTC-GBP/history/?period1=1577836800&period2=1578182400)).
 
@@ -158,15 +158,15 @@ The `simulate_step` routine shuffles agents each turn, lets them trade, applies 
 
 The model replicates Cocco et al.’s findings that, in a chartist/noise-trader ecosystem, returns remain heavy-tailed and volatility clusters even without fundamental value traders ([Cocco et al., 2019](https://doi.org/10.1109/ACCESS.2019.2907880)).
 
-<Figure src="/posts/dbba-btc-agent-model/Bar_metrics.png" number='5' caption="Distribution of absolute returns, squared returns, and autocorrelation for the baseline simulation."  width="80%" />
+<Figure src="/posts/dbba-btc-agent-model/Bar_metrics.png" number='5' caption="Distribution of absolute returns, squared returns, and autocorrelation for the baseline simulation."  width="40%" />
 
-<Figure src="/posts/dbba-btc-agent-model/autocorrelation.png" number='6' caption="Autocorrelation of absolute returns shows slow decay consistent with volatility clustering."  width="80%" />
+<Figure src="/posts/dbba-btc-agent-model/autocorrelation.png" number='6' caption="Autocorrelation of absolute returns shows slow decay consistent with volatility clustering."  width="40%" />
 
 Activating informed momentum (RSI + alternating chartists) and periodic wealth injections magnifies these effects without breaking plausibility.
 
-<Figure src="/posts/dbba-btc-agent-model/informed_Bar_metrics.png" number='7' caption="Metric distribution after enabling informed momentum traders, highlighting fatter tails."  width="80%" />
+<Figure src="/posts/dbba-btc-agent-model/informed_Bar_metrics.png" number='7' caption="Metric distribution after enabling informed momentum traders, highlighting fatter tails."  width="40%" />
 
-<Figure src="/posts/dbba-btc-agent-model/informed_wealth.png" number='8' caption="Wealth evolution when traders receive 10% injections, producing bursts of momentum-driven activity."  width="80%" />
+<Figure src="/posts/dbba-btc-agent-model/informed_wealth.png" number='8' caption="Wealth evolution when traders receive 10% injections, producing bursts of momentum-driven activity."  width="60%" />
 
 Momentum lookback windows \( n \in [1, 30] \) balance the Efficient Market Hypothesis—which argues that historical prices offer little predictive power ([Fama, 1970](https://doi.org/10.2307/2325486))—with empirical evidence of short-lived inefficiencies in equity and cryptocurrency markets ([Jiang, 2011](https://doi.org/10.1002/mde.1506); [Al-Yahyaee et al., 2020](https://doi.org/10.1016/j.najef.2020.101168)). The shorter horizons allow chartists to exploit transient order-imbalance and liquidity effects without contradicting longer-run market efficiency.
 
@@ -174,13 +174,13 @@ Momentum lookback windows \( n \in [1, 30] \) balance the Efficient Market Hypot
 
 Price trajectories, volume, and mean reversion were benchmarked against Section 3 of the reference model ([Cocco et al., 2019](https://doi.org/10.1109/ACCESS.2019.2907880)).
 
-<Figure src="/posts/dbba-btc-agent-model/price_Data.png" number='9' caption="Simulated BTC-GBP price path showing momentum bursts aligned with wealth injections."  width="80%" />
+<Figure src="/posts/dbba-btc-agent-model/price_Data.png" number='9' caption="Simulated BTC-GBP price path showing momentum bursts aligned with wealth injections."  width="50%" />
 
-<Figure src="/posts/dbba-btc-agent-model/informed_price_Data.png" number='10' caption="Price path once informed chartists are activated; richer dynamics but still mean-reverting around the unit root."  width="80%" />
+<Figure src="/posts/dbba-btc-agent-model/informed_price_Data.png" number='10' caption="Price path once informed chartists are activated; richer dynamics but still mean-reverting around the unit root."  width="50%" />
 
-<Figure src="/posts/dbba-btc-agent-model/volume.png" number='11' caption="Daily traded volume across 100 simulations; the upward drift reflects broader participation after each wealth injection."  width="80%" />
+<Figure src="/posts/dbba-btc-agent-model/volume.png" number='11' caption="Daily traded volume across 100 simulations; the upward drift reflects broader participation after each wealth injection."  width="50%" />
 
-<Figure src="/posts/dbba-btc-agent-model/ratio.png" number='12' caption="Bid-ask imbalance ratio compared with the reference model."  width="80%" />
+<Figure src="/posts/dbba-btc-agent-model/ratio.png" number='12' caption="Bid-ask imbalance ratio compared with the reference model."  width="60%" />
 
 Both frameworks deliver upward-trending prices, but wealth injections induce more realistic surges in this implementation. Volumes also scale closer to observed BTC markets once rescaled by 1,000, because liquidity is not confined to a single cohort of agents.
 
@@ -188,9 +188,9 @@ Both frameworks deliver upward-trending prices, but wealth injections induce mor
 
 Log-return distributions match actual BTC-GBP series (2018–2024) and retain volatility spikes between 0.1 and 0.3.
 
-<Figure src="/posts/dbba-btc-agent-model/logretnew.png" number='13' caption="Log returns for real BTC-GBP data."  width="80%" />
+<Figure src="/posts/dbba-btc-agent-model/logretnew.png" number='13' caption="Log returns for real BTC-GBP data."  width="50%" />
 
-<Figure src="/posts/dbba-btc-agent-model/simulated-log-ret.png" number='14' caption="Log returns for the simulated market; note the similar volatility bursts."  width="80%" />
+<Figure src="/posts/dbba-btc-agent-model/simulated-log-ret.png" number='14' caption="Log returns for the simulated market; note the similar volatility bursts."  width="50%" />
 
 Unit-root behaviour holds under the Augmented Dickey-Fuller test:
 
@@ -223,15 +223,15 @@ Unit-root behaviour holds under the Augmented Dickey-Fuller test:
 
 Additional stylised stats:
 
-<Figure src="/posts/dbba-btc-agent-model/real-btc-log-ret.png" number='15' caption="Rolling statistics for real BTC log returns."  width="60%" />
+<Figure src="/posts/dbba-btc-agent-model/real-btc-log-ret.png" number='15' caption="Rolling statistics for real BTC log returns."  width="40%" />
 
 <Figure src="/posts/dbba-btc-agent-model/reducedvol1.png" number='16' caption="Volatility clustering under reduced momentum parameters."  width="60%" />
 
-<Figure src="/posts/dbba-btc-agent-model/reducedvol2.png" number='17' caption="Alternative volatility scenario with damped wealth injections."  width="60%" />
+<Figure src="/posts/dbba-btc-agent-model/reducedvol2.png" number='17' caption="Alternative volatility scenario with damped wealth injections."  width="40%" />
 
-<Figure src="/posts/dbba-btc-agent-model/m_analysis.png" number='18' caption="Distribution of RSI and momentum-triggered trades across subtypes."  width="60%" />
+<Figure src="/posts/dbba-btc-agent-model/m_analysis.png" number='18' caption="Distribution of RSI and momentum-triggered trades across subtypes."  width="80%" />
 
-<Figure src="/posts/dbba-btc-agent-model/single_run.png" number='19' caption="Example single-run trajectory showing alternating RSI and momentum dominance."  width="60%" />
+<Figure src="/posts/dbba-btc-agent-model/single_run.png" number='19' caption="Example single-run trajectory showing alternating RSI and momentum dominance."  width="40%" />
 
 ## Takeaways for DBBA Capital
 
