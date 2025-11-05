@@ -90,9 +90,9 @@ export default function Home({ allPostsData, carouselProps }) {
             <ul className={utilStyles.list}>
               {
               allPostsData.filter(post => post.author === 'Cameron Michie').sort((a, b) => {
-                const beforeDate = DateTime.fromFormat(a.date, 'yyyy-mm-dd')
-                const afterDate = DateTime.fromFormat(b.date, 'yyyy-mm-dd')
-                return afterDate - beforeDate
+                const beforeDate = DateTime.fromISO(a.date);
+                const afterDate = DateTime.fromISO(b.date);
+                return afterDate.toMillis() - beforeDate.toMillis();
               }).map(({ id, date, title, summary }) => (
                 
                 <li className={utilStyles.listItem} key={id}>
@@ -152,9 +152,9 @@ export default function Home({ allPostsData, carouselProps }) {
               </div>
             <ul className={utilStyles.list}>
               {allPostsData.filter(post => post.author === 'Alex Cheetham').sort((a, b) => {
-                  const beforeDate = DateTime.fromFormat(a.date, 'yyyy-mm-dd')
-                  const afterDate = DateTime.fromFormat(b.date, 'yyyy-mm-dd')
-                  return afterDate - beforeDate
+                  const beforeDate = DateTime.fromISO(a.date);
+                  const afterDate = DateTime.fromISO(b.date);
+                  return afterDate.toMillis() - beforeDate.toMillis();
                 }).map(({ id, date, title, summary }) => (
                   <li className={utilStyles.listItem} key={id}>
                   <Link href={`/posts/${id}`}>{title}</Link>

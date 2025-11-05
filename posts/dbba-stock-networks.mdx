@@ -1,0 +1,192 @@
+---
+title: Mapping Microsoft's Investor Network for DBBA Capital
+date: "2024-10-01"
+math: true
+summary: Multi-layer network analysis of Microsoft and its investors to guide DBBA Capital's portfolio strategy.
+author: Alex Cheetham
+commentable: false
+imageSrc: "/posts/dbba-stock-networks/ego_stock_projection_comparison.png"
+---
+
+## Why map Microsoft's network?
+
+To brief DBBA Capital on Microsoft (MSFT), this article traces how the stock sits inside a global investor–stock network. The study spans quarterly holdings (2016–2023) and monthly returns (2018–2024), looking for structures that could justify confidence in, or hedging against, MSFT. Theproject’s emphasis is on investor behaviour, network topology, and the unusual conditions created by COVID-19.
+
+## Building the bipartite investor–stock graph
+
+The raw data lists institutional investors and their quarterly positions. I modelled that as a bipartite network with investors on one side and stocks on the other and used edge weights to track how many quarters an investor held a position, then coloured each community via the Louvain modularity heuristic.[^louvain]
+
+### Preprocessing pipeline
+
+- Abbreviated investor names and dropped missing records to normalise identifiers.
+- Constructed an investor-by-stock matrix so each entry counts quarters invested.
+- Generated a weighted bipartite `networkx` graph from the matrix for downstream analysis.
+
+```python
+partitions = nx.algorithms.community.louvain_communities(
+    B,
+    weight="weight",
+    resolution=20,
+    threshold=1e-07,
+    max_level=None,
+    seed=6772,
+)
+```
+
+<Figure src="/posts/dbba-stock-networks/bipartite.png" number='1' caption="Bipartite investor–stock graph. Nodes are coloured by Louvain community and edges are weighted by quarters invested."  width="70%" />
+
+The layout makes two immediate points. First, most investors concentrate on a narrow slice of the market, reinforcing the concept of a high-conviction “safe” stock set. Second, MSFT already appears central because high-weight edges radiate from its community.
+
+## Ego networks: investors vs. stocks
+
+An MSFT-centred ego network on the bipartite graph (EGO1) retains investor identities, so each edge encodes the number of quarters an investor held MSFT.[^golbeck] Roughly 43% of investors held MSFT at least once, but the holding lengths vary widely (mean 6.17 quarters, standard deviation 8.78), highlighting divergent risk tolerances.
+
+<Figure src="/posts/dbba-stock-networks/ego_comparison.png" number='2' caption="Bipartite ego graph (EGO1) centred on MSFT, with edge colour marking holding length."  width="70%" />
+
+Projecting the network onto the stock side (EGO2) replaces investors with stocks that share investors. MSFT suddenly has hundreds of neighbours, yet most edges have weight one, meaning those stocks only share a single investor.
+
+<Figure src="/posts/dbba-stock-networks/ego_stock_projection_comparison.png" number='3' caption="Stock-side ego projection (EGO2). MSFT is surrounded by dense technology and finance cliques."  width="70%" />
+
+<table style={{ margin: '1.5rem auto', borderCollapse: 'collapse', width: '100%', maxWidth: '780px' }}>
+  <thead>
+    <tr>
+      <th style={{ border: '1px solid #d0d0d0', padding: '0.6rem 1rem', textAlign: 'left' }}>Graph</th>
+      <th style={{ border: '1px solid #d0d0d0', padding: '0.6rem 1rem', textAlign: 'left' }}>Nodes</th>
+      <th style={{ border: '1px solid #d0d0d0', padding: '0.6rem 1rem', textAlign: 'left' }}>Edges</th>
+      <th style={{ border: '1px solid #d0d0d0', padding: '0.6rem 1rem', textAlign: 'left' }}>Edge weight meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem' }}>EGO1 (bipartite)</td>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem' }}>MSFT + investors</td>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem' }}>Investor → MSFT</td>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem' }}>Quarters held</td>
+    </tr>
+    <tr>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem' }}>Stock projection</td>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem' }}>Stocks (global universe)</td>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem' }}>Stock ↔ stock</td>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem' }}>Shared investors (count)</td>
+    </tr>
+    <tr>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem' }}>EGO2</td>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem' }}>MSFT + neighbouring stocks</td>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem' }}>Stock ↔ stock</td>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem' }}>Shared investors (count)</td>
+    </tr>
+  </tbody>
+</table>
+
+The comparison shows why EGO1 is better for reading the depth of conviction by investor, while EGO2 reveals the breadth of association across correlated stocks.
+
+## Filtering the projection
+
+The full stock projection contains 1,529 stocks and 108,956 edges. To make the structure interpretable I applied thresholding on degree (> 400) and shared-investor weight (> 5). That removes weak ties and exposes a dense core of technology and finance names tightly connected to MSFT.
+
+<Figure src="/posts/dbba-stock-networks/stock_projection_comparison.png" number='4' caption="Stock-side projection before and after thresholding. The filtered version highlights the high-conviction clique around MSFT."  width="70%" />
+
+The filtered graph suggests DBBA Capital can treat MSFT as a proxy for a larger tech-finance block: META, GOOGL, AMZN, JPM, and UNH all sit in the immediate neighbourhood and share investor flows.
+
+## Pandemic-era dynamics
+
+Quarter-by-quarter statistics reveal how COVID-19 distorted the MSFT subnetwork.[^covidcrash] While raw node and edge counts stay flat, density, clustering, and average degree fall for MSFT’s ego projection during 2020, reflecting investors consolidating into perceived “safe” stocks. Yet those same metrics remain higher than the market-wide baseline, so MSFT never loses its central footing.
+
+<Figure src="/posts/dbba-stock-networks/temporal_evolution.png" number='5' caption="Temporal evolution of network statistics for the full projection (IQP) and MSFT ego projection (IQEP)."  width="80%" />
+
+<table style={{ margin: '1.5rem auto', borderCollapse: 'collapse', width: '100%', maxWidth: '820px' }}>
+  <thead>
+    <tr>
+      <th style={{ border: '1px solid #d0d0d0', padding: '0.6rem 1rem', textAlign: 'left' }}>Quantity</th>
+      <th style={{ border: '1px solid #d0d0d0', padding: '0.6rem 1rem', textAlign: 'center' }}>Informative?</th>
+      <th style={{ border: '1px solid #d0d0d0', padding: '0.6rem 1rem', textAlign: 'left' }}>Takeaway for MSFT</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem' }}>Density</td>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem', textAlign: 'center' }}><span style={{ fontSize: '1.4rem', lineHeight: 1 }}>&#10003;</span></td>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem' }}>Drops during COVID-19 as portfolios narrow, but remains above IQP.</td>
+    </tr>
+    <tr>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem' }}>Clustering coefficient</td>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem', textAlign: 'center' }}><span style={{ fontSize: '1.4rem', lineHeight: 1 }}>&#10003;</span></td>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem' }}>Divergent trend confirms a tech/finance clique around MSFT.</td>
+    </tr>
+    <tr>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem' }}>Degree / Strength</td>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem', textAlign: 'center' }}><span style={{ fontSize: '1.4rem', lineHeight: 1 }}>&#10003;</span></td>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem' }}>Strong positive trend and sharp correction confined to MSFT ego.</td>
+    </tr>
+    <tr>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem' }}>Assortativity</td>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem', textAlign: 'center' }}><span style={{ fontSize: '1.4rem', lineHeight: 1 }}>&#10007;</span></td>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem' }}>No decisive change for MSFT.</td>
+    </tr>
+  </tbody>
+</table>
+
+The post-pandemic reversion across density, degree, and strength supports the hypothesis that 2020 behaviour was an anomaly rather than a lasting regime shift.
+
+## Centrality in a non-transitive world
+
+Because edges encode “shared investors”, relationships are non-transitive: if A and B share an investor and B and C share an investor, nothing guarantees A and C are related. That undermines path-based centrality metrics.[^zhangcentrality]
+
+<table style={{ margin: '1.5rem auto', borderCollapse: 'collapse', width: '100%', maxWidth: '820px' }}>
+  <thead>
+    <tr>
+      <th style={{ border: '1px solid #d0d0d0', padding: '0.6rem 1rem', textAlign: 'left' }}>Centrality</th>
+      <th style={{ border: '1px solid #d0d0d0', padding: '0.6rem 1rem', textAlign: 'left' }}>Why it struggles here</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem' }}>Closeness</td>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem' }}>Shortest paths do not correspond to meaningful influence.</td>
+    </tr>
+    <tr>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem' }}>Betweenness</td>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem' }}>Overstates importance of nodes sitting on accidental paths.</td>
+    </tr>
+    <tr>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem' }}>Degree</td>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem' }}>Captures popularity but ignores neighbour quality.</td>
+    </tr>
+    <tr>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem' }}>Eigenvector</td>
+      <td style={{ border: '1px solid #d0d0d0', padding: '0.5rem 1rem' }}><span style={{ fontSize: '1.4rem', lineHeight: 1 }}>&#10003;</span> Relies on direct neighbours and inherits their influence.</td>
+    </tr>
+  </tbody>
+</table>
+
+Eigenvector centrality therefore became the primary measure of “influence” in the stock network.
+
+<Figure src="/posts/dbba-stock-networks/metric_distribution.png" number='6' caption="Distribution of key network metrics when comparing individual quarters (IQP) and MSFT-focused variants (IQEP)."  width="60%" />
+
+## Minimum spanning tree and COVID-19
+
+To study monthly return correlations I built a minimum spanning tree (MST) on the stock network. In normal periods MSFT is the hub of a technology cluster, but during the pandemic it moves to the periphery while crashed sectors (waste management, transportation, defence) take over the backbone.
+
+<Figure src="/posts/dbba-stock-networks/fullspantree.png" number='7' caption="Spanning tree built from positive return correlations prior to filtering."  width="60%" />
+
+<Figure src="/posts/dbba-stock-networks/covid_span.png" number='8' caption="Spanning trees before, during, and after COVID-19. MSFT loses hub status during the pandemic but regains it post-crisis."  width="60%" />
+
+The shift aligns with price data: MSFT’s correlations barely move (≈10% change) while vulnerable sectors swing by ~45%, placing them at the centre of the crisis-era MST.[^yahoofinance] The resilience of MSFT and its clique reinforces the “safe stock” interpretation, echoing the company’s pandemic-era financial disclosures.[^microsoftresults]
+
+<Figure src="/posts/dbba-stock-networks/clustering.png" number='9' caption="2019 Q2 clustering allocation, highlighting partially disjoint groups that can be used to hedge MSFT exposure."  width="45%" />
+
+## Recommendations for DBBA Capital
+
+1. **Lean into the clique when conviction is high.** MSFT is deeply intertwined with resilient tech and finance stocks.[^nasdaqindex] When you have a directional view on MSFT, extending positions to META, AMZN, GOOGL, JPM, and UNH keeps the portfolio aligned with shared-investor flows.
+2. **Hedge by diversifying across clusters.** If outlook is uncertain, use the MSFT ego analysis and the clustering view above to pick uncorrelated groups. This mirrors the approach advocated by Tola et al. for risk management via cluster-aware portfolios.[^tola]
+
+MSFT’s persistence at the core of both investor holdings and return correlations makes it an attractive anchor position, provided the surrounding clique is monitored for structural breaks similar to those seen in 2020.
+
+[^louvain]: Vincent D. Blondel, Jean-Loup Guillaume, Renaud Lambiotte, and Etienne Lefebvre, “Fast Unfolding of Communities in Large Networks,” *Journal of Statistical Mechanics: Theory and Experiment* 2008(10), P10008 (2008). [https://doi.org/10.1088/1742-5468/2008/10/P10008](https://doi.org/10.1088/1742-5468/2008/10/P10008)
+[^golbeck]: Jennifer Golbeck, *Introduction to Social Media Investigation: A Hands-on Approach*, Syngress Publishing (2015).
+[^covidcrash]: Mieszko Mazur, Man Dang, and Miguel Vega, “COVID-19 and the March 2020 Stock Market Crash. Evidence from S&P1500,” *Finance Research Letters* 38, 101690 (2021). [https://doi.org/10.1016/j.frl.2020.101690](https://doi.org/10.1016/j.frl.2020.101690)
+[^zhangcentrality]: Junlong Zhang and Yu Luo, “Degree Centrality, Betweenness Centrality, and Closeness Centrality in Social Network,” in *Proceedings of the 2nd International Conference on Modelling, Simulation and Applied Mathematics* (MSAM 2017), Atlantis Press (2017); Britta Ruhnau, “Eigenvector-centrality—a Node-centrality?” *Social Networks* 22(4), 357–365 (2000).
+[^yahoofinance]: Yahoo Finance, “Stock Data for Canadian National Railway (CNI), Comcast Corporation (CMCSA), and Waste Management, Inc. (WM),” accessed 31 Oct 2024. [https://finance.yahoo.com](https://finance.yahoo.com)
+[^microsoftresults]: Microsoft News, “Microsoft Cloud Strength Drives Fourth Quarter Results,” press release, 30 Jul 2024. [https://news.microsoft.com/2024/07/30/microsoft-cloud-strength-drives-fourth-quarter-results-6/](https://news.microsoft.com/2024/07/30/microsoft-cloud-strength-drives-fourth-quarter-results-6/)
+[^nasdaqindex]: NASDAQ OMX Group, “NASDAQ Composite Index,” retrieved from FRED, Federal Reserve Bank of St. Louis (2024). [https://fred.stlouisfed.org/series/NASDAQCOM](https://fred.stlouisfed.org/series/NASDAQCOM)
+[^tola]: Vincenzo Tola, Fabrizio Lillo, Mauro Gallegati, and Rosario N. Mantegna, “Cluster Analysis for Portfolio Optimization,” *Journal of Economic Dynamics and Control* 32(1), 235–258 (2008). [https://doi.org/10.1016/j.jedc.2007.01.034](https://doi.org/10.1016/j.jedc.2007.01.034)
