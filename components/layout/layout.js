@@ -76,7 +76,20 @@ export default function Layout({ children, home }) {
       )}
 
       {/* Simple footer spacer for now, can be replaced with a real footer component later */}
-      <div style={{ height: '100px' }}></div>
+      <footer className={styles.footer}>
+        <div className={styles.footerImageContainer}>
+          <Image
+            src="/images/artwork4.svg"
+            alt="Footer Artwork"
+            width={1440}
+            height={274}
+            style={{
+              width: '100%',
+              height: 'auto',
+            }}
+          />
+        </div>
+      </footer>
 
     </SettingsProvider>
   );
