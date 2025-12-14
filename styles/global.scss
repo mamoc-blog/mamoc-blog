@@ -14,89 +14,92 @@ body {
 :root {
   --main-padding-sm: 20px;
 
+  /* Modernized Palette - Light Mode */
   --color-primary: #ff005c;
   --color-secondary: #7000ff;
   --color-secondary-light: #b174ff;
   --color-secondary-vlight: #7e1aff;
   --color-secondary-dark: #5a00cc;
-  --color-success: #2cb927;
-  --color-success-light: #00eda042;
-  --color-success-dark: #00281b;
-  --color-error: #eb1b1b;
-  --color-error-40: rgba(255, 0, 0, 0.4);
-  --color-error-20: rgba(255, 0, 0, 0.2);
-  --color-warning: #ffc300;
-  --color-warning-light: #ffc3003b;
-  --color-gray-vvvvlight: #f7f7f7;
-  --color-gray-vvvlight: #f1f1f1;
-  --color-gray-vvlight: #e7e7e7;
-  --color-gray-vlight: #d3d3d3;
-  --color-gray-light: #c4c4c4;
-  --color-gray: #727272;
-  --color-gray-dark: #484848;
-  --color-gray-vdark: #363636;
-  --color-black: #000000;
+
+  --color-success: #10b981;
+  /* Modern green */
+  --color-success-light: #d1fae5;
+  --color-success-dark: #064e3b;
+
+  --color-error: #ef4444;
+  /* Modern red */
+  --color-error-40: rgba(239, 68, 68, 0.4);
+  --color-error-20: rgba(239, 68, 68, 0.2);
+
+  --color-warning: #f59e0b;
+  /* Modern amber */
+  --color-warning-light: #fef3c7;
+
+  /* Grays - Neutral & Cool */
+  --color-gray-vvvvlight: #f9fafb;
+  --color-gray-vvvlight: #f3f4f6;
+  --color-gray-vvlight: #e5e7eb;
+  --color-gray-vlight: #d1d5db;
+  --color-gray-light: #9ca3af;
+  --color-gray: #6b7280;
+  --color-gray-dark: #4b5563;
+  --color-gray-vdark: #374151;
+
+  --color-black: #111827;
   --color-white: #ffffff;
   --rgb-white: 255, 255, 255;
-  --color-border: #000000;
-  --color-border-input: #000000;
-  --color-donator: #3496eb;
-  --color-info: rgba(0, 154, 255, 0.8);
-  --color-info-light: rgba(0, 154, 255, 0.18);
 
-  --layout-margin-big-lg: 80px;
-  --layout-margin-small-lg: 30px;
-  --layout-margin-big-md: 50px;
-  --layout-margin-small-md: 20px;
-  --layout-margin-big-sm: 20px;
-  --layout-margin-small-sm: 10px;
-  --layout-margin-md: 40px;
+  --color-border: #e5e7eb;
+  --color-border-input: #d1d5db;
 
-  --layout-gap-big-lg: 50px;
-  --layout-gap-big-md: 30px;
-  --layout-gap-small-lg: 30px;
-  --layout-gap-small-md: 15px;
+  --color-donator: #3b82f6;
+  --color-info: rgba(59, 130, 246, 0.9);
+  --color-info-light: rgba(59, 130, 246, 0.1);
 
-  --font-size-vsmall: 0.7rem;
-  --font-size-small: 0.875rem;
-  --font-size-regular: 1rem;
-  --font-size-big: 1.125rem;
-  --font-size-h6: 1rem;
-  --font-size-h5: 1.25rem;
-  --font-size-h4: 1.5625rem;
-  --font-size-h3: 2rem;
-  --font-size-h2: 2.5rem;
-  --font-size-h1: 3rem;
+  --color-carousel-accent: var(--color-secondary);
+  --color-toc-text: var(--color-secondary);
 
-  --font-size-vsmall-em: 0.7em;
-  --font-size-small-em: 0.875em;
-  --font-size-regular-em: 1em;
-  --font-size-big-em: 1.125em;
-  --font-size-h6-em: 1.15em;
-  --font-size-h5-em: 1.25em;
-  --font-size-h4-em: 1.5625em;
-  --font-size-h3-em: 1.8em;
-  --font-size-h2-em: 2.5em;
-  --font-size-h1-em: 3em;
 
-  --font-size-paragraph: 1.3125rem;
+  /* Layout */
+  --layout-max-width: 1200px;
+  --header-height: 80px;
+
+  /* Typography */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --font-size-5xl: 3rem;
 
   --font-family-primary: "Fira Code", monospace;
 
-  --cards-border-width: 3px;
-  --cards-shadow: 19px;
-  --cards-gap: 30px;
-  --cards-size: 270px;
+  /* Components */
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 16px;
+  --border-radius-full: 9999px;
 
-  --fxl-color-light: #ffffff;
-  --fxl-color-light0: #bbbbbb;
-  --fxl-color-light1: #727272;
-  --fxl-color-light2: #363636;
-  --fxl-color-dark: #000000;
-  --fxl-color-dark0: #111111;
-  --fxl-color-dark1: #181818;
-  --fxl-color-dark2: #1c1c1c;
-  --fxl-color-background1: #f8f8f8;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+  --cards-gap: 24px;
+
+  /* FXL Legacy Support - Mapped to new palette */
+  --fxl-color-light: var(--color-white);
+  --fxl-color-light0: var(--color-gray-vlight);
+  --fxl-color-light1: var(--color-gray);
+  --fxl-color-light2: var(--color-gray-vdark);
+  --fxl-color-dark: var(--color-black);
+  --fxl-color-dark0: var(--color-black);
+  --fxl-color-dark1: var(--color-gray-vdark);
+  --fxl-color-dark2: var(--color-gray-dark);
+  --fxl-color-background1: var(--color-gray-vvvvlight);
   --fxl-color-background2: var(--color-gray-vvvlight);
   --fxl-color-background3: var(--color-gray-vvlight);
 
@@ -106,13 +109,11 @@ body {
   --fxl-color-secondary: var(--color-secondary);
   --fxl-color-secondary-light: var(--color-secondary-light);
   --fxl-color-background: var(--color-white);
-  --fxl-color-background-hover: var(--color-white);
+  --fxl-color-background-hover: var(--color-gray-vvvvlight);
   --fxl-color-text-primary: var(--color-black);
-  --fxl-color-text-primary-hover: var(--color-dark1);
-  --fxl-color-text-secondary: var(--color-black);
-
+  --fxl-color-text-primary-hover: var(--color-gray-vdark);
+  --fxl-color-text-secondary: var(--color-gray-dark);
   --fxl-color-panel-background: var(--fxl-color-dark);
-
   --fxl-font-size-xs: var(--font-size-vsmall);
   --fxl-font-size-s: var(--font-size-small);
   --fxl-font-size-regular: var(--font-size-regular);
@@ -134,38 +135,87 @@ body {
   --spacing-l: #{$spacing-large};
   --spacing-xl: #{$spacing-x-large};
   --spacing-xxl: #{$spacing-2x-large};
-}
 
-@media (max-width: 768px) {
-  body {
-    font-size: 80%; /* Reduce font size to 90% of its original size */
-  }
+  /* Code Snippet Theme - Light Mode (One Light inspired) */
+  --code-bg: #fafafa;
+  --code-text: #383a42;
+  --token-comment: #a0a1a7;
+  --token-keyword: #a626a4;
+  --token-boolean: #986801;
+  --token-function: #4078f2;
+  --token-string: #50a14f;
+  --token-number: #986801;
+  --token-operator: #383a42;
+  --token-class: #c18401;
+  --token-variable: #e45649;
+  --token-property: #4078f2;
+  --mac-window-header: #e5e5e5;
+  --mac-window-border: #d4d4d4;
+
+  --scrollbar-thumb: var(--color-gray-vlight);
+  --scrollbar-track: var(--color-gray-vvvvlight);
 }
 
 .dark {
-  --color-white: #242424;
-  --rgb-white: 36, 36, 36;
-  --color-black: white;
-  --color-gray: #a5a5a5;
-  --color-gray-vvvlight: #2b2b2b;
-  --color-gray-vvlight: #2e2e2e;
-  --color-gray-vlight: #363636;
-  --color-gray-light: #505050;
-  --color-gray-dark: #999999;
-  --color-secondary: #c8ff00;
-  --color-secondary-light: #7b9811;
-  --color-secondary-vlight: #7b9811;
-  --color-border: #0f0f0f;
-  --color-border-input: #7e7e7e;
+  /* Modernized Palette - Dark Mode */
+  --color-white: #1a1a1a;
+  /* Dark Grey bg */
+  --rgb-white: 26, 26, 26;
+  --color-black: #f3f4f6;
+  /* Off-white text */
+
+  --color-gray-vvvvlight: #2d2d2d;
+  --color-gray-vvvlight: #333333;
+  --color-gray-vvlight: #4b5563;
+  --color-gray-vlight: #6b7280;
+  --color-gray-light: #9ca3af;
+  --color-gray: #d1d5db;
+  --color-gray-dark: #e5e7eb;
+  --color-gray-vdark: #f3f4f6;
+
+  --color-secondary: #a78bfa;
+  /* Soft purple */
+  --color-secondary-light: #c4b5fd;
+  --color-secondary-vlight: #ddd6fe;
+
+  --color-border: #333333;
+  --color-border-input: #4b5563;
+  --color-hover: #00ff41;
+  /* Coding Green */
+
+  --color-carousel-accent: #00ff41;
+  --color-toc-text: #00ff41;
+
   --fxl-color-text-primary: var(--color-black);
-  --fxl-color-background1: var(--color-gray-vvvlight);
-  --fxl-color-background2: var(--color-gray-vvlight);
+  --fxl-color-background-hover: var(--color-gray-vvvvlight);
+  --fxl-color-background1: var(--color-gray-vvvvlight);
+  --fxl-color-background2: var(--color-gray-vvvlight);
   --fxl-color-background3: var(--color-gray-vlight);
   --fxl-color-light2: var(--color-gray-light);
+
+  /* Code Snippet Theme - Dark Mode (One Dark inspired) */
+  --code-bg: #1e2127;
+  /* Slightly lighter than pure black */
+  --code-text: #abb2bf;
+  --token-comment: #5c6370;
+  --token-keyword: #c678dd;
+  --token-boolean: #d19a66;
+  --token-function: #61afef;
+  --token-string: #98c379;
+  --token-number: #d19a66;
+  --token-operator: #56b6c2;
+  --token-class: #e5c07b;
+  --token-variable: #e06c75;
+  --token-property: #56b6c2;
+  --mac-window-header: #2c313a;
+  --mac-window-border: #181a1f;
+
+  --scrollbar-thumb: var(--color-gray-vlight);
+  --scrollbar-track: var(--color-gray-vvvvlight);
 }
 
 ::-webkit-scrollbar {
-  width:8px;
+  width: 8px;
   height: 5px;
 }
 
@@ -189,10 +239,12 @@ a {
   color: var(--color-secondary);
   font-weight: bold;
   text-decoration: none;
+  transition: color 0.2s ease;
 }
 
 a:hover {
   text-decoration: underline;
+  color: var(--color-hover, var(--color-secondary));
 }
 
 * {
@@ -251,6 +303,75 @@ button {
   }
 }
 
+@media (max-width: 768px) {
+  body {
+    font-size: 80%;
+    /* Reduce font size to 90% of its original size */
+  }
+}
+
+/* Smooth Theme Transition */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Mac Window Code Block Styles */
+.mac-window {
+  background-color: var(--code-bg);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 1.5rem 0;
+  border: 1px solid var(--mac-window-border);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.mac-window-header {
+  background-color: var(--mac-window-header);
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--mac-window-border);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.mac-window-dots {
+  display: flex;
+  gap: 6px;
+  margin-right: 1rem;
+}
+
+.mac-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.mac-dot.red {
+  background-color: #ff5f56;
+}
+
+.mac-dot.yellow {
+  background-color: #ffbd2e;
+}
+
+.mac-dot.green {
+  background-color: #27c93f;
+}
+
+.mac-window-content {
+  padding: 0;
+  /* Padding is handled by the pre tag */
+  overflow-x: auto;
+}
+
+/* Override Prism default pre margins since we wrap it */
+.mac-window pre {
+  margin: 0 !important;
+  border-radius: 0 !important;
+  background-color: transparent !important;
+}
+
 @media (max-width: $breakpoint-sm) {
   h6 {
     font-size: var(--font-size-h6);
@@ -288,211 +409,223 @@ button {
 
 code[class*="language-"],
 pre[class*="language-"] {
-	text-align: left;
-	white-space: pre;
-	word-spacing: normal;
-	word-break: normal;
-	word-wrap: normal;
-	color: #c3cee3;
-	background: #263238;
-	font-family: Roboto Mono, monospace;
-	font-size: 1em;
-	line-height: 1.5em;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  color: #c3cee3;
+  background: #263238;
+  font-family: Roboto Mono, monospace;
+  font-size: 1em;
+  line-height: 1.5em;
 
-	-moz-tab-size: 4;
-	-o-tab-size: 4;
-	tab-size: 4;
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
 
-	-webkit-hyphens: none;
-	-moz-hyphens: none;
-	-ms-hyphens: none;
-	hyphens: none;
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
 }
 
 code[class*="language-"]::-moz-selection,
 pre[class*="language-"]::-moz-selection,
 code[class*="language-"] ::-moz-selection,
 pre[class*="language-"] ::-moz-selection {
-	background: #363636;
+  background: #363636;
 }
 
 code[class*="language-"]::selection,
 pre[class*="language-"]::selection,
 code[class*="language-"] ::selection,
 pre[class*="language-"] ::selection {
-	background: #363636;
+  background: #363636;
 }
 
-:not(pre) > code[class*="language-"] {
-	white-space: normal;
-	border-radius: 0.2em;
-	padding: 0.1em;
+:not(pre)>code[class*="language-"] {
+  white-space: normal;
+  border-radius: 0.2em;
+  padding: 0.1em;
 }
 
 pre[class*="language-"] {
-	overflow: auto;
-	position: relative;
-	margin: 0.5em 0;
-	padding: 1.25em 1em;
+  overflow: auto;
+  position: relative;
+  margin: 0.5em 0;
+  padding: 1.25em 1em;
 }
 
-.language-css > code,
-.language-sass > code,
-.language-scss > code {
-	color: #fd9170;
+.language-css>code,
+.language-sass>code,
+.language-scss>code {
+  color: #fd9170;
 }
 
 [class*="language-"] .namespace {
-	opacity: 0.7;
+  opacity: 0.7;
 }
 
 .token.atrule {
-	color: #c792ea;
+  color: #c792ea;
 }
 
 .token.attr-name {
-	color: #ffcb6b;
+  color: #ffcb6b;
 }
 
 .token.attr-value {
-	color: #c3e88d;
+  color: #c3e88d;
 }
 
 .token.attribute {
-	color: #c3e88d;
+  color: #c3e88d;
 }
 
 .token.boolean {
-	color: #c792ea;
+  color: #c792ea;
 }
 
 .token.builtin {
-	color: #ffcb6b;
+  color: #ffcb6b;
 }
 
 .token.cdata {
-	color: #80cbc4;
+  color: #80cbc4;
 }
 
 .token.char {
-	color: #80cbc4;
+  color: #80cbc4;
 }
 
 .token.class {
-	color: #ffcb6b;
+  color: #ffcb6b;
 }
 
 .token.class-name {
-	color: #f2ff00;
+  color: #f2ff00;
 }
 
 .token.color {
-	color: #f2ff00;
+  color: #f2ff00;
 }
 
 .token.comment {
-	color: #546e7a;
+  color: #546e7a;
 }
 
 .token.constant {
-	color: #c792ea;
+  color: #c792ea;
 }
 
 .token.deleted {
-	color: #f07178;
+  color: #f07178;
 }
 
 .token.doctype {
-	color: #546e7a;
+  color: #546e7a;
 }
 
 .token.entity {
-	color: #f07178;
+  color: #f07178;
 }
 
 .token.function {
-	color: #c792ea;
+  color: #c792ea;
 }
 
 .token.hexcode {
-	color: #f2ff00;
+  color: #f2ff00;
 }
 
 .token.id {
-	color: #c792ea;
-	font-weight: bold;
+  color: #c792ea;
+  font-weight: bold;
 }
 
 .token.important {
-	color: #c792ea;
-	font-weight: bold;
+  color: #c792ea;
+  font-weight: bold;
 }
 
 .token.inserted {
-	color: #80cbc4;
+  color: #80cbc4;
 }
 
 .token.keyword {
-	color: #c792ea;
-	font-style: italic;
+  color: #c792ea;
+  font-style: italic;
 }
 
 .token.number {
-	color: #fd9170;
+  color: #fd9170;
 }
 
 .token.operator {
-	color: #89ddff;
+  color: #89ddff;
 }
 
 .token.prolog {
-	color: #546e7a;
+  color: #546e7a;
 }
 
 .token.property {
-	color: #80cbc4;
+  color: #80cbc4;
 }
 
 .token.pseudo-class {
-	color: #c3e88d;
+  color: #c3e88d;
 }
 
 .token.pseudo-element {
-	color: #c3e88d;
+  color: #c3e88d;
 }
 
 .token.punctuation {
-	color: #89ddff;
+  color: #89ddff;
 }
 
 .token.regex {
-	color: #f2ff00;
+  color: #f2ff00;
 }
 
 .token.selector {
-	color: #f07178;
+  color: #f07178;
 }
 
 .token.string {
-	color: #c3e88d;
+  color: #c3e88d;
 }
 
 .token.symbol {
-	color: #c792ea;
+  color: #c792ea;
 }
 
 .token.tag {
-	color: #f07178;
+  color: #f07178;
 }
 
 .token.unit {
-	color: #f07178;
+  color: #f07178;
 }
 
 .token.url {
-	color: #fd9170;
+  color: #fd9170;
 }
 
 .token.variable {
-	color: #f07178;
+  color: #f07178;
+}
+
+/* Ensure code blocks and tables scroll on mobile */
+pre {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+table {
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
 }

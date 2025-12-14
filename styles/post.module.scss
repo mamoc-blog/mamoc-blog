@@ -1,141 +1,172 @@
+@import "variables";
 
 .tableOfContents {
-    flex:1;
+  /* flex: 1; Removed to allow vertical centering by parent */
+  width: 100%;
+
+  a {
+    color: var(--color-toc-text);
+    font-weight: normal;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
-  
-  .collapseButton {
-    margin: 10px 0;
-    cursor: pointer;
-  }
-  
-  .heading1 {
-    scroll-margin-top: 100px; 
-  }
-  
-  .heading2 {
-    scroll-margin-top: 100px;
-  }
-  
-  .heading3 {
-    scroll-margin-top: 100px;
-  }
-  
-  /* Add styles for ToC list items based on their level */
-  .h1, .h2, .h3 {
-    margin-left: 0;
-  }
-  
-  .h2 {
-    margin-left: 10px;
-  }
-  
-  .h3 {
-    margin-left: 20px;
-  }
-  
+}
+
+.collapseButton {
+  margin: 10px 0;
+  cursor: pointer;
+}
+
+.heading1 {
+  scroll-margin-top: 100px;
+}
+
+.heading2 {
+  scroll-margin-top: 100px;
+}
+
+.heading3 {
+  scroll-margin-top: 100px;
+}
+
+/* Add styles for ToC list items based on their level */
+.h1,
+.h2,
+.h3 {
+  margin-left: 0;
+}
+
+.h2 {
+  margin-left: 10px;
+}
+
+.h3 {
+  margin-left: 20px;
+}
+
 
 .summaryGrid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    grid-template-rows: minmax(0, 1fr);
-    gap: clamp(1rem, 2vw, 2.5rem);
-    align-items: stretch;
-
-    @media (max-width: 900px) {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    @media (max-width: 640px) {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 1.5rem;
-    }
-  }
-
-  .metadataColumn,
-  .tocColumn,
-  .imageColumn {
-    padding-inline: clamp(0.75rem, 2vw, 1.5rem);
-  }
-
-  .summaryGrid > :not(:last-child) {
-    border-right: 1px solid rgba(0, 0, 0, 0.08);
-  }
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: minmax(0, 1fr);
+  gap: clamp(1rem, 2vw, 2.5rem);
+  align-items: stretch;
 
   @media (max-width: 900px) {
-    .summaryGrid > :not(:last-child) {
-      border-right: none;
-    }
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .metadataColumn {
-    display: flex;
-    flex-direction: column;
-    gap: clamp(0.75rem, 2vw, 1.4rem);
+  @media (max-width: 640px) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
   }
- 
-  .authorContainer {
-    display: flex;
-    align-items: center;
-    align-items: flex-end;
-    padding-right: 1rem;
-  }
-  
-  .authorName {
-    color: var(--color-primary);
-  }
-  
-  .summarySection {
-    background-color: var(--color-gray-vvvlight);
-    padding: 15px;
-    border-radius: 8px;
-    margin-inline: 0;
-  }
-  .dark .summarySection {
-    background-color: #333; // Example dark mode background color
-    // Define other dark mode styles as needed
-  }
+}
 
-  .metadataColumn,
-  .tocColumn,
-  .imageColumn {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 0.75rem;
-  }
+.metadataColumn,
+.tocColumn,
+.imageColumn {
+  padding-inline: clamp(0.75rem, 2vw, 1.5rem);
+}
 
-  .tocColumn {
-    align-self: stretch;
-  }
+.summaryGrid> :not(:last-child) {
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+}
 
-  .imageColumn {
-    align-items: center;
+@media (max-width: 900px) {
+  .summaryGrid> :not(:last-child) {
+    border-right: none;
   }
+}
 
-  .summaryImage {
-    width: 100%;
-    max-width: clamp(220px, 22vw, 300px);
-    border-radius: 16px;
-    box-shadow: 0 14px 30px rgba(0,0,0,0.08);
-    height: auto;
-    object-fit: cover;
+.metadataColumn {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.75rem, 2vw, 1.4rem);
+}
 
-    @media (max-width: 768px) {
-      max-width: min(420px, 80vw);
-    }
+.authorContainer {
+  display: flex;
+  align-items: center;
+  align-items: flex-end;
+  padding-right: 1rem;
+}
+
+.authorName {
+  color: var(--color-primary);
+}
+
+.summarySection {
+  background-color: var(--color-gray-vvvlight);
+  padding: 15px;
+  border-radius: 8px;
+  margin-inline: 0;
+}
+
+.dark .summarySection {
+  background-color: #333; // Example dark mode background color
+  // Define other dark mode styles as needed
+}
+
+.metadataColumn,
+.tocColumn,
+.imageColumn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.tocColumn {
+  align-self: stretch;
+}
+
+.imageColumn {
+  align-items: center;
+}
+
+.summaryImage {
+  width: 100%;
+  max-width: clamp(220px, 22vw, 300px);
+  border-radius: 16px;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
+  height: auto;
+  object-fit: cover;
+
+  @media (max-width: 768px) {
+    max-width: min(420px, 80vw);
   }
-  
-  
-  .postContent {
-    font-size: 85%;
-    margin-top: 50px;
-    
-  }
-  
-  // .postImageContainer {
-  //   height: 100%; /* Make the image fill the container height */
-  //   width: auto; /* Maintain aspect ratio */
-  //   object-fit: cover;
-  //   flex: 1;
-  // }
-  
+}
+
+
+.postContent {
+  font-size: 85%;
+  margin-top: 50px;
+
+}
+
+// .postImageContainer {
+//   height: 100%; /* Make the image fill the container height */
+//   width: auto; /* Maintain aspect ratio */
+//   object-fit: cover;
+//   flex: 1;
+// }
+
+
+.authorHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--color-gray-vvlight);
+}
+
+.authorMetaRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing;
+  margin-bottom: $spacing;
+  padding-left: $spacing-small;
+}

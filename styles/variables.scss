@@ -6,22 +6,31 @@
  * Decrease: 12, 8, 4
  * Increase: 24, 32, 40, 48, 56, 72, 96
  */
+
+// Spacing adjustments for better breathing room
 $spacing: 16px !default;
+$spacing-small: 12px !default;
+$spacing-x-small: 8px !default;
+$spacing-2x-small: 4px !default;
+$spacing-3x-small: 2px !default;
 
-// Decrease
-$spacing-small: floor($spacing - 4) !default;
-$spacing-x-small: floor(math.div($spacing, 2)) !default;
-$spacing-2x-small: floor(math.div($spacing, 4)) !default;
-$spacing-3x-small: floor(math.div($spacing, 8)) !default;
+$spacing-large: 24px !default;
+$spacing-x-large: 32px !default;
+$spacing-2x-large: 48px !default;
+$spacing-3x-large: 64px !default;
+$spacing-4x-large: 96px !default;
+$spacing-5x-large: 128px !default;
 
-// Increase
-$spacing-large: ceil(math.div($spacing, 2) * 3) !default;
-$spacing-x-large: ceil(math.div($spacing, 2) * 4) !default;
-$spacing-2x-large: ceil(math.div($spacing, 2) * 5) !default;
-$spacing-3x-large: ceil(math.div($spacing, 2) * 6) !default;
-$spacing-4x-large: ceil(math.div($spacing, 2) * 7) !default;
-$spacing-5x-large: ceil(math.div($spacing, 2) * 9) !default;
-$spacing-6x-large: ceil(math.div($spacing, 2) * 12) !default;
+// Shadows (Elevation)
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+$shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+
+// Transitions
+$transition-base: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
 // breakpoints
 $breakpoint-vlg: 1600px;
@@ -29,12 +38,11 @@ $breakpoint-lg: 1200px;
 $breakpoint-md: 960px;
 $breakpoint-sm: 768px;
 
-// timing
-$timing-cubic: cubic-bezier(0.77, 0, 0.175, 1);
-
 // keyframes
 @keyframes ping {
-  75%, 100% {
+
+  75%,
+  100% {
     transform: scale(2);
     opacity: 0;
   }

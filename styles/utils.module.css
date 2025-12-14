@@ -54,3 +54,13 @@
   margin-left: 3px;
 }
 
+
+.postGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.postCardWrapper {
+  width: 100%;
+}

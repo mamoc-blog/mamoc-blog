@@ -1,0 +1,27 @@
+@import "../../styles/variables.scss";
+
+.socialDock {
+    display: flex;
+    align-items: center;
+    gap: $spacing-small;
+    padding: 0;
+    margin: 0;
+    // Removed pill styling (bg, border, radius)
+}
+
+.socialIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-gray);
+    font-size: var(--font-size-3xl); // Increased size
+    transition: $transition-base;
+    padding: 6px;
+    border-radius: 50%;
+
+    &:hover {
+        color: var(--color-hover, var(--color-secondary));
+        background-color: rgba(var(--rgb-white), 0.5);
+        transform: translateY(-2px);
+    }
+}

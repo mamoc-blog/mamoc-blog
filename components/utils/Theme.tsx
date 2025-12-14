@@ -10,16 +10,30 @@ interface ISettingsContext {
 
 const defaultCtx: ISettingsContext = {
   darkTheme: false, // Default theme setting
-  toggleDarkTheme: () => {},
+  toggleDarkTheme: () => { },
 };
 
 export const SettingsContext = React.createContext<ISettingsContext>(defaultCtx);
 export const useSettingsContext = () => useContext<ISettingsContext>(SettingsContext);
 
-export function SettingsProvider({ children }) {
+export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [darkTheme, setDarkTheme] = useState(defaultCtx.darkTheme);
 
-  const toggleDarkTheme = () => setDarkTheme(!darkTheme);
+  const toggleDarkTheme = () => {
+    const newTheme = !darkTheme;
+    setDarkTheme(newTheme);
+    localStorage.setItem("theme", newTheme ? "dark" : "light");
+  };
+
+  useEffect(() => {
+    // Initial load
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      setDarkTheme(true);
+    } else {
+      setDarkTheme(false);
+    }
+  }, []);
 
   useEffect(() => {
     if (darkTheme) {
