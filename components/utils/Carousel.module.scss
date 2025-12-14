@@ -1,84 +1,158 @@
-.cycler {
+@import "../../styles/variables.scss";
+
+$slide-spacing: $spacing;
+$slide-size: 100%;
+$slide-height: 400px;
+
+.embla {
   position: relative;
-  padding-top: calc(100% + 105px);
-  & > div {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    scale: 0.7;
-    opacity: 0;
-    transform-origin: center center;
-    will-change: transform, opacity, scale;
-    pointer-events: none;
-    z-index: 1;
-    .details {
-      transition: 0.5s ease-out opacity;
-      opacity: 0;
-    }
-    .infos {
-      background-color: var(--color-gray-vvvlight);
-      padding: 8px 4px;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 8px;
-    }
-    .infos_text {
-      flex: 1;
-    }
-    .avatar {
-      width: 30px;
-      height: 30px;
-    }
-    .progress_bar {
-      width: 100%;
-    }
-    .title_url {
-      color: var(--color-black);
-    }
-    h4 {
-      font-size: 0.9375rem;
-      line-height: 1.312;
-    }
-    .iteration {
-      font-weight: 400;
-      color: var(--color-gray-light);
-    }
-    .creator {
-      line-height: 1;
-      font-size: 0.75rem;
-    }
-    .owner {
-      transition: 0.5s ease-out opacity;
-      font-size: 0.75rem;
-      margin-top: 8px;
-      display: flex;
-      flex-direction: row;
-      gap: 0.5em;
-      opacity: 0;
-      .label {
-        color: var(--color-gray);
-      }
-    }
-    &.show {
-      opacity: 0.1;
-    }
-    &.is_active {
-      pointer-events: initial;
-      opacity: 1;
-      scale: 1;
-      z-index: 2;
-      .details {
-        opacity: 1;
-      }
-      .owner {
-        opacity: 1;
-      }
-    }
+  background-color: var(--color-white);
+  padding: $spacing;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: hidden; // Ensure arrows don't overflow if positioned outside
+}
+
+.viewport {
+  overflow: hidden;
+}
+
+.container {
+  display: flex;
+  touch-action: pan-y pinch-zoom;
+  margin-left: calc($slide-spacing * -1);
+}
+
+.slide {
+  transform: translate3d(0, 0, 0);
+  flex: 0 0 $slide-size;
+  min-width: 0;
+  padding-left: $slide-spacing;
+  position: relative;
+
+  @media (min-width: $breakpoint-md) {
+    flex: 0 0 50%; // Show 2 slides on medium screens
   }
 }
 
-.square {
-  border: 3px solid var(--color-border);
+.slideInner {
+  position: relative;
+  display: block; // Fix: Ensure anchor tag is block-level
+  width: 100%; // Fix: Ensure it takes full width
+  height: $slide-height;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: $shadow-sm;
+  transition: $transition-smooth;
+
+  &:hover {
+    box-shadow: $shadow-md;
+    transform: translateY(-2px);
+  }
+}
+
+.slideImg {
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+
+  // Darken image slightly for text readability
+  filter: brightness(0.85);
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
+  padding: $spacing;
+  color: white;
+  pointer-events: none;
+}
+
+.title {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  margin-bottom: 4px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.author {
+  font-size: var(--font-size-xs);
+  opacity: 0.9;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: $spacing;
+  padding-top: $spacing-small;
+  border-top: 1px solid var(--color-border);
+}
+
+.buttons {
+  display: flex;
+  gap: $spacing-small;
+}
+
+.button {
+  background-color: var(--color-gray-vvvvlight);
+  border: 1px solid var(--color-border);
+  color: var(--color-black);
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: $transition-base;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: var(--color-carousel-accent);
+    border-color: var(--color-carousel-accent);
+    color: var(--color-white);
+    /* Adjust text color based on background logic if needed, but white usually works on dark/saturated backgrounds */
+  }
+}
+
+.progressBar {
+  flex: 1;
+  height: 4px;
+  background-color: var(--color-gray-vvlight);
+  border-radius: 2px;
+  margin: 0 $spacing;
+  position: relative;
+  overflow: hidden;
+}
+
+.progressFill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%; // Controlled by transform
+  background-color: var(--color-carousel-accent);
+  transition: transform 0.1s linear; // Smoother updates?
+  transform-origin: left;
 }

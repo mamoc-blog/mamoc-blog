@@ -1,0 +1,71 @@
+@import "../../styles/variables.scss";
+
+.card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: $spacing-small 0; // Minimal vertical padding, no horizontal
+    background-color: transparent; // No background
+    border: none; // No border
+    border-radius: 0; // No rounded corners
+    transition: $transition-smooth;
+    position: relative;
+    overflow: visible; // Allow content to flow naturally
+
+    // Removed "code-like" border strip as it contradicts "no borders"
+
+    &:hover {
+        // No transform on hover
+        // No box-shadow or border-color on hover
+
+        .title {
+            color: var(--color-hover, var(--color-secondary));
+            text-decoration: underline; // Classic web link style
+        }
+    }
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: $spacing;
+}
+
+.date {
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-xs);
+    color: var(--color-gray);
+    margin-bottom: 0;
+    padding: 0;
+    border: none;
+    background: none;
+}
+
+.content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    margin: 0 0 6px 0; // Halved gap
+    color: var(--color-black);
+    transition: $transition-base;
+    line-height: 1.4;
+}
+
+.summary {
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-dark);
+    line-height: 1.6;
+    margin-bottom: $spacing;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}

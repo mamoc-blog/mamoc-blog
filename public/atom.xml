@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://mamoc.net</id>
+    <title>MAMOC Blog</title>
+    <updated>2025-12-13T20:43:35.703Z</updated>
+    <generator>Feed for Node.js</generator>
+    <author>
+        <name>Cameron Michie &amp; Alexander Cheetham</name>
+        <email>alexandercheetham@example.com</email>
+        <uri>https://mamoc.net</uri>
+    </author>
+    <link rel="alternate" href="https://mamoc.net"/>
+    <link rel="self" href="https://mamoc.net/atom.xml"/>
+    <subtitle>Technical blog on Machine Learning, NeuroEvolution, and more.</subtitle>
+    <logo>https://mamoc.net/images/mamoc-text.png</logo>
+    <icon>https://mamoc.net/favicon.ico</icon>
+    <rights>All rights reserved 2025, MAMOC</rights>
+    <entry>
+        <title type="html"><![CDATA[Better Python Testing with ExpectTest]]></title>
+        <id>https://mamoc.net/posts/better-python-testing-with-expecttest</id>
+        <link href="https://mamoc.net/posts/better-python-testing-with-expecttest"/>
+        <link rel="enclosure" href="https://mamoc.net/posts/better-python-testing-with-expecttest/header.png" type="image/png"/>
+        <updated>2025-12-11T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Why we moved from traditional assertions to inline snapshot testing.]]></summary>
+        <content type="html"><![CDATA[An exploration of inline snapshot testing in Python using ExpectTest, moving away from brittle assertions towards a more joyful and maintainable testing workflow inspired by Jane Street.]]></content>
+        <author>
+            <name>Alex Cheetham</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Agent-Based BTC Trading in a Limit Order Book]]></title>
+        <id>https://mamoc.net/posts/dbba-btc-agent-model</id>
+        <link href="https://mamoc.net/posts/dbba-btc-agent-model"/>
+        <link rel="enclosure" href="https://mamoc.net/posts/dbba-btc-agent-model/price_Data.png" type="image/png"/>
+        <updated>2025-01-06T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Recreating the DBBA agent-based BTC-GBP market model with chartists, noise traders, and a limit order book that reproduces key stylised facts.]]></summary>
+        <content type="html"><![CDATA[Recreating the DBBA agent-based BTC-GBP market model with chartists, noise traders, and a limit order book that reproduces key stylised facts.]]></content>
+        <author>
+            <name>Alex Cheetham</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Mapping Microsoft's Investor Network for DBBA Capital]]></title>
+        <id>https://mamoc.net/posts/dbba-stock-networks</id>
+        <link href="https://mamoc.net/posts/dbba-stock-networks"/>
+        <link rel="enclosure" href="https://mamoc.net/posts/dbba-stock-networks/ego_stock_projection_comparison.png" type="image/png"/>
+        <updated>2024-10-01T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Multi-layer network analysis of Microsoft and its investors to guide DBBA Capital's portfolio strategy.]]></summary>
+        <content type="html"><![CDATA[Multi-layer network analysis of Microsoft and its investors to guide DBBA Capital's portfolio strategy.]]></content>
+        <author>
+            <name>Alex Cheetham</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Windows Closed, Nix Open.]]></title>
+        <id>https://mamoc.net/posts/nixos</id>
+        <link href="https://mamoc.net/posts/nixos"/>
+        <link rel="enclosure" href="https://mamoc.net/posts/nixos/featured.svg" type="image/svg"/>
+        <updated>2024-06-30T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[A summary of my experience switching to NixOS and using Nix for project package management.]]></summary>
+        <content type="html"><![CDATA[A summary of my experience switching to NixOS and using Nix for project package management.]]></content>
+        <author>
+            <name>Alex Cheetham</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Creating Maps with Wave Function Collapse]]></title>
+        <id>https://mamoc.net/posts/wfc</id>
+        <link href="https://mamoc.net/posts/wfc"/>
+        <link rel="enclosure" href="https://mamoc.net/WFC_code/featured.png" type="image/png"/>
+        <updated>2024-03-19T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[A showcase and explanation of my own WFC implementation for generating video game maps and discussion of potential further improvements.]]></summary>
+        <content type="html"><![CDATA[A showcase and explanation of my own WFC implementation for generating video game maps and discussion of potential further improvements.]]></content>
+        <author>
+            <name>Alex Cheetham</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[The Spatial Ecology of Predator-Prey Systems.]]></title>
+        <id>https://mamoc.net/posts/spatial-ecology</id>
+        <link href="https://mamoc.net/posts/spatial-ecology"/>
+        <link rel="enclosure" href="https://mamoc.net/posts/spatial-ecology/featured.png" type="image/png"/>
+        <updated>2023-11-18T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[The emergent properties of predator prey systems, analysed computationally through reaction-diffusion systems and agent based models.]]></summary>
+        <content type="html"><![CDATA[The emergent properties of predator prey systems, analysed computationally through reaction-diffusion systems and agent based models.]]></content>
+        <author>
+            <name>Cameron Michie</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Learning to walk with Novelty Search]]></title>
+        <id>https://mamoc.net/posts/neuroev</id>
+        <link href="https://mamoc.net/posts/neuroev"/>
+        <link rel="enclosure" href="https://mamoc.net/posts/NEUROEV/featured.jpeg" type="image/jpeg"/>
+        <updated>2023-10-30T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[An investigation into NeuroEvolution of Augmenting Topologies (NEAT) and its ability to solve reinforcement learning situations with fitness and novelty based fitness functions.]]></summary>
+        <content type="html"><![CDATA[An investigation into NeuroEvolution of Augmenting Topologies (NEAT) and its ability to solve reinforcement learning situations with fitness and novelty based fitness functions.]]></content>
+        <author>
+            <name>Alex Cheetham</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[PINNs, Not the Spiky Kind.]]></title>
+        <id>https://mamoc.net/posts/PINNS</id>
+        <link href="https://mamoc.net/posts/PINNS"/>
+        <link rel="enclosure" href="https://mamoc.net/posts/PINNS/featured.jpeg" type="image/jpeg"/>
+        <updated>2023-07-28T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[An investigation into Physics Informed Neural Networks and their ability to solve forward/inverse problems with PDEs.]]></summary>
+        <content type="html"><![CDATA[An investigation into Physics Informed Neural Networks and their ability to solve forward/inverse problems with PDEs.]]></content>
+        <author>
+            <name>Alex Cheetham</name>
+        </author>
+    </entry>
+</feed>

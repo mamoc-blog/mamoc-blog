@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+    <channel>
+        <title>MAMOC Blog</title>
+        <link>https://mamoc.net</link>
+        <description>Technical blog on Machine Learning, NeuroEvolution, and more.</description>
+        <lastBuildDate>Sat, 13 Dec 2025 20:43:35 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>Feed for Node.js</generator>
+        <language>en</language>
+        <image>
+            <title>MAMOC Blog</title>
+            <url>https://mamoc.net/images/mamoc-text.png</url>
+            <link>https://mamoc.net</link>
+        </image>
+        <copyright>All rights reserved 2025, MAMOC</copyright>
+        <item>
+            <title><![CDATA[Better Python Testing with ExpectTest]]></title>
+            <link>https://mamoc.net/posts/better-python-testing-with-expecttest</link>
+            <guid isPermaLink="false">https://mamoc.net/posts/better-python-testing-with-expecttest</guid>
+            <pubDate>Thu, 11 Dec 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[Why we moved from traditional assertions to inline snapshot testing.]]></description>
+            <content:encoded><![CDATA[An exploration of inline snapshot testing in Python using ExpectTest, moving away from brittle assertions towards a more joyful and maintainable testing workflow inspired by Jane Street.]]></content:encoded>
+            <enclosure url="https://mamoc.net/posts/better-python-testing-with-expecttest/header.png" length="0" type="image/png"/>
+        </item>
+        <item>
+            <title><![CDATA[Agent-Based BTC Trading in a Limit Order Book]]></title>
+            <link>https://mamoc.net/posts/dbba-btc-agent-model</link>
+            <guid isPermaLink="false">https://mamoc.net/posts/dbba-btc-agent-model</guid>
+            <pubDate>Mon, 06 Jan 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[Recreating the DBBA agent-based BTC-GBP market model with chartists, noise traders, and a limit order book that reproduces key stylised facts.]]></description>
+            <content:encoded><![CDATA[Recreating the DBBA agent-based BTC-GBP market model with chartists, noise traders, and a limit order book that reproduces key stylised facts.]]></content:encoded>
+            <enclosure url="https://mamoc.net/posts/dbba-btc-agent-model/price_Data.png" length="0" type="image/png"/>
+        </item>
+        <item>
+            <title><![CDATA[Mapping Microsoft's Investor Network for DBBA Capital]]></title>
+            <link>https://mamoc.net/posts/dbba-stock-networks</link>
+            <guid isPermaLink="false">https://mamoc.net/posts/dbba-stock-networks</guid>
+            <pubDate>Tue, 01 Oct 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[Multi-layer network analysis of Microsoft and its investors to guide DBBA Capital's portfolio strategy.]]></description>
+            <content:encoded><![CDATA[Multi-layer network analysis of Microsoft and its investors to guide DBBA Capital's portfolio strategy.]]></content:encoded>
+            <enclosure url="https://mamoc.net/posts/dbba-stock-networks/ego_stock_projection_comparison.png" length="0" type="image/png"/>
+        </item>
+        <item>
+            <title><![CDATA[Windows Closed, Nix Open.]]></title>
+            <link>https://mamoc.net/posts/nixos</link>
+            <guid isPermaLink="false">https://mamoc.net/posts/nixos</guid>
+            <pubDate>Sun, 30 Jun 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[A summary of my experience switching to NixOS and using Nix for project package management.]]></description>
+            <content:encoded><![CDATA[A summary of my experience switching to NixOS and using Nix for project package management.]]></content:encoded>
+            <enclosure url="https://mamoc.net/posts/nixos/featured.svg" length="0" type="image/svg"/>
+        </item>
+        <item>
+            <title><![CDATA[Creating Maps with Wave Function Collapse]]></title>
+            <link>https://mamoc.net/posts/wfc</link>
+            <guid isPermaLink="false">https://mamoc.net/posts/wfc</guid>
+            <pubDate>Tue, 19 Mar 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[A showcase and explanation of my own WFC implementation for generating video game maps and discussion of potential further improvements.]]></description>
+            <content:encoded><![CDATA[A showcase and explanation of my own WFC implementation for generating video game maps and discussion of potential further improvements.]]></content:encoded>
+            <enclosure url="https://mamoc.net/WFC_code/featured.png" length="0" type="image/png"/>
+        </item>
+        <item>
+            <title><![CDATA[The Spatial Ecology of Predator-Prey Systems.]]></title>
+            <link>https://mamoc.net/posts/spatial-ecology</link>
+            <guid isPermaLink="false">https://mamoc.net/posts/spatial-ecology</guid>
+            <pubDate>Sat, 18 Nov 2023 00:00:00 GMT</pubDate>
+            <description><![CDATA[The emergent properties of predator prey systems, analysed computationally through reaction-diffusion systems and agent based models.]]></description>
+            <content:encoded><![CDATA[The emergent properties of predator prey systems, analysed computationally through reaction-diffusion systems and agent based models.]]></content:encoded>
+            <enclosure url="https://mamoc.net/posts/spatial-ecology/featured.png" length="0" type="image/png"/>
+        </item>
+        <item>
+            <title><![CDATA[Learning to walk with Novelty Search]]></title>
+            <link>https://mamoc.net/posts/neuroev</link>
+            <guid isPermaLink="false">https://mamoc.net/posts/neuroev</guid>
+            <pubDate>Mon, 30 Oct 2023 00:00:00 GMT</pubDate>
+            <description><![CDATA[An investigation into NeuroEvolution of Augmenting Topologies (NEAT) and its ability to solve reinforcement learning situations with fitness and novelty based fitness functions.]]></description>
+            <content:encoded><![CDATA[An investigation into NeuroEvolution of Augmenting Topologies (NEAT) and its ability to solve reinforcement learning situations with fitness and novelty based fitness functions.]]></content:encoded>
+            <enclosure url="https://mamoc.net/posts/NEUROEV/featured.jpeg" length="0" type="image/jpeg"/>
+        </item>
+        <item>
+            <title><![CDATA[PINNs, Not the Spiky Kind.]]></title>
+            <link>https://mamoc.net/posts/PINNS</link>
+            <guid isPermaLink="false">https://mamoc.net/posts/PINNS</guid>
+            <pubDate>Fri, 28 Jul 2023 00:00:00 GMT</pubDate>
+            <description><![CDATA[An investigation into Physics Informed Neural Networks and their ability to solve forward/inverse problems with PDEs.]]></description>
+            <content:encoded><![CDATA[An investigation into Physics Informed Neural Networks and their ability to solve forward/inverse problems with PDEs.]]></content:encoded>
+            <enclosure url="https://mamoc.net/posts/PINNS/featured.jpeg" length="0" type="image/jpeg"/>
+        </item>
+    </channel>
+</rss>

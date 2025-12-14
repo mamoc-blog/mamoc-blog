@@ -1,0 +1,72 @@
+@import "../../styles/variables.scss";
+
+.container {
+    width: 100%;
+    overflow: auto;
+    margin: 1.5rem 0;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    caption-side: bottom;
+}
+
+.header {
+
+    // Styles for thead
+    &>tr {
+        border-bottom: 1px solid #e5e7eb; // Fallback
+        border-bottom: 1px solid var(--color-border, #e5e7eb);
+    }
+}
+
+.body {
+
+    // Styles for tbody
+    &>tr:last-child {
+        border-bottom: 0;
+    }
+}
+
+.footer {
+    // Styles for tfoot
+    border-top: 1px solid var(--color-border, #e5e7eb);
+    background-color: var(--fxl-color-background2); // Use theme variable
+    font-weight: 500;
+
+    &>tr:last-child {
+        border-bottom: 0;
+    }
+}
+
+.row {
+    border-bottom: 1px solid var(--color-border, #e5e7eb);
+    transition: background-color 0.2s;
+
+    &:hover {
+        background-color: var(--fxl-color-background-hover); // Use theme variable for hover
+    }
+}
+
+.head {
+    height: 3rem;
+    padding: 0 1rem;
+    text-align: left;
+    vertical-align: middle;
+    font-weight: 500;
+    color: var(--color-gray); // Use theme variable
+}
+
+.cell {
+    padding: 1rem;
+    vertical-align: middle;
+}
+
+.caption {
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--color-gray); // Use theme variable
+}

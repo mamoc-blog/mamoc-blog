@@ -13,7 +13,8 @@ import dynamic from 'next/dynamic';
 import 'katex/dist/katex.min.css'
 import { MDXRemote } from 'next-mdx-remote';
 import styles from '../../styles/post.module.scss';
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
+import SocialLinks from '../../components/ui/SocialLinks';
 import 'katex/dist/katex.min.css'
 import Link from 'next/link';
 import Image from 'next/image';
@@ -22,8 +23,23 @@ import path from 'path'
 // import {CustomH1, CustomH2, CustomH3} from '../../components/mdx/customHN';
 // import your component
 const LotkaVolterra = dynamic(() => import('/components/interactive/LotkaVolterra'), {
-  ssr: false, 
+  ssr: false,
 });
+
+import CodeBlock from '../../components/mdx/CodeBlock';
+import PostHeader from '../../components/posts/PostHeader';
+import TableOfContents from '../../components/ui/TableOfContents';
+import { getAuthorByName } from '../../data/authors';
+
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '../../components/ui/table';
 
 const components = {
   Image,
@@ -34,32 +50,21 @@ const components = {
   Link,
   CharacteristicLengthCalculator,
   WFCCONTAINER,
-  // whatever component you want
+  pre: CodeBlock,
+  // Table components
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 };
 
-export default function Post({ postData,wfc_paths }) {
-  const [toc, setToc] = useState([]);
+export default function Post({ postData, wfc_paths }) {
 
-  useEffect(() => {
-    // Assuming MDX content is already rendered, find all headings in the document
-    const headings = Array.from(document.querySelectorAll('article h2, article h3, article h4, article h5, article h6'));
-    const tocItems = headings.map((heading) => {
-      const level = parseInt(heading.tagName.substring(1), 10); // Extract level number from tagName
-      const bars = '|'.repeat(level - 2); // Generate a string of '|' characters based on heading level
-  
-      return {
-        id: heading.id,
-        title: `${bars} ${heading.textContent}`, // Prepend bars to the title
-        level: heading.tagName.toLowerCase(),
-      };
-    });
-    setToc(tocItems);
-  }, []);
-  
-  const authorImageSrc = postData.author.toLowerCase() === "cameron michie" ? "/images/cam.png" : "/images/alex.png";
-  const linkedinUrl = postData.author.toLowerCase() === "cameron michie" ? "https://www.linkedin.com/in/cameron-michie/" : "https://www.linkedin.com/in/alexandercheetham/";
-  const githubUrl = postData.author.toLowerCase() === "cameron michie" ? "https://github.com/cameron-michie" : "https://github.com/alexander-cheetham";
-  const cvLink = "/cv/"+(postData.author.toLowerCase() === "cameron michie" ? "cam" : "alex")+".pdf";
+
+
 
   return (
     <Layout>
@@ -67,93 +72,26 @@ export default function Post({ postData,wfc_paths }) {
         <title>{postData.title}</title>
       </Head>
       <article>
-        <h1 className={`${utilStyles.headingXl} ${utilStyles2.pink}`}>{postData.title}</h1>
-        <div className={styles.summarySection}>
-          <div className={styles.summaryGrid}>
-            <div className={styles.metadataColumn}>
-              <span className={`${styles.authorName} ${utilStyles.headingMd}`}><b>{postData.author}</b></span>
-              <div className={`${utilStyles.lightText}`}>
-                <Date dateString={postData.date} />
-              </div>
-              <p><b>{postData.summary}</b></p>
-              <div className={styles.authorContainer}>
-                <Link href='.'>
-                  <Image
-                    priority
-                    src={authorImageSrc}
-                    height={50}
-                    width={50}
-                    alt={postData.author}
-                    className={utilStyles.borderCircle}
-                  />
-                </Link>
-                <Link href={githubUrl}>
-                  <Image
-                    priority
-                    src={"/images/github.png"}
-                    height={50}
-                    width={50}
-                    alt={postData.author}
-                    className={utilStyles.borderCircle}
-                  />
-                </Link>
-                <Link href={linkedinUrl}>
-                  <Image
-                    priority
-                    src={"/images/linkedin.png"}
-                    height={50}
-                    width={50}
-                    alt={postData.author}
-                    className={utilStyles.borderCircle}
-                  />
-                </Link>
-                <a href={cvLink}>
-                  <Image
-                    priority
-                    src={"/images/cv.png"}
-                    height={50}
-                    width={50}
-                    alt={postData.author}
-                    className={utilStyles.borderCircle}
-                  />
-                </a>
-              </div>
-            </div>
 
-            <div className={styles.tocColumn}>
-              <div className={styles.tableOfContents}>
-                {toc.map(item => (
-                  <div key={item.id}>
-                    <a href={`#${item.id}`}>
-                      <small>{item.title}</small>
-                    </a>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className={styles.imageColumn}>
-              <Image
-                priority
-                src={postData.imageSrc}
-                alt={`Cover image for ${postData.title}`}
-                width={640}
-                height={480}
-                className={styles.summaryImage}
-              />
-            </div>
-          </div>
-        </div>
+        <PostHeader
+          title={postData.title}
+          author={postData.author}
+          date={postData.date}
+          summary={postData.summary}
+          imageSrc={postData.imageSrc}
+          readingTime={postData.readingTime}
+          toc={<TableOfContents />}
+        />
         <div hidden id="imageholder">
-        {wfc_paths.map((image) => (
-          <img  src={image} key={image} alt={image} />
-        ))}
+          {wfc_paths.map((image) => (
+            <img src={image} key={image} alt={image} />
+          ))}
         </div>
         <div className={styles.postContent}>
-          <MDXRemote {...postData.mdxSource} components={components}/>
+          <MDXRemote {...postData.mdxSource} components={components} />
         </div>
       </article>
-   </Layout>
+    </Layout>
   );
 }
 
@@ -180,16 +118,16 @@ export function* readAllFiles(dir) {
 export async function getStaticProps({ params }) {
   const postData = await getPostData(params.id);
   var wfc_paths = []
-  if(postData.title=='Creating Maps with Wave Function Collapse') {
+  if (postData.title == 'Creating Maps with Wave Function Collapse') {
     for (const file of readAllFiles('./public/posts/WFC/')) {
-    wfc_paths.push(file.split('public')[1])
+      wfc_paths.push(file.split('public')[1])
+    }
   }
-  }
-  
+
   return {
     props: {
-       postData,
-       wfc_paths,
+      postData,
+      wfc_paths,
     },
   };
 }

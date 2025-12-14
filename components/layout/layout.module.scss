@@ -1,65 +1,54 @@
+@import "../../styles/variables.scss";
+
+
 .container {
-  max-width: 100%;
-  padding-left: 10%;
-  padding-right: 10%;
-  // margin: 0rem auto 0rem;
+  max-width: var(--layout-max-width);
+  padding-left: $spacing-large;
+  padding-right: $spacing-large;
+  margin: 0 auto;
   z-index: 1;
 }
 
 .header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  z-index: 1;
-  background-color: var(--color-gray-vvvlight);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: var(--color-white);
+  border-bottom: 1px solid var(--color-border);
+  // Removed backdrop-filter for opaque look
+  transition: $transition-base;
 }
 
 .backToHome {
-  margin: 3rem;
+  margin: 3rem 0;
 }
 
-.headerheader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  // padding: 0.5rem;
-  background-color: var(--background-color);
-  color: var(--text-color);
-  border-radius: 25px;
-  
-} 
-
-.content {
-  display: flex;
-  align-items: center;
-}
-
-.title {
-  margin-right: 20px;
-  a {
-    color: #333; 
-    text-decoration: none;
-  }
-}
 .layoutContainer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%; // Adjust for a smaller width
-  margin: auto; // Center the container
-  padding: 10px; // Add some padding inside the box
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // Optional: add a subtle shadow
-  position: relative;
-  box-sizing: border-box; // Include padding and border in the width
-
-  .component {
-    height: 75px; // Reduced size
-    width: 75px; // Reduced size
-  }
+  width: 100%;
+  max-width: var(--layout-max-width);
+  margin: 0 auto;
+  padding: $spacing-small $spacing-large;
+  height: var(--header-height);
 
   .centeredComponents {
     display: flex;
-    gap: 10px;
+    align-items: center;
+    gap: $spacing;
+    cursor: pointer;
+    transition: $transition-base;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
   }
 }
 
