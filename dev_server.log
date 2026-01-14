@@ -1,0 +1,954 @@
+   ▲ Next.js 16.0.10 (webpack)
+   - Local:         http://localhost:3000
+   - Network:       http://192.168.0.2:3000
+
+ ✓ Starting...
+ ✓ Ready in 3.5s
+ ○ Compiling / ...
+ ⚠ ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/layout/layout.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/layout/layout.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/layout/layout.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/layout/layout.module.scss
+./components/layout/layout.module.scss
+./components/layout/layout.js
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/ui/PostCard.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/ui/PostCard.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/ui/PostCard.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/ui/PostCard.module.scss
+./components/ui/PostCard.module.scss
+./components/ui/PostCard.js
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/ui/Search.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/ui/Search.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/ui/Search.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/ui/Search.module.scss
+./components/ui/Search.module.scss
+./components/ui/Search.js
+./components/layout/layout.js
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/ui/SocialLinks.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/ui/SocialLinks.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/ui/SocialLinks.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/ui/SocialLinks.module.scss
+./components/ui/SocialLinks.module.scss
+./components/ui/SocialLinks.js
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/utils/Carousel.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/utils/Carousel.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/utils/Carousel.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/utils/Carousel.module.scss
+./components/utils/Carousel.module.scss
+./components/utils/Carousel.tsx
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/utils/DarkModeToggle.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/utils/DarkModeToggle.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/utils/DarkModeToggle.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/utils/DarkModeToggle.module.scss
+./components/utils/DarkModeToggle.module.scss
+./components/utils/DarkModeToggle.tsx
+./components/layout/layout.js
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./styles/post.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/styles/post.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "variables";
+
+styles/post.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./styles/post.module.scss
+./styles/post.module.scss
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./styles/utils2.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/styles/utils2.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../styles/variables.scss";
+
+styles/utils2.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./styles/utils2.module.scss
+./styles/utils2.module.scss
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[14].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[14].use[4]!./styles/global.scss
+Deprecation Warning on line 0, column 8 of file:///app/styles/fonts.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "./variables";
+
+styles/fonts.scss 1:9   @import
+styles/global.scss 2:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[14].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[14].use[4]!./styles/global.scss
+./styles/global.scss
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[14].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[14].use[4]!./styles/global.scss
+Deprecation Warning on line 0, column 8 of file:///app/styles/global.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "./variables.scss";
+
+styles/global.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[14].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[14].use[4]!./styles/global.scss
+./styles/global.scss
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[14].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[14].use[4]!./styles/global.scss
+Deprecation Warning on line 1, column 8 of file:///app/styles/global.scss:1:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+1 | @import "./fonts.scss";
+
+styles/global.scss 2:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[14].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[14].use[4]!./styles/global.scss
+./styles/global.scss
+
+./components/layout/layout.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/layout/layout.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/layout/layout.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./components/layout/layout.module.scss
+./components/layout/layout.js
+./pages/index.js
+
+./components/ui/PostCard.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/ui/PostCard.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/ui/PostCard.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./components/ui/PostCard.module.scss
+./components/ui/PostCard.js
+./pages/index.js
+
+./components/ui/Search.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/ui/Search.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/ui/Search.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./components/ui/Search.module.scss
+./components/ui/Search.js
+./components/layout/layout.js
+./pages/index.js
+
+./components/ui/SocialLinks.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/ui/SocialLinks.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/ui/SocialLinks.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./components/ui/SocialLinks.module.scss
+./components/ui/SocialLinks.js
+./pages/index.js
+
+./components/utils/Carousel.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/utils/Carousel.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/utils/Carousel.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./components/utils/Carousel.module.scss
+./components/utils/Carousel.tsx
+./pages/index.js
+
+./components/utils/DarkModeToggle.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/utils/DarkModeToggle.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/utils/DarkModeToggle.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./components/utils/DarkModeToggle.module.scss
+./components/utils/DarkModeToggle.tsx
+./components/layout/layout.js
+./pages/index.js
+
+./styles/post.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/styles/post.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "variables";
+
+styles/post.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./styles/post.module.scss
+./pages/index.js
+
+./styles/utils2.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/styles/utils2.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../styles/variables.scss";
+
+styles/utils2.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./styles/utils2.module.scss
+./pages/index.js
+`legacyBehavior` is deprecated and will be removed in a future release. A codemod is available to upgrade your components:
+
+npx @next/codemod@latest new-link .
+
+Learn more: https://nextjs.org/docs/app/building-your-application/upgrading/codemods#remove-a-tags-from-link-components
+Image with src "/carousel/alex_neuroev_2.jpeg" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/carousel/cam_spatial-ecology_1.png" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/carousel/cam_spatial-ecology_2.png" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/carousel/alex_neuroev_1.jpeg" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/posts/PINNS/featured.jpeg" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/carousel/cam_spatial-ecology_4.gif" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/carousel/alex_wfc_1.png" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/posts/dbba-stock-networks/ego_stock_projection_comparison.png" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/carousel/cam_spatial-ecology_3.png" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/posts/dbba-btc-agent-model/price_Data.png" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/posts/nixos/featured.svg" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/posts/better-python-testing-with-expecttest/header.png" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/carousel/alex_pinns_1.gif" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+ GET / 200 in 9.1s (compile: 8.6s, render: 538ms)
+ ⚠ ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/layout/layout.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/layout/layout.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/layout/layout.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/layout/layout.module.scss
+./components/layout/layout.module.scss
+./components/layout/layout.js
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/ui/PostCard.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/ui/PostCard.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/ui/PostCard.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/ui/PostCard.module.scss
+./components/ui/PostCard.module.scss
+./components/ui/PostCard.js
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/ui/Search.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/ui/Search.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/ui/Search.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/ui/Search.module.scss
+./components/ui/Search.module.scss
+./components/ui/Search.js
+./components/layout/layout.js
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/ui/SocialLinks.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/ui/SocialLinks.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/ui/SocialLinks.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/ui/SocialLinks.module.scss
+./components/ui/SocialLinks.module.scss
+./components/ui/SocialLinks.js
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/utils/Carousel.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/utils/Carousel.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/utils/Carousel.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/utils/Carousel.module.scss
+./components/utils/Carousel.module.scss
+./components/utils/Carousel.tsx
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/utils/DarkModeToggle.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/utils/DarkModeToggle.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/utils/DarkModeToggle.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/utils/DarkModeToggle.module.scss
+./components/utils/DarkModeToggle.module.scss
+./components/utils/DarkModeToggle.tsx
+./components/layout/layout.js
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./styles/post.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/styles/post.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "variables";
+
+styles/post.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./styles/post.module.scss
+./styles/post.module.scss
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./styles/utils2.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/styles/utils2.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../styles/variables.scss";
+
+styles/utils2.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./styles/utils2.module.scss
+./styles/utils2.module.scss
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[14].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[14].use[4]!./styles/global.scss
+Deprecation Warning on line 0, column 8 of file:///app/styles/fonts.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "./variables";
+
+styles/fonts.scss 1:9   @import
+styles/global.scss 2:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[14].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[14].use[4]!./styles/global.scss
+./styles/global.scss
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[14].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[14].use[4]!./styles/global.scss
+Deprecation Warning on line 0, column 8 of file:///app/styles/global.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "./variables.scss";
+
+styles/global.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[14].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[14].use[4]!./styles/global.scss
+./styles/global.scss
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[14].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[14].use[4]!./styles/global.scss
+Deprecation Warning on line 1, column 8 of file:///app/styles/global.scss:1:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+1 | @import "./fonts.scss";
+
+styles/global.scss 2:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[14].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[14].use[4]!./styles/global.scss
+./styles/global.scss
+
+./components/layout/layout.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/layout/layout.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/layout/layout.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./components/layout/layout.module.scss
+./components/layout/layout.js
+./pages/index.js
+
+./components/ui/PostCard.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/ui/PostCard.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/ui/PostCard.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./components/ui/PostCard.module.scss
+./components/ui/PostCard.js
+./pages/index.js
+
+./components/ui/Search.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/ui/Search.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/ui/Search.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./components/ui/Search.module.scss
+./components/ui/Search.js
+./components/layout/layout.js
+./pages/index.js
+
+./components/ui/SocialLinks.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/ui/SocialLinks.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/ui/SocialLinks.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./components/ui/SocialLinks.module.scss
+./components/ui/SocialLinks.js
+./pages/index.js
+
+./components/utils/Carousel.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/utils/Carousel.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/utils/Carousel.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./components/utils/Carousel.module.scss
+./components/utils/Carousel.tsx
+./pages/index.js
+
+./components/utils/DarkModeToggle.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/utils/DarkModeToggle.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/utils/DarkModeToggle.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./components/utils/DarkModeToggle.module.scss
+./components/utils/DarkModeToggle.tsx
+./components/layout/layout.js
+./pages/index.js
+
+./styles/post.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/styles/post.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "variables";
+
+styles/post.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./styles/post.module.scss
+./pages/index.js
+
+./styles/utils2.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/styles/utils2.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../styles/variables.scss";
+
+styles/utils2.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./styles/utils2.module.scss
+./pages/index.js
+`legacyBehavior` is deprecated and will be removed in a future release. A codemod is available to upgrade your components:
+
+npx @next/codemod@latest new-link .
+
+Learn more: https://nextjs.org/docs/app/building-your-application/upgrading/codemods#remove-a-tags-from-link-components
+Image with src "/carousel/cam_spatial-ecology_4.gif" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/carousel/cam_spatial-ecology_3.png" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/carousel/alex_wfc_1.png" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/posts/nixos/featured.svg" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/posts/better-python-testing-with-expecttest/header.png" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/posts/PINNS/featured.jpeg" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/carousel/alex_neuroev_2.jpeg" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/carousel/alex_pinns_1.gif" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/carousel/cam_spatial-ecology_2.png" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/carousel/cam_spatial-ecology_1.png" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/posts/dbba-btc-agent-model/price_Data.png" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/carousel/alex_neuroev_1.jpeg" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/posts/dbba-stock-networks/ego_stock_projection_comparison.png" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+ GET / 200 in 440ms (compile: 342ms, render: 98ms)
+ GET / 200 in 83ms (compile: 6ms, render: 77ms)
+ ⚠ The requested resource "/carousel/cam_spatial-ecology_4.gif" is an animated image so it will not be optimized. Consider adding the "unoptimized" property to the <Image>.
+ ⚠ The requested resource "/carousel/alex_pinns_1.gif" is an animated image so it will not be optimized. Consider adding the "unoptimized" property to the <Image>.
+ ⚠ ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/layout/layout.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/layout/layout.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/layout/layout.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/layout/layout.module.scss
+./components/layout/layout.module.scss
+./components/layout/layout.js
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/ui/PostCard.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/ui/PostCard.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/ui/PostCard.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/ui/PostCard.module.scss
+./components/ui/PostCard.module.scss
+./components/ui/PostCard.js
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/ui/Search.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/ui/Search.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/ui/Search.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/ui/Search.module.scss
+./components/ui/Search.module.scss
+./components/ui/Search.js
+./components/layout/layout.js
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/ui/SocialLinks.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/ui/SocialLinks.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/ui/SocialLinks.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/ui/SocialLinks.module.scss
+./components/ui/SocialLinks.module.scss
+./components/ui/SocialLinks.js
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/utils/Carousel.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/utils/Carousel.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/utils/Carousel.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/utils/Carousel.module.scss
+./components/utils/Carousel.module.scss
+./components/utils/Carousel.tsx
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/utils/DarkModeToggle.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/utils/DarkModeToggle.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/utils/DarkModeToggle.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./components/utils/DarkModeToggle.module.scss
+./components/utils/DarkModeToggle.module.scss
+./components/utils/DarkModeToggle.tsx
+./components/layout/layout.js
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./styles/post.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/styles/post.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "variables";
+
+styles/post.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./styles/post.module.scss
+./styles/post.module.scss
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./styles/utils2.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/styles/utils2.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../styles/variables.scss";
+
+styles/utils2.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[9].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[9].use[4]!./styles/utils2.module.scss
+./styles/utils2.module.scss
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[14].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[14].use[4]!./styles/global.scss
+Deprecation Warning on line 0, column 8 of file:///app/styles/fonts.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "./variables";
+
+styles/fonts.scss 1:9   @import
+styles/global.scss 2:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[14].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[14].use[4]!./styles/global.scss
+./styles/global.scss
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[14].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[14].use[4]!./styles/global.scss
+Deprecation Warning on line 0, column 8 of file:///app/styles/global.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "./variables.scss";
+
+styles/global.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[14].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[14].use[4]!./styles/global.scss
+./styles/global.scss
+
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[14].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[14].use[4]!./styles/global.scss
+Deprecation Warning on line 1, column 8 of file:///app/styles/global.scss:1:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+1 | @import "./fonts.scss";
+
+styles/global.scss 2:9  root stylesheet
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[9].oneOf[14].use[2]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[9].oneOf[14].use[3]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[9].oneOf[14].use[4]!./styles/global.scss
+./styles/global.scss
+
+./components/layout/layout.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/layout/layout.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/layout/layout.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./components/layout/layout.module.scss
+./components/layout/layout.js
+./pages/index.js
+
+./components/ui/PostCard.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/ui/PostCard.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/ui/PostCard.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./components/ui/PostCard.module.scss
+./components/ui/PostCard.js
+./pages/index.js
+
+./components/ui/Search.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/ui/Search.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/ui/Search.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./components/ui/Search.module.scss
+./components/ui/Search.js
+./components/layout/layout.js
+./pages/index.js
+
+./components/ui/SocialLinks.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/ui/SocialLinks.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/ui/SocialLinks.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./components/ui/SocialLinks.module.scss
+./components/ui/SocialLinks.js
+./pages/index.js
+
+./components/utils/Carousel.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/utils/Carousel.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/utils/Carousel.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./components/utils/Carousel.module.scss
+./components/utils/Carousel.tsx
+./pages/index.js
+
+./components/utils/DarkModeToggle.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/components/utils/DarkModeToggle.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../../styles/variables.scss";
+
+components/utils/DarkModeToggle.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./components/utils/DarkModeToggle.module.scss
+./components/utils/DarkModeToggle.tsx
+./components/layout/layout.js
+./pages/index.js
+
+./styles/post.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/styles/post.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "variables";
+
+styles/post.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./styles/post.module.scss
+./pages/index.js
+
+./styles/utils2.module.scss
+Deprecation Warning on line 0, column 8 of file:///app/styles/utils2.module.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "../styles/variables.scss";
+
+styles/utils2.module.scss 1:9  root stylesheet
+
+Import trace for requested module:
+./styles/utils2.module.scss
+./pages/index.js
+`legacyBehavior` is deprecated and will be removed in a future release. A codemod is available to upgrade your components:
+
+npx @next/codemod@latest new-link .
+
+Learn more: https://nextjs.org/docs/app/building-your-application/upgrading/codemods#remove-a-tags-from-link-components
+Image with src "/carousel/cam_spatial-ecology_4.gif" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/carousel/alex_neuroev_1.jpeg" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/carousel/cam_spatial-ecology_2.png" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/carousel/alex_wfc_1.png" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/posts/dbba-btc-agent-model/price_Data.png" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/carousel/cam_spatial-ecology_3.png" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/posts/better-python-testing-with-expecttest/header.png" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/carousel/alex_pinns_1.gif" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/posts/nixos/featured.svg" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/posts/dbba-stock-networks/ego_stock_projection_comparison.png" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/carousel/alex_neuroev_2.jpeg" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/carousel/cam_spatial-ecology_1.png" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+Image with src "/posts/PINNS/featured.jpeg" has legacy prop "layout". Did you forget to run the codemod?
+Read more: https://nextjs.org/docs/messages/next-image-upgrade-to-13
+ GET / 200 in 609ms (compile: 464ms, render: 145ms)
+ GET / 200 in 64ms (compile: 4ms, render: 60ms)
+ GET / 200 in 58ms (compile: 4ms, render: 54ms)

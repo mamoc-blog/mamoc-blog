@@ -6,6 +6,10 @@
     gap: 10px;
     align-items: center;
     justify-content: space-between; /* This ensures elements are spaced out */
+
+    @media (max-width: $breakpoint-sm) {
+      flex-direction: column;
+    }
   }
   
   .left, .right {
@@ -135,7 +139,7 @@
 .iframeContainer {
   overflow: hidden;
   position: relative;
-  width: 100vw; // 100% of the viewport width
+  width: 100%; // 100% of the container width
   height: 33.33vw; // Maintains a 3:1 aspect ratio
 
   iframe {
