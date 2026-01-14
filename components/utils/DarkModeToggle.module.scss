@@ -1,0 +1,18 @@
+@import "../../styles/variables.scss";
+
+.toggleButton {
+  border: none;
+  background: none;
+  z-index: 2;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+
+  img {
+    @media (max-width: $breakpoint-sm) {
+      width: 60px;
+      height: auto;
+    }
+  }
+}

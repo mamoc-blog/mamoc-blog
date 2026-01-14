@@ -33,6 +33,10 @@
   padding: $spacing-small $spacing-large;
   height: var(--header-height);
 
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-small $spacing-small;
+  }
+
   .centeredComponents {
     display: flex;
     align-items: center;
@@ -42,6 +46,13 @@
 
     &:hover {
       opacity: 0.8;
+    }
+
+    img {
+      @media (max-width: $breakpoint-sm) {
+        width: 120px;
+        height: auto;
+      }
     }
   }
 

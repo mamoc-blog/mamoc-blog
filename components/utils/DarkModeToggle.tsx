@@ -1,12 +1,13 @@
 import React from 'react';
 import { useSettingsContext } from './Theme';
 import Image from 'next/image';
+import styles from './DarkModeToggle.module.scss';
 
 export const DarkModeToggle = () => {
   const { darkTheme, toggleDarkTheme } = useSettingsContext();
 
   return (
-    <button onClick={toggleDarkTheme} style={{ border: 'none', background: 'none', zIndex:2 }}>
+    <button onClick={toggleDarkTheme} className={styles.toggleButton}>
       {darkTheme ? (
         <>
           <Image
