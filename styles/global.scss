@@ -70,8 +70,10 @@
   --layout-gap-small-md: 15px;
 
   /* ── TYPE FAMILIES ────────────────────────────────────────────────────── */
-  --font-family-primary: "Fira Code", ui-monospace, SFMono-Regular, Menlo, monospace;
-  --font-family-secondary: "Source Serif Pro", Georgia, serif;
+  /* --font-fira-code and --font-source-serif are injected by next/font/google
+     in app/layout.tsx. Fall back through system mono / serif if missing. */
+  --font-family-primary: var(--font-fira-code), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-family-secondary: var(--font-source-serif), "Source Serif Pro", Georgia, serif;
 
   /* ── TYPE SCALE (canonical) ───────────────────────────────────────────── */
   --font-size-xs:  0.75rem;   /* 12 */

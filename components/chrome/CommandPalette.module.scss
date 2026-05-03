@@ -1,0 +1,175 @@
+/* cmdk renders Dialog as a portal; these globals bypass module scoping
+   for cmdk's data attributes. We use :global() because cmdk applies its
+   own data attributes (data-cmdk-input, data-cmdk-item, etc.) that we
+   don't need to style here — the className-based selectors below cover
+   our visual styling. */
+
+.dialog {}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(3px);
+  z-index: 50;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.content {
+  position: fixed;
+  top: 12vh;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 51;
+  max-width: 640px;
+  width: calc(100% - 32px);
+  background: var(--color-white);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--color-border);
+  font-family: var(--font-family-primary);
+  animation: slideIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  [data-theme='dark'] & { background: #161618; border-color: #2a2a2a; }
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideIn {
+  from { opacity: 0; transform: translate(-50%, -8px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+.hd {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  padding: 18px 20px;
+  align-items: center;
+  border-bottom: 1px solid var(--color-border);
+  [data-theme='dark'] & { border-color: #2a2a2a; }
+}
+
+.pfx {
+  font-family: var(--font-family-primary);
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 15px;
+  .gt { color: var(--color-gray-light); font-weight: 400; margin-right: 4px; }
+}
+
+.input {
+  border: 0;
+  outline: 0;
+  font-family: var(--font-family-primary);
+  font-size: 18px;
+  background: transparent;
+  color: inherit;
+  width: 100%;
+}
+
+.hint {
+  font-size: 11px;
+  color: var(--color-gray);
+  display: flex;
+  gap: 6px;
+
+  .k {
+    border: 1px solid var(--color-border);
+    padding: 2px 5px;
+    border-radius: 3px;
+    [data-theme='dark'] & { border-color: #333; }
+  }
+}
+
+.list {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.empty {
+  padding: 24px 20px;
+  font-size: 13px;
+  color: var(--color-gray);
+  text-align: center;
+}
+
+.grp {
+  padding: 8px 10px 4px;
+
+  /* cmdk renders the group heading with a [cmdk-group-heading] attribute */
+  :global([cmdk-group-heading]) {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-gray);
+    padding: 6px 10px;
+    font-weight: 700;
+  }
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 24px 1fr auto;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  align-items: center;
+  cursor: pointer;
+
+  &[data-selected='true'],
+  &[aria-selected='true'] {
+    background: var(--color-primary);
+    color: #fff;
+
+    .s { color: rgba(255, 255, 255, 0.8); }
+    .tag { background: rgba(255, 255, 255, 0.25); color: #fff; border-color: transparent; }
+    .g { color: #fff; }
+  }
+}
+
+.g {
+  font-size: 16px;
+  color: var(--color-gray);
+  font-weight: 700;
+  text-align: center;
+}
+
+.t { font-size: 14px; font-weight: 600; }
+
+.s {
+  font-size: 11px;
+  color: var(--color-gray);
+  margin-top: 2px;
+  line-height: 1.5;
+}
+
+.tag {
+  font-size: 10px;
+  padding: 3px 6px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-gray);
+  letter-spacing: 0.08em;
+  [data-theme='dark'] & { border-color: #333; }
+}
+
+.foot {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-top: 1px solid var(--color-border);
+  font-size: 11px;
+  color: var(--color-gray);
+  font-family: var(--font-family-primary);
+
+  [data-theme='dark'] & { border-color: #2a2a2a; }
+
+  .k {
+    border: 1px solid var(--color-border);
+    padding: 1px 5px;
+    border-radius: 3px;
+    margin: 0 3px;
+    [data-theme='dark'] & { border-color: #333; }
+  }
+}

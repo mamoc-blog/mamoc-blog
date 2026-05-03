@@ -1,6 +1,8 @@
+'use client';
+
 import React, { useState, useEffect, useRef } from 'react';
-import styles from "/styles/post.module.scss";
-import { useSettingsContext } from '../utils/Theme';
+import styles from "../../styles/post.module.scss";
+import { useTheme } from 'next-themes';
 
 const GRID_SIZE = 120;
 const DELTA_T = 0.2;
@@ -77,11 +79,12 @@ const RK4ReactionDiffusion = () => {
       }
     };
 
-    const { darkTheme } = useSettingsContext();
+    const { resolvedTheme } = useTheme();
+    const isDark = resolvedTheme === 'dark';
 
     const imgSrc = displayType === 1
-      ? `/posts/spatial-ecology/colourmapping-${darkTheme ? 'dark' : 'light'}mode-render2.png`
-      : `/posts/spatial-ecology/colourmapping-${darkTheme ? 'dark' : 'light'}mode.png`;
+      ? `/posts/spatial-ecology/colourmapping-${isDark ? 'dark' : 'light'}mode-render2.png`
+      : `/posts/spatial-ecology/colourmapping-${isDark ? 'dark' : 'light'}mode.png`;
     
 
   return (
