@@ -1,5 +1,7 @@
+'use client';
+
 import React, { useState } from 'react';
-import styles from "/styles/post.module.scss";
+import styles from "../../styles/post.module.scss";
 
 function CharacteristicLengthCalculator() {
   const [parameters, setParameters] = useState({

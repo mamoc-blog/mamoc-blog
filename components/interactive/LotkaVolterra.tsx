@@ -1,7 +1,9 @@
+'use client';
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Line } from 'react-chartjs-2';
 import ZoomPlugin from 'chartjs-plugin-zoom'; 
-import styles from '/styles/post.module.scss';
+import styles from '../../styles/post.module.scss';
 import {
     Chart as ChartJS,
     CategoryScale,

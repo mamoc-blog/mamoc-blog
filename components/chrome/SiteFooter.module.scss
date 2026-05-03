@@ -1,0 +1,107 @@
+.root {
+  background: #0d0d10;
+  color: #eaeaea;
+  padding: 60px 48px 24px;
+  font-family: var(--font-family-primary);
+}
+.root.light {
+  background: #f7f6f2;
+  color: #111827;
+}
+
+.sig {
+  font-size: clamp(64px, 14vw, 200px);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 0.85;
+  margin: 0 0 24px;
+
+  .dot { color: #ff005c; }
+  .cur {
+    color: #00ff41;
+    animation: mm-blink-f 1s steps(2) infinite;
+  }
+}
+
+.root.light .sig .cur { color: #7000ff; }
+
+@keyframes mm-blink-f { 50% { opacity: 0; } }
+
+.grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  padding: 40px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+  .root.light & {
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+}
+
+.col {
+  .h {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    margin-bottom: 14px;
+  }
+
+  a {
+    display: block;
+    padding: 4px 0;
+    color: inherit;
+    font-size: 13px;
+    text-decoration: none;
+
+    &:hover { color: #00ff41; }
+  }
+}
+
+.root.light .col a:hover { color: #7000ff; }
+
+.main {
+  p {
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 44ch;
+    opacity: 0.7;
+  }
+
+  .rss {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    padding: 8px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    margin-top: 18px;
+    text-decoration: none;
+    color: inherit;
+
+    .root.light & { border-color: rgba(0, 0, 0, 0.2); }
+    &:hover { border-color: #00ff41; color: #00ff41; }
+    .root.light &:hover { border-color: #7000ff; color: #7000ff; }
+  }
+}
+
+.strip {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 20px;
+  font-size: 11px;
+  opacity: 0.6;
+
+  .l { display: flex; gap: 18px; }
+  .r { display: flex; gap: 14px; }
+}
+
+@media (max-width: 768px) {
+  .root { padding: 40px 20px 20px; }
+  .grid { grid-template-columns: 1fr 1fr; gap: 28px; padding: 28px 0; }
+  .strip { flex-direction: column; gap: 8px; }
+  .strip .l, .strip .r { flex-wrap: wrap; }
+}

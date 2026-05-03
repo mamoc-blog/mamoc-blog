@@ -1,3 +1,5 @@
+'use client';
+
 import React, {useState} from 'react';
 import { useChannel } from 'ably/react';
 import * as Ably from 'ably';
