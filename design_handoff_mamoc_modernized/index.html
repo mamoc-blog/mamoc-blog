@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>mamoc · modernized — design handoff preview</title>
+  <link rel="icon" href="./assets/favicon.ico" />
+  <link rel="stylesheet" href="./tokens.css" />
+  <link rel="stylesheet" href="./components.css" />
+  <style>
+    body { margin: 0; }
+    .toolbar {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; gap: 12px; align-items: center;
+      padding: 10px 18px;
+      background: var(--color-white);
+      border-bottom: 1px solid var(--color-border);
+      font: 12px/1 var(--font-family-primary);
+    }
+    .toolbar .grow { flex: 1; }
+    .toolbar select, .toolbar button {
+      font: 12px/1 var(--font-family-primary);
+      padding: 6px 10px; border: 1px solid var(--color-border);
+      background: var(--color-white); color: var(--color-black);
+      border-radius: 6px; cursor: pointer;
+    }
+    .toolbar .lbl { color: var(--color-gray); margin-right: 4px; }
+    .stage { padding: 24px; background: var(--color-gray-vvvvlight); }
+    .stage > .frame {
+      background: var(--color-white);
+      max-width: var(--layout-max-width);
+      margin: 0 auto;
+      box-shadow: var(--shadow-md);
+      border-radius: var(--border-radius-lg);
+      overflow: hidden;
+    }
+    .toc-banner {
+      max-width: var(--layout-max-width);
+      margin: 24px auto 0;
+      padding: 16px 20px;
+      border: 1px dashed var(--color-border);
+      border-radius: var(--border-radius-md);
+      font: 12px/1.6 var(--font-family-primary);
+      color: var(--color-gray);
+    }
+    .toc-banner b { color: var(--color-black); }
+  </style>
+</head>
+<body>
+
+  <div class="toolbar">
+    <span class="lbl">component</span>
+    <select id="pick">
+      <option value="Frontpage">Frontpage — index (zine)</option>
+      <option value="PostSummary">PostSummary — article masthead</option>
+      <option value="SiteHeader">SiteHeader — global header</option>
+      <option value="CommandPalette">CommandPalette — overlay search</option>
+      <option value="ArchivePage">ArchivePage — /archive</option>
+      <option value="AuthorPage">AuthorPage — /authors/:slug</option>
+      <option value="SubscribeBlock">SubscribeBlock — newsletter + RSS</option>
+      <option value="AboutPage">AboutPage — /about</option>
+      <option value="SiteFooter">SiteFooter — global footer</option>
+      <option value="__all">— show all in sequence —</option>
+    </select>
+    <span class="grow"></span>
+    <span class="lbl">theme</span>
+    <button id="theme">light</button>
+  </div>
+
+  <div class="toc-banner">
+    <b>Handoff preview.</b> This file demonstrates the chosen components rendering with the
+    bundled tokens + CSS. Source-of-truth files: <b>tokens.css</b> (design tokens),
+    <b>components.css</b> (component styles), <b>components.jsx</b> (React components).
+    See README.md for the implementation guide.
+  </div>
+
+  <div class="stage"><div class="frame" id="root"></div></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script type="text/babel" src="./components.jsx"></script>
+
+  <script type="text/babel">
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    let dark = false;
+    let pick = 'Frontpage';
+
+    const ALL = [
+      'SiteHeader', 'Frontpage', 'PostSummary',
+      'CommandPalette', 'ArchivePage', 'AuthorPage',
+      'SubscribeBlock', 'AboutPage', 'SiteFooter'
+    ];
+
+    function render() {
+      document.documentElement.classList.toggle('dark', dark);
+      document.body.style.background = dark ? '#1a1a1a' : '';
+      const items = pick === '__all' ? ALL : [pick];
+      root.render(
+        <>
+          {items.map(name => {
+            const C = window[name];
+            return C ? (
+              <div key={name} style={{ marginBottom: pick === '__all' ? 24 : 0 }}>
+                <C dark={dark} />
+              </div>
+            ) : null;
+          })}
+        </>
+      );
+    }
+    document.getElementById('pick').addEventListener('change', e => { pick = e.target.value; render(); });
+    document.getElementById('theme').addEventListener('click', e => {
+      dark = !dark; e.target.textContent = dark ? 'dark' : 'light'; render();
+    });
+    render();
+  </script>
+</body>
+</html>
