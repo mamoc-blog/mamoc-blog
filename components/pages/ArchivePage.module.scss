@@ -1,0 +1,189 @@
+.root {
+  padding: 0 40px 72px;
+  max-width: 1440px;
+  margin: 0 auto;
+  font-family: var(--font-family-primary);
+}
+
+.head {
+  padding: 48px 0 40px;
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 48px;
+  align-items: end;
+  border-bottom: 1px solid var(--color-border);
+  [data-theme='dark'] & { border-color: #222; }
+
+  h2 {
+    font-size: 72px;
+    letter-spacing: -0.04em;
+    margin: 0;
+    line-height: 0.95;
+    font-weight: 800;
+  }
+  .slash { color: var(--color-primary); font-weight: 400; }
+
+  .lede {
+    font-size: 14px;
+    color: var(--color-gray-dark);
+    max-width: 48ch;
+    line-height: 1.7;
+    [data-theme='dark'] & { color: #9ca3af; }
+  }
+}
+
+.filters {
+  display: flex;
+  gap: 6px;
+  margin: 28px 0;
+  flex-wrap: wrap;
+
+  .chip {
+    padding: 7px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--color-border);
+    background: transparent;
+    font-family: inherit;
+    font-size: 12px;
+    color: var(--color-gray);
+    cursor: pointer;
+    transition: var(--transition-base);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    [data-theme='dark'] & { border-color: #2a2a2a; }
+    &:hover { border-color: var(--color-primary); color: var(--color-primary); }
+
+    .n {
+      font-variant-numeric: tabular-nums;
+      color: var(--color-gray-light);
+      font-size: 10px;
+    }
+  }
+
+  .chip.on {
+    background: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+    .n { color: rgba(255, 255, 255, 0.8); }
+  }
+}
+
+.split {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 40px;
+}
+
+.side {
+  font-size: 12px;
+  position: sticky;
+  top: 20px;
+  align-self: start;
+
+  .grp { margin-bottom: 28px; }
+
+  .hd {
+    color: var(--color-gray);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-size: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--color-border);
+    [data-theme='dark'] & { border-color: #222; }
+  }
+
+  a {
+    display: block;
+    padding: 4px 0;
+    color: inherit;
+    cursor: pointer;
+    font-size: 12px;
+    text-decoration: none;
+    &:hover { color: var(--color-secondary); [data-theme='dark'] & { color: #00ff41; } }
+  }
+}
+
+.empty { color: var(--color-gray); padding: 24px 0; font-size: 13px; }
+
+.year {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 40px;
+  padding: 24px 0;
+  border-top: 1px solid var(--color-border);
+  [data-theme='dark'] & { border-color: #222; }
+
+  .yn {
+    font-size: 48px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--color-primary);
+    line-height: 1;
+
+    .sub {
+      display: block;
+      font-size: 10px;
+      color: var(--color-gray);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 400;
+      margin-top: 8px;
+    }
+  }
+
+  .it {
+    display: grid;
+    grid-template-columns: 90px 1fr 100px 80px;
+    gap: 20px;
+    align-items: baseline;
+    padding: 14px 0;
+    border-bottom: 1px dashed var(--color-border);
+    cursor: pointer;
+    color: inherit;
+    text-decoration: none;
+    [data-theme='dark'] & { border-color: #222; }
+
+    .d { font-size: 11px; color: var(--color-gray); font-variant-numeric: tabular-nums; }
+    .t {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.3;
+      letter-spacing: -0.005em;
+    }
+    &:hover .t {
+      color: var(--color-secondary);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      [data-theme='dark'] & { color: #00ff41; }
+    }
+    .tg {
+      font-size: 10px;
+      color: var(--color-primary);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .a { font-size: 11px; color: var(--color-gray); text-align: right; }
+    .rt {
+      font-size: 11px;
+      color: var(--color-gray);
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .root { padding: 0 20px 56px; }
+  .head { grid-template-columns: 1fr; gap: 16px; padding: 24px 0; }
+  .head h2 { font-size: 44px; }
+  .split { grid-template-columns: 1fr; gap: 24px; }
+  .side { position: static; }
+  .year { grid-template-columns: 1fr; gap: 12px; }
+  .year .yn { font-size: 32px; }
+  .year .it { grid-template-columns: 1fr; gap: 4px; }
+  .year .it .a, .year .it .rt { display: none; }
+}

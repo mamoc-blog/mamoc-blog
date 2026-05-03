@@ -31,7 +31,7 @@ export default async function PostPage({
   try {
     const { default: PostBody } = await import(`@/content/posts/${slug}.mdx`);
     return (
-      <article style={{ maxWidth: 800, margin: '0 auto', padding: '40px 24px' }}>
+      <article className="post-body">
         <PostBody />
       </article>
     );

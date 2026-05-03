@@ -1,0 +1,106 @@
+.root {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 48px 40px 80px;
+  font-family: var(--font-family-primary);
+
+  h1 {
+    font-size: clamp(48px, 7vw, 104px);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 0.95;
+    margin: 0 0 28px;
+  }
+}
+
+.slash { color: var(--color-primary); font-weight: 400; }
+
+.sub {
+  font-family: var(--font-family-secondary);
+  font-size: 22px;
+  line-height: 1.55;
+  max-width: 56ch;
+  color: var(--color-black);
+  margin: 0 0 48px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+
+  h4 {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-gray);
+    margin: 0 0 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--color-border);
+    [data-theme='dark'] & { border-color: #222; }
+  }
+
+  p { font-size: 14px; line-height: 1.75; margin: 0 0 14px; }
+}
+
+.tech {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 18px;
+  font-size: 12px;
+
+  dt { color: var(--color-gray); font-variant-numeric: tabular-nums; }
+  dd { margin: 0; }
+  dd a { color: var(--color-secondary); [data-theme='dark'] & { color: #00ff41; } }
+}
+
+.pull {
+  margin: 56px 0;
+  padding: 32px 40px;
+  border-top: 2px solid var(--color-primary);
+  border-bottom: 1px solid var(--color-border);
+  position: relative;
+
+  [data-theme='dark'] & { border-bottom-color: #222; }
+
+  &::before {
+    content: '\201C';
+    position: absolute;
+    top: -40px;
+    left: -8px;
+    font-size: 120px;
+    color: var(--color-primary);
+    font-family: var(--font-family-secondary);
+    line-height: 1;
+    font-weight: 700;
+  }
+
+  p {
+    font-family: var(--font-family-secondary);
+    font-size: 26px;
+    line-height: 1.4;
+    font-style: italic;
+    max-width: 46ch;
+    margin: 0;
+  }
+
+  cite {
+    display: block;
+    margin-top: 16px;
+    font-family: var(--font-family-primary);
+    font-size: 11px;
+    font-style: normal;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-gray);
+  }
+}
+
+@media (max-width: 768px) {
+  .root { padding: 32px 20px 56px; }
+  .sub { font-size: 17px; }
+  .grid { grid-template-columns: 1fr; gap: 32px; }
+  .pull { margin: 32px 0; padding: 24px 24px; }
+  .pull p { font-size: 20px; }
+  .pull::before { font-size: 80px; top: -28px; }
+}

@@ -338,6 +338,29 @@ button {
   overflow: hidden;
 }
 
+/* MDX article body — generic typographic defaults for post content rendered
+   under .post-body. Component-specific styling lives alongside its component. */
+.post-body {
+  max-width: 720px;
+  margin: 32px auto 0;
+  padding: 0 24px 80px;
+  font-size: 16px;
+  line-height: var(--body-leading);
+
+  h2, h3, h4 { margin: 2em 0 0.75em; scroll-margin-top: 100px; }
+  h2 { font-size: var(--font-size-3xl); }
+  h3 { font-size: var(--font-size-2xl); }
+  h4 { font-size: var(--font-size-xl); }
+  p { margin: 0 0 1.25em; }
+  pre { margin: 1.5em 0; border-radius: 6px; }
+  img { max-width: 100%; height: auto; }
+  a { word-break: break-word; }
+}
+
+@media (max-width: 768px) {
+  .post-body { padding: 0 18px 60px; }
+}
+
 /* ── PRISM TOKENS (kept inline for now; rehype-prism-plus picks them up) ── */
 code[class*="language-"],
 pre[class*="language-"] {
