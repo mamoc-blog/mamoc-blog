@@ -3,6 +3,16 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Figure from '@/components/frames/Figure';
 import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableFooter,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableCaption,
+} from '@/components/ui/table';
+import {
   ButtonTimerDynamic,
   LotkaVolterraDynamic,
   RK4ReactionDiffusionDynamic,
@@ -14,6 +24,14 @@ const components = {
   Image,
   Link,
   Figure,
+  Table,
+  TableHeader,
+  TableBody,
+  TableFooter,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableCaption,
   ButtonTimer: ButtonTimerDynamic,
   LotkaVolterra: LotkaVolterraDynamic,
   RK4ReactionDiffusion: RK4ReactionDiffusionDynamic,
