@@ -1,49 +1,62 @@
 @import "./variables.scss";
-@import "./fonts.scss";
 
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: "Fira Code", monospace;
-  background: var(--color-white);
-  color: var(--color-black);
-  font-size: clamp(14px, 2vw, 16px);
-}
+/* ==========================================================================
+   mamoc Design System — canonical tokens
+   Adopted from design_handoff_mamoc_modernized/tokens.css
+   Legacy aliases (--font-size-h1..h6, --font-size-vsmall/small/regular/big,
+   --fxl-*, --layout-margin-*, --cards-*) preserved for existing components.
+   ========================================================================== */
 
 :root {
-  --main-padding-sm: 20px;
-
+  /* ── BRAND / ACCENT ───────────────────────────────────────────────────── */
   --color-primary: #ff005c;
   --color-secondary: #7000ff;
   --color-secondary-light: #b174ff;
   --color-secondary-vlight: #7e1aff;
   --color-secondary-dark: #5a00cc;
-  --color-success: #2cb927;
-  --color-success-light: #00eda042;
-  --color-success-dark: #00281b;
-  --color-error: #eb1b1b;
-  --color-error-40: rgba(255, 0, 0, 0.4);
-  --color-error-20: rgba(255, 0, 0, 0.2);
-  --color-warning: #ffc300;
-  --color-warning-light: #ffc3003b;
-  --color-gray-vvvvlight: #f7f7f7;
-  --color-gray-vvvlight: #f1f1f1;
-  --color-gray-vvlight: #e7e7e7;
-  --color-gray-vlight: #d3d3d3;
-  --color-gray-light: #c4c4c4;
-  --color-gray: #727272;
-  --color-gray-dark: #484848;
-  --color-gray-vdark: #363636;
-  --color-black: #000000;
+
+  /* ── SEMANTIC SIGNAL ──────────────────────────────────────────────────── */
+  --color-success: #10b981;
+  --color-success-light: #d1fae5;
+  --color-success-dark: #064e3b;
+
+  --color-error: #ef4444;
+  --color-error-40: rgba(239, 68, 68, 0.4);
+  --color-error-20: rgba(239, 68, 68, 0.2);
+
+  --color-warning: #f59e0b;
+  --color-warning-light: #fef3c7;
+
+  --color-info: rgba(59, 130, 246, 0.9);
+  --color-info-light: rgba(59, 130, 246, 0.1);
+  --color-donator: #3b82f6;
+
+  /* ── NEUTRAL GREYS ────────────────────────────────────────────────────── */
+  --color-gray-vvvvlight: #f9fafb;
+  --color-gray-vvvlight:  #f3f4f6;
+  --color-gray-vvlight:   #e5e7eb;
+  --color-gray-vlight:    #d1d5db;
+  --color-gray-light:     #9ca3af;
+  --color-gray:           #6b7280;
+  --color-gray-dark:      #4b5563;
+  --color-gray-vdark:     #374151;
+
+  --color-black: #111827;
   --color-white: #ffffff;
   --rgb-white: 255, 255, 255;
-  --color-border: #000000;
-  --color-border-input: #000000;
-  --color-donator: #3496eb;
-  --color-info: rgba(0, 154, 255, 0.8);
-  --color-info-light: rgba(0, 154, 255, 0.18);
 
+  --color-border: #e5e7eb;
+  --color-border-input: #d1d5db;
+
+  --color-carousel-accent: var(--color-secondary);
+  --color-toc-text: var(--color-secondary);
+
+  /* ── LAYOUT ───────────────────────────────────────────────────────────── */
+  --layout-max-width: 1200px;
+  --header-height: 80px;
+  --main-padding-sm: 20px;
+
+  /* Legacy layout margins (used by older components) */
   --layout-margin-big-lg: 80px;
   --layout-margin-small-lg: 30px;
   --layout-margin-big-md: 50px;
@@ -51,43 +64,106 @@ body {
   --layout-margin-big-sm: 20px;
   --layout-margin-small-sm: 10px;
   --layout-margin-md: 40px;
-
   --layout-gap-big-lg: 50px;
   --layout-gap-big-md: 30px;
   --layout-gap-small-lg: 30px;
   --layout-gap-small-md: 15px;
 
-  --font-size-vsmall: 0.7rem;
-  --font-size-small: 0.875rem;
-  --font-size-regular: 1rem;
-  --font-size-big: 1.125rem;
-  --font-size-h6: 1rem;
-  --font-size-h5: 1.25rem;
-  --font-size-h4: 1.5625rem;
-  --font-size-h3: 2rem;
-  --font-size-h2: 2.5rem;
-  --font-size-h1: 3rem;
+  /* ── TYPE FAMILIES ────────────────────────────────────────────────────── */
+  --font-family-primary: "Fira Code", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-family-secondary: "Source Serif Pro", Georgia, serif;
 
-  --font-size-vsmall-em: 0.7em;
-  --font-size-small-em: 0.875em;
+  /* ── TYPE SCALE (canonical) ───────────────────────────────────────────── */
+  --font-size-xs:  0.75rem;   /* 12 */
+  --font-size-sm:  0.875rem;  /* 14 */
+  --font-size-base: 1rem;     /* 16 */
+  --font-size-lg:  1.125rem;  /* 18 */
+  --font-size-xl:  1.25rem;   /* 20 */
+  --font-size-2xl: 1.5rem;    /* 24 */
+  --font-size-3xl: 1.875rem;  /* 30 */
+  --font-size-4xl: 2.25rem;   /* 36 */
+  --font-size-5xl: 3rem;      /* 48 */
+
+  /* ── TYPE SCALE (legacy aliases — keep until callers migrate) ─────────── */
+  --font-size-vsmall:  var(--font-size-xs);
+  --font-size-small:   var(--font-size-sm);
+  --font-size-regular: var(--font-size-base);
+  --font-size-big:     var(--font-size-lg);
+  --font-size-h6: var(--font-size-base);
+  --font-size-h5: var(--font-size-xl);
+  --font-size-h4: var(--font-size-2xl);
+  --font-size-h3: var(--font-size-3xl);
+  --font-size-h2: var(--font-size-4xl);
+  --font-size-h1: var(--font-size-5xl);
+  --font-size-vsmall-em:  0.75em;
+  --font-size-small-em:   0.875em;
   --font-size-regular-em: 1em;
-  --font-size-big-em: 1.125em;
-  --font-size-h6-em: 1.15em;
+  --font-size-big-em:     1.125em;
+  --font-size-h6-em: 1em;
   --font-size-h5-em: 1.25em;
-  --font-size-h4-em: 1.5625em;
-  --font-size-h3-em: 1.8em;
-  --font-size-h2-em: 2.5em;
+  --font-size-h4-em: 1.5em;
+  --font-size-h3-em: 1.875em;
+  --font-size-h2-em: 2.25em;
   --font-size-h1-em: 3em;
-
   --font-size-paragraph: 1.3125rem;
 
-  --font-family-primary: "Fira Code", monospace;
+  /* ── SPACING ──────────────────────────────────────────────────────────── */
+  --spacing-xxs: 4px;
+  --spacing-xs:  8px;
+  --spacing-sm:  12px;
+  --spacing:     16px;
+  --spacing-l:   24px;
+  --spacing-xl:  32px;
+  --spacing-xxl: 48px;
+  --spacing-3xl: 64px;
+  --spacing-4xl: 96px;
 
-  --cards-border-width: 3px;
-  --cards-shadow: 19px;
-  --cards-gap: 30px;
-  --cards-size: 270px;
+  /* ── RADII ────────────────────────────────────────────────────────────── */
+  --border-radius-sm:   4px;
+  --border-radius-md:   8px;
+  --border-radius-lg:   12px;
+  --border-radius-xl:   16px;
+  --border-radius-full: 9999px;
 
+  /* ── SHADOWS ──────────────────────────────────────────────────────────── */
+  --shadow-sm:    0 1px 2px 0 rgba(0,0,0,.05);
+  --shadow-md:    0 4px 6px -1px rgba(0,0,0,.10), 0 2px 4px -1px rgba(0,0,0,.06);
+  --shadow-lg:    0 10px 15px -3px rgba(0,0,0,.10), 0 4px 6px -2px rgba(0,0,0,.05);
+  --shadow-xl:    0 20px 25px -5px rgba(0,0,0,.10), 0 10px 10px -5px rgba(0,0,0,.04);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0,0,0,.06);
+
+  /* ── MOTION ───────────────────────────────────────────────────────────── */
+  --transition-base:   all 0.2s cubic-bezier(.4,0,.2,1);
+  --transition-smooth: all 0.3s cubic-bezier(.4,0,.2,1);
+
+  /* ── SEMANTIC TYPOGRAPHY ──────────────────────────────────────────────── */
+  --h1-size: var(--font-size-5xl);  --h1-weight: 800; --h1-leading: 1.15;
+  --h2-size: var(--font-size-4xl);  --h2-weight: 700; --h2-leading: 1.2;
+  --h3-size: var(--font-size-3xl);  --h3-weight: 700; --h3-leading: 1.3;
+  --h4-size: var(--font-size-2xl);  --h4-weight: 700; --h4-leading: 1.4;
+  --h5-size: var(--font-size-xl);   --h5-weight: 600; --h5-leading: 1.4;
+  --h6-size: var(--font-size-lg);   --h6-weight: 600; --h6-leading: 1.4;
+  --body-size: var(--font-size-base);
+  --body-leading: 1.66;
+  --display-letter-spacing: -0.02em;
+
+  /* ── CODE THEME (One Light) ───────────────────────────────────────────── */
+  --code-bg:         #fafafa;
+  --code-text:       #383a42;
+  --token-comment:   #a0a1a7;
+  --token-keyword:   #a626a4;
+  --token-boolean:   #986801;
+  --token-function:  #4078f2;
+  --token-string:    #50a14f;
+  --token-number:    #986801;
+  --token-operator:  #383a42;
+  --token-class:     #c18401;
+  --token-variable:  #e45649;
+  --token-property:  #4078f2;
+  --mac-window-header: #e5e5e5;
+  --mac-window-border: #d4d4d4;
+
+  /* ── LEGACY: fxl-* aliases (used by interactive components) ───────────── */
   --fxl-color-light: #ffffff;
   --fxl-color-light0: #bbbbbb;
   --fxl-color-light1: #727272;
@@ -99,7 +175,6 @@ body {
   --fxl-color-background1: #f8f8f8;
   --fxl-color-background2: var(--color-gray-vvvlight);
   --fxl-color-background3: var(--color-gray-vvlight);
-
   --fxl-font-family: var(--font-family-primary);
   --fxl-color-primary: var(--color-primary);
   --fxl-color-primary-light: var(--color-primary);
@@ -108,17 +183,14 @@ body {
   --fxl-color-background: var(--color-white);
   --fxl-color-background-hover: var(--color-white);
   --fxl-color-text-primary: var(--color-black);
-  --fxl-color-text-primary-hover: var(--color-dark1);
+  --fxl-color-text-primary-hover: var(--fxl-color-dark1);
   --fxl-color-text-secondary: var(--color-black);
-
   --fxl-color-panel-background: var(--fxl-color-dark);
-
-  --fxl-font-size-xs: var(--font-size-vsmall);
-  --fxl-font-size-s: var(--font-size-small);
-  --fxl-font-size-regular: var(--font-size-regular);
-  --fxl-font-size-m: var(--font-size-big);
-  --fxl-font-size-l: var(--font-size-h4);
-
+  --fxl-font-size-xs: var(--font-size-xs);
+  --fxl-font-size-s: var(--font-size-sm);
+  --fxl-font-size-regular: var(--font-size-base);
+  --fxl-font-size-m: var(--font-size-lg);
+  --fxl-font-size-l: var(--font-size-2xl);
   --fxl-spacing: #{$spacing};
   --fxl-spacing-sm: #{$spacing-small};
   --fxl-spacing-xs: #{$spacing-x-small};
@@ -127,372 +199,221 @@ body {
   --fxl-spacing-xl: #{$spacing-x-large};
   --fxl-spacing-xxl: #{$spacing-2x-large};
 
-  --spacing: #{$spacing};
-  --spacing-sm: #{$spacing-small};
-  --spacing-xs: #{$spacing-x-small};
-  --spacing-xxs: #{$spacing-2x-small};
-  --spacing-l: #{$spacing-large};
-  --spacing-xl: #{$spacing-x-large};
-  --spacing-xxl: #{$spacing-2x-large};
+  /* ── LEGACY: card sizing ──────────────────────────────────────────────── */
+  --cards-border-width: 3px;
+  --cards-shadow: 19px;
+  --cards-gap: 30px;
+  --cards-size: 270px;
 }
 
-@media (max-width: 768px) {
-  body {
-    font-size: 80%; /* Reduce font size to 90% of its original size */
-  }
-}
+/* ── DARK MODE OVERRIDES ─────────────────────────────────────────────────
+   Both .dark (legacy) and [data-theme="dark"] (next-themes target) work.
+   Adopting handoff palette: soft purple secondary + coding-green hover.
+   ────────────────────────────────────────────────────────────────────── */
+.dark,
+[data-theme="dark"] {
+  --color-white: #1a1a1a;
+  --rgb-white: 26, 26, 26;
+  --color-black: #f3f4f6;
 
-.dark {
-  --color-white: #242424;
-  --rgb-white: 36, 36, 36;
-  --color-black: white;
-  --color-gray: #a5a5a5;
-  --color-gray-vvvlight: #2b2b2b;
-  --color-gray-vvlight: #2e2e2e;
-  --color-gray-vlight: #363636;
-  --color-gray-light: #505050;
-  --color-gray-dark: #999999;
-  --color-secondary: #c8ff00;
-  --color-secondary-light: #7b9811;
-  --color-secondary-vlight: #7b9811;
-  --color-border: #0f0f0f;
-  --color-border-input: #7e7e7e;
+  --color-gray-vvvvlight: #2d2d2d;
+  --color-gray-vvvlight:  #333333;
+  --color-gray-vvlight:   #4b5563;
+  --color-gray-vlight:    #6b7280;
+  --color-gray-light:     #9ca3af;
+  --color-gray:           #d1d5db;
+  --color-gray-dark:      #e5e7eb;
+  --color-gray-vdark:     #f3f4f6;
+
+  --color-secondary: #a78bfa;
+  --color-secondary-light: #c4b5fd;
+  --color-secondary-vlight: #ddd6fe;
+
+  --color-border: #333333;
+  --color-border-input: #4b5563;
+  --color-hover: #00ff41;
+
+  --color-carousel-accent: #00ff41;
+  --color-toc-text: #00ff41;
+
   --fxl-color-text-primary: var(--color-black);
   --fxl-color-background1: var(--color-gray-vvvlight);
   --fxl-color-background2: var(--color-gray-vvlight);
   --fxl-color-background3: var(--color-gray-vlight);
   --fxl-color-light2: var(--color-gray-light);
+
+  /* One Dark code theme */
+  --code-bg:        #1e2127;
+  --code-text:      #abb2bf;
+  --token-comment:  #5c6370;
+  --token-keyword:  #c678dd;
+  --token-boolean:  #d19a66;
+  --token-function: #61afef;
+  --token-string:   #98c379;
+  --token-number:   #d19a66;
+  --token-operator: #56b6c2;
+  --token-class:    #e5c07b;
+  --token-variable: #e06c75;
+  --token-property: #56b6c2;
+  --mac-window-header: #2c313a;
+  --mac-window-border: #181a1f;
 }
 
-::-webkit-scrollbar {
-  width:8px;
-  height: 5px;
+/* ── BASE ELEMENT STYLES ────────────────────────────────────────────────── */
+html, body {
+  padding: 0;
+  margin: 0;
+  font-family: var(--font-family-primary);
+  background: var(--color-white);
+  color: var(--color-black);
+  font-size: clamp(14px, 2vw, 16px);
 }
 
-::-webkit-scrollbar-thumb {
-  background: var(--color-gray);
-
-  &:hover {
-    background: var(--color-gray-dark);
-  }
-
-  &:active {
-    background: var(--color-black);
-  }
+@media (max-width: 768px) {
+  body { font-size: 80%; }
 }
 
-::-webkit-scrollbar-track {
-  background: var(--color-gray-vlight);
+* { box-sizing: border-box; }
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-family: var(--font-family-primary);
 }
+h1 { font-size: var(--h1-size); font-weight: var(--h1-weight); line-height: var(--h1-leading); letter-spacing: var(--display-letter-spacing); }
+h2 { font-size: var(--h2-size); font-weight: var(--h2-weight); line-height: var(--h2-leading); }
+h3 { font-size: var(--h3-size); font-weight: var(--h3-weight); line-height: var(--h3-leading); }
+h4 { font-size: var(--h4-size); font-weight: var(--h4-weight); line-height: var(--h4-leading); }
+h5 { font-size: var(--h5-size); font-weight: var(--h5-weight); line-height: var(--h5-leading); }
+h6 { font-size: var(--h6-size); font-weight: var(--h6-weight); line-height: var(--h6-leading); }
+
+p { line-height: var(--body-leading); margin: 0 0 1em; }
+strong { font-weight: 700; }
 
 a {
   color: var(--color-secondary);
   font-weight: bold;
   text-decoration: none;
+  transition: color 0.2s ease;
 }
-
 a:hover {
   text-decoration: underline;
+  color: var(--color-hover, var(--color-secondary));
 }
 
-* {
-  box-sizing: border-box;
-}
-
-strong {
-  font-weight: 700;
-}
-
-h6 {
-  font-size: var(--font-size-h6);
-}
-
-h5 {
-  font-size: var(--font-size-h5);
-}
-
-h4 {
-  font-size: var(--font-size-h4);
-}
-
-h3 {
-  font-size: var(--font-size-h3);
-}
-
-h2 {
-  font-size: var(--font-size-h2);
-}
-
-h1 {
-  font-size: var(--font-size-h1);
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin: 0;
-}
-
-p {
-  line-height: 166%;
-}
+code, pre, kbd, samp { font-family: var(--font-family-primary); }
 
 button {
   font-family: inherit;
   font-size: inherit;
 }
 
-.dark {
-  input {
-    color: white;
-  }
-}
+.dark input,
+[data-theme="dark"] input { color: var(--color-black); }
 
 @media (max-width: $breakpoint-sm) {
-  h6 {
-    font-size: var(--font-size-h6);
-  }
-
-  h5 {
-    font-size: var(--font-size-h6);
-  }
-
-  h4 {
-    font-size: var(--font-size-h5);
-  }
-
-  h3 {
-    font-size: var(--font-size-h4);
-  }
-
-  h2 {
-    font-size: var(--font-size-h3);
-  }
-
-  h1 {
-    font-size: var(--font-size-h2);
-  }
-
-  p {
-    line-height: 1.3125;
-  }
+  h6 { font-size: var(--font-size-h6); }
+  h5 { font-size: var(--font-size-h6); }
+  h4 { font-size: var(--font-size-h5); }
+  h3 { font-size: var(--font-size-h4); }
+  h2 { font-size: var(--font-size-h3); }
+  h1 { font-size: var(--font-size-h2); }
+  p  { line-height: 1.3125; }
 }
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 5px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-gray);
+  &:hover { background: var(--color-gray-dark); }
+  &:active { background: var(--color-black); }
+}
+::-webkit-scrollbar-track { background: var(--color-gray-vlight); }
 
 .modal-open {
   height: 100vh;
   overflow: hidden;
 }
 
+/* ── PRISM TOKENS (kept inline for now; rehype-prism-plus picks them up) ── */
 code[class*="language-"],
 pre[class*="language-"] {
-	text-align: left;
-	white-space: pre;
-	word-spacing: normal;
-	word-break: normal;
-	word-wrap: normal;
-	color: #c3cee3;
-	background: #263238;
-	font-family: Roboto Mono, monospace;
-	font-size: 1em;
-	line-height: 1.5em;
-
-	-moz-tab-size: 4;
-	-o-tab-size: 4;
-	tab-size: 4;
-
-	-webkit-hyphens: none;
-	-moz-hyphens: none;
-	-ms-hyphens: none;
-	hyphens: none;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  color: #c3cee3;
+  background: #263238;
+  font-family: var(--font-family-primary);
+  font-size: 1em;
+  line-height: 1.5em;
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
 }
-
 code[class*="language-"]::-moz-selection,
 pre[class*="language-"]::-moz-selection,
 code[class*="language-"] ::-moz-selection,
-pre[class*="language-"] ::-moz-selection {
-	background: #363636;
-}
-
+pre[class*="language-"] ::-moz-selection { background: #363636; }
 code[class*="language-"]::selection,
 pre[class*="language-"]::selection,
 code[class*="language-"] ::selection,
-pre[class*="language-"] ::selection {
-	background: #363636;
-}
-
+pre[class*="language-"] ::selection { background: #363636; }
 :not(pre) > code[class*="language-"] {
-	white-space: normal;
-	border-radius: 0.2em;
-	padding: 0.1em;
+  white-space: normal;
+  border-radius: 0.2em;
+  padding: 0.1em;
 }
-
 pre[class*="language-"] {
-	overflow: auto;
-	position: relative;
-	margin: 0.5em 0;
-	padding: 1.25em 1em;
+  overflow: auto;
+  position: relative;
+  margin: 0.5em 0;
+  padding: 1.25em 1em;
 }
-
 .language-css > code,
 .language-sass > code,
-.language-scss > code {
-	color: #fd9170;
-}
-
-[class*="language-"] .namespace {
-	opacity: 0.7;
-}
-
-.token.atrule {
-	color: #c792ea;
-}
-
-.token.attr-name {
-	color: #ffcb6b;
-}
-
-.token.attr-value {
-	color: #c3e88d;
-}
-
-.token.attribute {
-	color: #c3e88d;
-}
-
-.token.boolean {
-	color: #c792ea;
-}
-
-.token.builtin {
-	color: #ffcb6b;
-}
-
-.token.cdata {
-	color: #80cbc4;
-}
-
-.token.char {
-	color: #80cbc4;
-}
-
-.token.class {
-	color: #ffcb6b;
-}
-
-.token.class-name {
-	color: #f2ff00;
-}
-
-.token.color {
-	color: #f2ff00;
-}
-
-.token.comment {
-	color: #546e7a;
-}
-
-.token.constant {
-	color: #c792ea;
-}
-
-.token.deleted {
-	color: #f07178;
-}
-
-.token.doctype {
-	color: #546e7a;
-}
-
-.token.entity {
-	color: #f07178;
-}
-
-.token.function {
-	color: #c792ea;
-}
-
-.token.hexcode {
-	color: #f2ff00;
-}
-
-.token.id {
-	color: #c792ea;
-	font-weight: bold;
-}
-
-.token.important {
-	color: #c792ea;
-	font-weight: bold;
-}
-
-.token.inserted {
-	color: #80cbc4;
-}
-
-.token.keyword {
-	color: #c792ea;
-	font-style: italic;
-}
-
-.token.number {
-	color: #fd9170;
-}
-
-.token.operator {
-	color: #89ddff;
-}
-
-.token.prolog {
-	color: #546e7a;
-}
-
-.token.property {
-	color: #80cbc4;
-}
-
-.token.pseudo-class {
-	color: #c3e88d;
-}
-
-.token.pseudo-element {
-	color: #c3e88d;
-}
-
-.token.punctuation {
-	color: #89ddff;
-}
-
-.token.regex {
-	color: #f2ff00;
-}
-
-.token.selector {
-	color: #f07178;
-}
-
-.token.string {
-	color: #c3e88d;
-}
-
-.token.symbol {
-	color: #c792ea;
-}
-
-.token.tag {
-	color: #f07178;
-}
-
-.token.unit {
-	color: #f07178;
-}
-
-.token.url {
-	color: #fd9170;
-}
-
-.token.variable {
-	color: #f07178;
-}
+.language-scss > code { color: #fd9170; }
+[class*="language-"] .namespace { opacity: 0.7; }
+.token.atrule        { color: #c792ea; }
+.token.attr-name     { color: #ffcb6b; }
+.token.attr-value    { color: #c3e88d; }
+.token.attribute     { color: #c3e88d; }
+.token.boolean       { color: #c792ea; }
+.token.builtin       { color: #ffcb6b; }
+.token.cdata         { color: #80cbc4; }
+.token.char          { color: #80cbc4; }
+.token.class         { color: #ffcb6b; }
+.token.class-name    { color: #f2ff00; }
+.token.color         { color: #f2ff00; }
+.token.comment       { color: #546e7a; }
+.token.constant      { color: #c792ea; }
+.token.deleted       { color: #f07178; }
+.token.doctype       { color: #546e7a; }
+.token.entity        { color: #f07178; }
+.token.function      { color: #c792ea; }
+.token.hexcode       { color: #f2ff00; }
+.token.id            { color: #c792ea; font-weight: bold; }
+.token.important     { color: #c792ea; font-weight: bold; }
+.token.inserted      { color: #80cbc4; }
+.token.keyword       { color: #c792ea; font-style: italic; }
+.token.number        { color: #fd9170; }
+.token.operator      { color: #89ddff; }
+.token.prolog        { color: #546e7a; }
+.token.property      { color: #80cbc4; }
+.token.pseudo-class  { color: #c3e88d; }
+.token.pseudo-element { color: #c3e88d; }
+.token.punctuation   { color: #89ddff; }
+.token.regex         { color: #f2ff00; }
+.token.selector      { color: #f07178; }
+.token.string        { color: #c3e88d; }
+.token.symbol        { color: #c792ea; }
+.token.tag           { color: #f07178; }
+.token.unit          { color: #f07178; }
+.token.url           { color: #fd9170; }
+.token.variable      { color: #f07178; }
