@@ -341,7 +341,8 @@ button {
 /* MDX article body — generic typographic defaults for post content rendered
    under .post-body. Component-specific styling lives alongside its component. */
 .post-body {
-  max-width: 720px;
+  width: 70%;
+  max-width: 1100px;
   margin: 32px auto 0;
   padding: 0 24px 80px;
   font-size: 16px;
@@ -358,7 +359,7 @@ button {
 }
 
 @media (max-width: 768px) {
-  .post-body { padding: 0 18px 60px; }
+  .post-body { width: auto; padding: 0 18px 60px; }
 }
 
 /* ── PRISM TOKENS (kept inline for now; rehype-prism-plus picks them up) ── */

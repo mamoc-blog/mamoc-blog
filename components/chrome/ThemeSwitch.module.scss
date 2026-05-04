@@ -1,0 +1,57 @@
+// Static three-icon pill. Sized to share a baseline with CommandTrigger
+// (.cmd height: 24px) so both sit cleanly next to nav text.
+.slot {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  // Force a text baseline at the pill's bottom edge so flex
+  // `align-items: baseline` lines this icon-only group up with neighbouring
+  // text instead of falling back to bottom-of-margin-box.
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 0;
+    height: 100%;
+  }
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  height: 24px;
+  padding: 2px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-white);
+  box-sizing: border-box;
+  transition: border-color 0.2s, background 0.2s;
+
+  [data-theme='dark'] & { border-color: #2a2a2a; background: #161618; }
+  &:hover, &:focus-within { border-color: var(--color-primary); }
+}
+
+.o {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  color: var(--color-gray);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0;
+  transition: color 0.2s, background 0.2s;
+
+  &:hover { color: var(--color-primary); }
+  &.on { background: var(--color-primary); color: #fff; }
+}
+
+.ic {
+  display: inline-flex;
+  svg { width: 12px; height: 12px; }
+}
+.lb { display: none; }
