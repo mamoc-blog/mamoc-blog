@@ -23,7 +23,3 @@ export const CharacteristicLengthCalculatorDynamic = dynamic(
   () => import('../CharacteristicLengthCalculator'),
   { ssr: false },
 );
-export const WFCCONTAINERDynamic = dynamic(
-  () => import('../../WFC_components/WFCCONTAINER'),
-  { ssr: false },
-);
