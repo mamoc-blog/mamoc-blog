@@ -18,9 +18,10 @@ export function SubscribeBlock() {
             <input type="hidden" name="embed" value="1" />
             <button type="submit">subscribe →</button>
           </form>
-          <div className={styles.tiny}>
-            Currently {SITE.status.subscribers.toLocaleString()} readers · powered by Buttondown
-          </div>
+          {/* TODO: surface a real subscriber count via Buttondown API at build
+              time (needs BUTTONDOWN_API_KEY env). Removed the placeholder
+              "Currently 1,284 readers" — was hardcoded. */}
+          <div className={styles.tiny}>powered by Buttondown</div>
         </div>
 
         <div className={styles.r}>

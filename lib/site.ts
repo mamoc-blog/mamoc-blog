@@ -10,16 +10,9 @@ export const SITE = {
   buttondownUsername: 'mamoc',
 
   issue: {
-    label: 'VOL.02 · APR \'26',
+    label: "VOL.02 · APR '26",
     number: '07',
     volume: 2,
-  },
-
-  status: {
-    lastPush: { label: '2d ago', sha: '0a1f9c2' },
-    subscribers: 1284,
-    nextPost: { title: 'RK4 reaction-diffusion', eta: '03-12' },
-    livePill: 'LIVE · neuroev sim',
   },
 
   social: {
@@ -28,6 +21,15 @@ export const SITE = {
     atom: '/atom.xml',
     json: '/feed.json',
   },
+
+  // TODO: replace placeholders with real wiring.
+  //   - subscribers: Buttondown API call at build time (needs BUTTONDOWN_API_KEY env)
+  //   - nextPost: a `status: 'in-progress'` flag on a post's metadata, or a
+  //     dedicated `lib/upcoming.ts` registry
+  // The fake "LIVE · neuroev sim" pill and "● online" indicator have been
+  // removed from chrome — there's no live source for either on a static site.
+  // Build-time git deploy info is wired via NEXT_PUBLIC_GIT_* (see
+  // next.config.mjs) and consumed in the chrome directly.
 } as const;
 
 export type Site = typeof SITE;

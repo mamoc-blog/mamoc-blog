@@ -5,7 +5,6 @@ import { usePathname } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import Link from 'next/link';
-import { SITE } from '@/lib/site';
 import { useCommandPalette } from './CommandPaletteRoot';
 import styles from './SiteHeader.module.scss';
 
@@ -69,10 +68,6 @@ export function SiteHeader() {
         </button>
 
         <div className={styles.right}>
-          <div className={styles.pill}>
-            <span className={styles.dot} aria-hidden="true" />
-            <span>{SITE.status.livePill}</span>
-          </div>
           <div className={styles.theme} role="group" aria-label="Theme">
             {themes.map((t) => (
               <button
@@ -87,13 +82,6 @@ export function SiteHeader() {
             ))}
           </div>
         </div>
-      </div>
-
-      <div className={styles.status}>
-        <span><b>last push</b> {SITE.status.lastPush.label} · {SITE.status.lastPush.sha}</span>
-        <span><b>subscribers</b> {SITE.status.subscribers.toLocaleString()}</span>
-        <span><b>next post</b> {SITE.status.nextPost.title} · ETA {SITE.status.nextPost.eta}</span>
-        <span className={styles.live}>● online</span>
       </div>
     </header>
   );
