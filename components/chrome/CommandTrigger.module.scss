@@ -1,0 +1,58 @@
+.cmd {
+  // Compact: shows "› find" + ⌘K keycap. Hover/focus expands width and
+  // fades in placeholder. Cmd+K still triggers globally. Font matches the
+  // nav links (12px) so they share a baseline when the row uses
+  // `align-items: baseline`.
+  margin: 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 24px;
+  padding: 0 4px 0 10px;
+  box-sizing: border-box;
+  background: var(--color-gray-vvvvlight);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-family: var(--font-family-primary);
+  font-size: 12px;
+  line-height: 1;
+  color: var(--color-gray);
+  cursor: text;
+  text-align: left;
+  text-transform: none;
+  letter-spacing: normal;
+  transition: border-color 0.2s, max-width 0.55s cubic-bezier(.4,0,.2,1);
+  max-width: 150px;
+  width: 100%;
+
+  [data-theme='dark'] & { background: #161618; border-color: #2a2a2a; }
+  &:hover, &:focus-visible { border-color: var(--color-primary); }
+
+  .p { color: var(--color-primary); font-weight: 700; }
+  .sep { color: var(--color-gray-light); white-space: nowrap; }
+  .placeholder {
+    flex: 1;
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: max-width 0.55s cubic-bezier(.4,0,.2,1), opacity 0.3s ease 0.2s;
+  }
+  .k {
+    border: 1px solid var(--color-border);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1;
+    background: var(--color-white);
+    color: var(--color-gray-dark);
+    [data-theme='dark'] & { background: #0f0f10; border-color: #333; color: var(--color-gray); }
+  }
+
+  &:hover, &:focus-visible {
+    max-width: 520px;
+
+    .placeholder { max-width: 360px; opacity: 1; }
+  }
+}

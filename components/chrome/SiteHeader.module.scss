@@ -1,21 +1,22 @@
 .root { width: 100%; }
 
+// Mirrors Frontpage .hdr2: same padding, divider, top-aligned tools row.
+// Background intentionally inherits from <body> so the persistent header
+// doesn't flash a different shade than the homepage masthead.
 .bar {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: 24px;
+  display: flex;
   align-items: center;
-  padding: 16px 32px;
-  border-bottom: 1px solid var(--color-border);
-  background: var(--color-white);
+  justify-content: space-between;
+  padding: 22px 48px;
+  border-bottom: 1px solid var(--color-black);
 
-  [data-theme='dark'] & { background: #0f0f10; border-color: #222; }
+  [data-theme='dark'] & { border-color: #f3f4f6; }
 }
 
 .brand {
   display: flex;
-  align-items: center;
-  gap: 14px;
+  align-items: baseline;
+  gap: 18px;
   color: inherit;
   font-weight: 500;
   text-decoration: none;
@@ -23,108 +24,19 @@
   img { height: 22px; width: auto; }
 }
 
-.bc {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
+.dt {
+  font-size: 11px;
   color: var(--color-gray);
-  font-family: var(--font-family-primary);
+  letter-spacing: 0.1em;
 }
 
-.sep { opacity: 0.4; }
-.cur { color: var(--color-primary); font-weight: 700; }
-
-.cmd {
-  max-width: 520px;
-  width: 100%;
-  margin: 0 auto;
+.tools {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 9px 14px;
-  background: var(--color-gray-vvvvlight);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  font-family: var(--font-family-primary);
-  font-size: 13px;
-  color: var(--color-gray);
-  cursor: text;
-  transition: var(--transition-base);
-  text-align: left;
-
-  [data-theme='dark'] & { background: #161618; border-color: #2a2a2a; }
-  &:hover { border-color: var(--color-primary); }
-
-  .p { color: var(--color-primary); font-weight: 700; }
-  .sep { color: var(--color-gray-light); }
-  .placeholder { flex: 1; }
-  .k {
-    border: 1px solid var(--color-border);
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 10px;
-    background: var(--color-white);
-    [data-theme='dark'] & { background: #0f0f10; border-color: #333; }
-  }
-}
-
-.right {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  font-family: var(--font-family-primary);
-  font-size: 12px;
-  color: var(--color-gray);
-}
-
-.pill {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
-  border: 1px solid var(--color-border);
-  border-radius: 999px;
-  cursor: pointer;
-  transition: var(--transition-base);
-
-  [data-theme='dark'] & { border-color: #2a2a2a; }
-  &:hover { border-color: var(--color-primary); color: var(--color-primary); }
-
-  .dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #00ff41;
-    box-shadow: 0 0 8px #00ff41;
-  }
-}
-
-.theme {
-  padding: 4px;
-  border: 1px solid var(--color-border);
-  border-radius: 999px;
-  display: flex;
-  gap: 2px;
-
-  [data-theme='dark'] & { border-color: #2a2a2a; }
-
-  .o {
-    padding: 4px 10px;
-    border-radius: 999px;
-    font-size: 11px;
-    color: var(--color-gray);
-    background: transparent;
-    border: 0;
-    cursor: pointer;
-    font-family: inherit;
-
-    &.on { background: var(--color-primary); color: #fff; }
-  }
+  gap: 12px;
 }
 
 @media (max-width: 768px) {
-  .bar { grid-template-columns: auto 1fr; padding: 12px 16px; }
-  .cmd { display: none; }
-  .right { gap: 6px; }
+  .bar { padding: 16px 20px; flex-wrap: wrap; gap: 12px; }
+  .tools { gap: 12px; }
 }

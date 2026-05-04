@@ -5,8 +5,8 @@ import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import Link from 'next/link';
 import { format, parseISO } from 'date-fns';
-import { SITE } from '@/lib/site';
-import { useCommandPalette } from '@/components/chrome/CommandPaletteRoot';
+import { type Issue } from '@/lib/site';
+import { CommandTrigger } from '@/components/chrome/CommandTrigger';
 import styles from './Frontpage.module.scss';
 
 export type FrontpagePost = {
@@ -21,15 +21,14 @@ export type FrontpagePost = {
   featured?: boolean;
 };
 
-type Props = { posts: FrontpagePost[] };
+type Props = { posts: FrontpagePost[]; issue: Issue };
 
 function dateLong(d: string) {
   try { return format(parseISO(d), 'MMMM dd, yyyy'); } catch { return d; }
 }
 
-export function Frontpage({ posts }: Props) {
+export function Frontpage({ posts, issue }: Props) {
   const { resolvedTheme } = useTheme();
-  const { open: openPalette } = useCommandPalette();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   const isDark = mounted && resolvedTheme === 'dark';
@@ -47,21 +46,21 @@ export function Frontpage({ posts }: Props) {
       <header className={styles.hdr2}>
         <div className={styles.ml}>
           <Image src={logoSrc} alt="mamoc" width={140} height={22} />
-          <span className={styles.dt}>{SITE.issue.label}</span>
+          <span className={styles.dt}>{issue.label}</span>
         </div>
         <nav>
           <Link href="/" className={styles.active}>Index</Link>
           <Link href="/archive">Archive</Link>
           <Link href="/authors/alex-cheetham">Authors</Link>
           <Link href="/about">About</Link>
-          <button type="button" onClick={openPalette} className={styles.kbd} aria-label="Open search palette">⌘K</button>
+          <CommandTrigger />
         </nav>
       </header>
 
       <section className={styles.masthead}>
         <h1>Notes <span className={styles.amp}>&amp;</span><br />simulations.</h1>
         <div className={styles.issue}>
-          Issue<span className={styles.big}>{SITE.issue.number}</span>volume {SITE.issue.volume}
+          Issue<span className={styles.big}>{issue.number}</span>volume {issue.volume}
         </div>
         <p className={styles.tag}>
           Long-form articles on mathematical and technical topics, with a focus on generating data to create interesting visuals. Written in the first person by Cameron Michie and Alexander Cheetham — often with an interactive component at the bottom of each post.
