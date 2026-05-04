@@ -1,57 +1,299 @@
-#wfc-container {
-    width: 60%;
-    height: 40%;
-    position: relative;
-  }
-  .box-container {
-    /* width: 60%;
-    height: 50%; */
-    position: relative;
-    width: 60vw; /* 60% of viewport width */
-    height: 50vh; /* 50% of viewport height */
-    background-color: #63606017;
-    border: 1px solid #bb2020;
-    text-align: center;
-    overflow: hidden;
-    max-height: 50vh; ;
-  }
-  .resetButton {
-    position: absolute;
-    bottom: 2%;
-    left: 0;
-    right: 0;
-    width:fit-content;
-    margin: auto;
-  }
+/* WFC interactive demo — design-token-aligned, dark-mode aware.
+   Loaded as a global stylesheet via WFCCONTAINER. The script-generated
+   nodes (.images, .image-container, p5 sliders, dynamic STARTWFC button)
+   need global selectors so they pick up styling without per-element work. */
 
-  .images {
-    border: 1px solid #bb2020;
-    width: 90%;
-    max-height: 35vh;
-    margin:auto;
-    
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    overflow: auto;
-  }
+.wfc-root {
+  font-family: var(--font-family-primary);
+  margin: 32px 0;
+}
 
-  .image-container {
-    border: 1px solid #bb2020;
-    /* position: relative;
-    width:40%; */
-    margin:2%;
-    button, img {
-      /* Constrain width and height to 100% of the container */
-      margin: auto;
-      padding: 2%;
-      max-width: 80%;
-      max-height: 30%;
-      width: 100%;
-      height: auto;
-      overflow-wrap: break-word;
-    }
-  }
+.wfc-shell {
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  background: var(--color-gray-vvvvlight);
+  overflow: hidden;
+}
 
+[data-theme='dark'] .wfc-shell {
+  background: #0f0f10;
+  border-color: #2a2a2a;
+}
 
-  
+.wfc-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-white);
+  font-size: 12px;
+  color: var(--color-gray);
+  letter-spacing: 0.02em;
+}
+[data-theme='dark'] .wfc-toolbar {
+  background: #161618;
+  border-bottom-color: #2a2a2a;
+}
+
+.wfc-toolbar .prompt {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.wfc-toolbar .resetButton {
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-gray);
+  padding: 4px 10px;
+  border-radius: var(--border-radius-sm);
+  font-family: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+.wfc-toolbar .resetButton:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+[data-theme='dark'] .wfc-toolbar .resetButton { border-color: #2a2a2a; }
+
+.wfc-stage { padding: 20px 16px; }
+
+.wfc-step {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-gray);
+  margin: 0 0 12px;
+}
+.wfc-step b { color: var(--color-primary); font-weight: 700; }
+
+#wfc-container,
+#prob_graph,
+#tileselect {
+  width: 100%;
+}
+
+/* Tileset picker --------------------------------------------------------- */
+
+.images {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+  margin: 0 0 16px;
+}
+
+.image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  background: var(--color-white);
+  transition: var(--transition-base);
+}
+[data-theme='dark'] .image-container {
+  background: #161618;
+  border-color: #2a2a2a;
+}
+.image-container:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-1px);
+}
+
+.image-container p {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--color-gray-dark);
+}
+
+.image-container img {
+  width: 88px;
+  height: 88px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.image-container button {
+  border: 1px solid var(--color-secondary);
+  background: transparent;
+  color: var(--color-secondary);
+  padding: 4px 14px;
+  border-radius: var(--border-radius-sm);
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+.image-container button:hover {
+  background: var(--color-secondary);
+  color: #fff;
+}
+
+.tileset-hint {
+  display: inline-block;
+  font-size: 11px;
+  color: var(--color-gray);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--color-gray-light);
+  padding-bottom: 1px;
+}
+.tileset-hint:hover { color: var(--color-primary); border-color: var(--color-primary); }
+
+/* Probability editor (step 2) -------------------------------------------- */
+
+.prob-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  background: var(--color-white);
+  padding: 10px;
+  max-height: 360px;
+  overflow-y: auto;
+}
+[data-theme='dark'] .prob-grid { background: #161618; border-color: #2a2a2a; }
+
+.prob-row {
+  display: grid;
+  grid-template-columns: 44px minmax(72px, 1fr) 2fr 56px;
+  gap: 12px;
+  align-items: center;
+  padding: 8px 10px;
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-sm);
+  transition: var(--transition-base);
+}
+.prob-row:hover {
+  border-color: var(--color-border);
+  background: var(--color-gray-vvvvlight);
+}
+[data-theme='dark'] .prob-row:hover { background: #1c1c1e; border-color: #2a2a2a; }
+
+.prob-thumb {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  display: block;
+}
+
+.prob-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--color-gray-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.prob-slider {
+  width: 100%;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.prob-pct {
+  font-size: 11px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-primary);
+  text-align: right;
+}
+
+#wfc-footer {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  padding-top: 14px;
+}
+
+#wfc-footer button#STARTWFC {
+  border: 1px solid var(--color-primary);
+  background: var(--color-primary);
+  color: #fff;
+  padding: 6px 18px;
+  border-radius: var(--border-radius-sm);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+#wfc-footer button#STARTWFC:hover {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+}
+
+/* Run step --------------------------------------------------------------- */
+
+#wfc-canvas {
+  display: flex;
+  justify-content: center;
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  background: var(--color-gray-vvvlight);
+}
+[data-theme='dark'] #wfc-canvas { background: #050505; }
+
+#wfc-canvas canvas { display: block; max-width: 100%; height: auto; }
+
+#wfc-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+  padding-top: 14px;
+  font-size: 12px;
+  color: var(--color-gray-dark);
+}
+
+#wfc-controls input[type="range"] {
+  flex: 1;
+  min-width: 140px;
+  max-width: 240px;
+  accent-color: var(--color-primary);
+}
+
+#wfc-controls p {
+  margin: 0;
+  min-width: 28px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+#wfc-controls button {
+  border: 1px solid var(--color-border);
+  background: var(--color-primary);
+  color: #fff;
+  padding: 6px 16px;
+  border-radius: var(--border-radius-sm);
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+#wfc-controls button:hover {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+}
+
+@media (max-width: 768px) {
+  .wfc-stage { padding: 14px 12px; }
+  .images { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; }
+  .prob-row { grid-template-columns: 32px 1fr 1.5fr 48px; gap: 8px; }
+}

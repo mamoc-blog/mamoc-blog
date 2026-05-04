@@ -17,8 +17,8 @@ import {
   LotkaVolterraDynamic,
   RK4ReactionDiffusionDynamic,
   CharacteristicLengthCalculatorDynamic,
-  WFCCONTAINERDynamic,
 } from '@/components/interactive/_dynamic';
+import WFCCONTAINER from '@/components/WFC_components/WFCCONTAINER';
 
 const components = {
   Image,
@@ -36,7 +36,7 @@ const components = {
   LotkaVolterra: LotkaVolterraDynamic,
   RK4ReactionDiffusion: RK4ReactionDiffusionDynamic,
   CharacteristicLengthCalculator: CharacteristicLengthCalculatorDynamic,
-  WFCCONTAINER: WFCCONTAINERDynamic,
+  WFCCONTAINER,
 } satisfies MDXComponents;
 
 export function useMDXComponents(): MDXComponents {

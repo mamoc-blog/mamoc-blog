@@ -1,5 +1,7 @@
 var w = window.innerWidth;
 var h = window.innerHeight;
+var cnv_w = 600;
+var cnv_h = 400;
 var bslider
 var slider_text
 var status_button
@@ -13,6 +15,19 @@ var global_options =[];
 var old_grids = [];
 var backtracking = false;
 var slider_max = 30;
+
+// Canvas dimensions track the #wfc-canvas host element so the demo fits the
+// post body instead of overflowing the viewport. Recomputed on resize.
+function computeCanvasSize() {
+  var host = document.getElementById('wfc-canvas');
+  if (host && host.clientWidth > 0) {
+    cnv_w = host.clientWidth;
+    cnv_h = Math.round(cnv_w * (2 / 3));
+  } else {
+    cnv_w = 0.6 * window.innerWidth;
+    cnv_h = 0.4 * window.innerHeight;
+  }
+}
 
 
 var filled_count;
@@ -34,27 +49,16 @@ if (filename.endsWith('.svg')||filename.endsWith('.png')) { // Check if it's an 
   }
 });
 
-function  startWFC() {
+function startWFC() {
   try {
     bslider.remove()
   }
   catch (TypeError) {
   }
-  if (tileset.includes('CITY')){
-    bslider = createSlider(1, 8,2);
-    bslider.parent("wfc-container")
-    bslider.position(0,0.41*h);
-    bslider.size(0.2*w);
-  }
-  else {
-    bslider = createSlider(1, 30,2);
-    bslider.parent("wfc-container")
-    bslider.position(0,0.41*h);
-    bslider.size(0.2*w);
-  }
-
-  createGrid(bslider.value(),true)
-
+  var max = tileset.includes('CITY') ? 8 : 30;
+  bslider = createSlider(1, max, 2);
+  bslider.parent("wfc-controls")
+  createGrid(bslider.value(), true)
 }
 
 // Represents a square within the grid.
@@ -90,7 +94,7 @@ constructor(message, broken_cell, grid_list) {
 function renderGrid(grid_array) {
 // Calculate grid dimensions
 var grid_size = Math.sqrt(grid_array.length);
-var [grid_w, grid_h] = [0.6 * w / grid_size, 0.4 * h / grid_size];  // Adjust based on canvas size
+var [grid_w, grid_h] = [cnv_w / grid_size, cnv_h / grid_size];  // Adjust based on canvas size
 
 // Iterate through each square in the grid
 for (let i = 0; i < grid_array.length; i++) {
@@ -571,40 +575,32 @@ return tile
 
 function setup() {
 //frameRate(10);
-svgFilenames.forEach(filename => { 
+svgFilenames.forEach(filename => {
   gridimages[filename.split('/').at(-1).split('.')[0]] = loadImage(filename);
     });
 
-console.log(gridimages)
-var cnv = createCanvas(0.6*w,0.4*h);
-cnv.parent("wfc-container");
+computeCanvasSize();
+var cnv = createCanvas(cnv_w, cnv_h);
+cnv.parent("wfc-canvas");
 
-bslider = createSlider(1, slider_max,2);
-bslider.parent("wfc-container")
-bslider.position(0,0.41*h);
-bslider.size(0.2*w);
+bslider = createSlider(1, slider_max, 2);
+bslider.parent("wfc-controls")
 
 slider_text = createP(bslider.value())
-slider_text.parent("wfc-container")
-slider_text.position(0.21*w,0.4*h)
+slider_text.parent("wfc-controls")
 
-status_button = createButton("Start");
-status_button.parent("wfc-container")
+status_button = createButton("start");
+status_button.parent("wfc-controls")
 status_button.mousePressed(changeState)
-status_button.position(0.3*w,0.41*h)
-
-
 }
 
 function draw() {
-  // check positions
+  // Track viewport size (used by some unrelated formulas) and recompute the
+  // canvas size off its container so the demo stays inside the post body.
   w = window.innerWidth;
   h = window.innerHeight;
-  resizeCanvas(0.6*w,0.4*h)
-  bslider.position(0,0.41*h);
-  bslider.size(0.2*w);
-  slider_text.position(0.21*w,0.4*h)
-  status_button.position(0.3*w,0.41*h)
+  computeCanvasSize();
+  resizeCanvas(cnv_w, cnv_h);
   background(220);
   if(status_bool){
     switch_bool = true;

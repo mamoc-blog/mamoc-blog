@@ -1,51 +1,81 @@
-'use client';
+import fs from 'node:fs';
+import path from 'node:path';
+import Script from 'next/script';
 
-
-import React from "react";
-import Script from 'next/script'
-
-
-
+// Walks public/posts/WFC and returns paths like "/posts/WFC/CITY/foo.png".
+// wfc.js / wfc_flow.js read these at runtime by querying #imageholder.
+function loadTileManifest(): string[] {
+  const root = path.join(process.cwd(), 'public', 'posts', 'WFC');
+  const out: string[] = [];
+  const walk = (dir: string) => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) walk(full);
+      else if (/\.(svg|png)$/i.test(entry.name)) {
+        out.push(
+          '/' +
+            path
+              .relative(path.join(process.cwd(), 'public'), full)
+              .split(path.sep)
+              .join('/'),
+        );
+      }
+    }
+  };
+  try {
+    walk(root);
+  } catch {
+    // public/posts/WFC missing — interactive will degrade gracefully
+  }
+  return out;
+}
 
 export default function WFCCONTAINER() {
-  
-    
+  const tiles = loadTileManifest();
 
   return (
-    <div>
-    <div>
-    <link rel="stylesheet" type="text/css" href="/WFC_code/wfc.css" />
-    <Script src="https://cdn.jsdelivr.net/npm/p5@1.8.0/lib/p5.js" />
-    <Script type="text/javascript" src="/WFC_code/wfc.js" />
-    <Script type="text/javascript"  src="https://cdn.jsdelivr.net/npm/jsxgraph/distrib/jsxgraphcore.js"/>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/jsxgraph/distrib/jsxgraph.css" />
-  </div>
-  <div className="box-container" id="box-c" style={{margin:'auto',}}>
-      <div id="start-page">
-        <p className="title" style={{fontSize: "2rem", fontWeight:"800"}}>WAVE FUNCTION COLLAPSE DEMO</p>
-        <button id="goButton">Go</button>
+    <section className="wfc-root">
+      <link rel="stylesheet" type="text/css" href="/WFC_code/wfc.css" />
+      <Script src="https://cdn.jsdelivr.net/npm/p5@1.8.0/lib/p5.js" />
+      <Script type="text/javascript" src="/WFC_code/wfc.js" />
 
+      {/* Hidden manifest the WFC scripts read at runtime to discover tiles. */}
+      <div hidden id="imageholder">
+        {tiles.map((src) => (
+          <img src={src} key={src} alt={src} />
+        ))}
       </div>
-      <div id="tileselect" style={{display:'none'}}>
-        <p className="" style={{fontSize: "1.6rem", fontWeight:"800", margin:'2%'}} >SELECT TILESET</p>
-          <div className="images">
-          </div>
-          <a className="title header" style={{fontSize: "0.8rem", fontWeight:"800", margin:'2%'}} href='#tilesets'>Tileset Info</a>
-      </div>
-      <div id='prob_graph' style={{display: 'none'}}>
-        <div id="jxgbox"  className="jxgbox" style={{width:'60vw', height:'40vh'}}></div>
+
+      <div className="wfc-shell">
+        <div className="wfc-toolbar">
+          <span>
+            <span className="prompt">$</span> wave_function_collapse
+          </span>
+          <button className="resetButton" id="resetButton">↺ reset</button>
         </div>
-        <main id="wfc-container" style={{display:'none'}}>
-        </main>
-      <br></br>
-      <div id="wfc-footer">
-      <button className="resetButton"  id="resetButton">↺ Reset</button>
+
+        <div className="wfc-stage">
+          <div id="tileselect">
+            <p className="wfc-step"><b>step 1</b> · pick a tileset</p>
+            <div className="images" />
+            <a className="tileset-hint" href="#tilesets">tileset info ↓</a>
+          </div>
+
+          <div id="prob_graph" style={{ display: 'none' }}>
+            <p className="wfc-step"><b>step 2</b> · tune the distribution — drag sliders to reweight tiles</p>
+            <div id="prob_editor" />
+            <div id="wfc-footer" />
+          </div>
+
+          <main id="wfc-container" style={{ display: 'none' }}>
+            <p className="wfc-step"><b>step 3</b> · collapse — adjust grid size, then start</p>
+            <div id="wfc-canvas" />
+            <div id="wfc-controls" />
+          </main>
+        </div>
       </div>
-    </div>
-    <Script type="text/javascript" src="/WFC_code/wfc_flow.js" />
-    <br/>
-    <br/>
-  </div>
-  
-    );
-  }
+
+      <Script type="text/javascript" src="/WFC_code/wfc_flow.js" />
+    </section>
+  );
+}
