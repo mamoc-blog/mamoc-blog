@@ -43,7 +43,7 @@ export const AUTHORS = {
     shortName: 'Cam Michie',
     handle: '@cameron.michie',
     role: 'spatial ecology · finance · agent-based modeling',
-    bio: 'Building agent-based simulations of dispersal, predation, and emergent collective behaviour. When the agents start trading orderbooks instead of eating each other, that is a separate post.',
+    bio: "I'm a sick lad, i love maths and im a qualified chartered slutty A",
     avatar: '/images/cam.png',
     social: {
       github: 'https://github.com/cameron-michie',
