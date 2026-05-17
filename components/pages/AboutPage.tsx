@@ -35,28 +35,21 @@ export function AboutPage({ colophon }: { colophon: Colophon }) {
     <div className={styles.root}>
       <h1>About <span className={styles.slash}>/</span> mamoc.</h1>
       <p className={styles.sub}>
-        A blog project started by {joinNames(names)} — long-form articles on
-        mathematical and technical topics, focused on generating data that produces interesting
-        visuals.
+        A blog by {joinNames(names)}. Long-form posts on maths and adjacent things — usually started because one of us wanted to understand something better.
       </p>
 
       <div className={styles.grid}>
         <div>
           <h4>What this is</h4>
           <p>
-            Every post starts with an algorithm or a derivation, builds a simulation to probe it,
-            and ends with an interactive you can actually play with. Think of it as a shared
-            research notebook that we happen to publish.
+            Most posts start with something we read and didn&apos;t fully get, work through the maths, and end with an interactive you can poke at. Less a publication, more a notebook we left the lid off.
           </p>
           <p>
-            We lean academic on the math, casual on the prose, and obsessive on the interactive
-            bits. If a footnote is missing from a claim, tell us.
+            The maths is as careful as we can make it. The prose, less so. If we&apos;ve got something wrong, tell us.
           </p>
           <h4 style={{ marginTop: 28 }}>Why</h4>
           <p>
-            Writing the posts is how we understand our own work. Publishing them forces us to
-            explain properly. The blog is entirely a side project — no sponsors, no ads, no
-            tracking.
+            Writing things down is how we actually learn them — explaining something makes it obvious when we don&apos;t really understand it. Statically generated, no client-side trackers, no email gates, no engagement metrics. Source is on GitHub.
           </p>
         </div>
         <div>
@@ -103,8 +96,7 @@ export function AboutPage({ colophon }: { colophon: Colophon }) {
       </div>
 
       <div className={styles.pull}>
-        <p>We write the posts we wish existed when we were first trying to figure these things out.</p>
-        <cite>— the mamoc notebook, forever-draft</cite>
+        <p>vibes based articles that make cam happy</p>
       </div>
     </div>
   );

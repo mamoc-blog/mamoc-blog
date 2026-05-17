@@ -8,6 +8,7 @@ import { format, parseISO } from 'date-fns';
 import { type Issue } from '@/lib/site';
 import { AUTHORS } from '@/lib/authors';
 import { CommandTrigger } from '@/components/chrome/CommandTrigger';
+import { AuthorsMenu } from '@/components/chrome/AuthorsMenu';
 import styles from './Frontpage.module.scss';
 
 const BYLINE_NAMES = Object.values(AUTHORS).map((a) => a.shortName ?? a.name);
@@ -57,7 +58,7 @@ export function Frontpage({ posts, issue }: Props) {
         <nav>
           <Link href="/" className={styles.active}>Index</Link>
           <Link href="/archive">Archive</Link>
-          <Link href="/authors/alex-cheetham">Authors</Link>
+          <AuthorsMenu />
           <Link href="/about">About</Link>
           <CommandTrigger />
         </nav>
