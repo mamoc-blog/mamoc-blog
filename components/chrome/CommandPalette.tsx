@@ -4,7 +4,6 @@ import { Command } from 'cmdk';
 import { useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import { useMemo } from 'react';
-import { SITE } from '@/lib/site';
 import styles from './CommandPalette.module.scss';
 
 export type PalettePost = {
@@ -103,7 +102,7 @@ export function CommandPalette({ posts, open, onClose }: Props) {
           </Command.Group>
         )}
 
-        <Command.Group heading="Actions · 3" className={styles.grp}>
+        <Command.Group heading="Actions · 2" className={styles.grp}>
           <Command.Item
             value="action toggle theme"
             onSelect={() => {
@@ -118,18 +117,6 @@ export function CommandPalette({ posts, open, onClose }: Props) {
               <div className={styles.s}>{resolvedTheme === 'dark' ? 'dark → light' : 'light → dark'}</div>
             </div>
             <div className={styles.tag}>⌘⇧L</div>
-          </Command.Item>
-          <Command.Item
-            value="action subscribe rss"
-            onSelect={() => navigate(SITE.social.rss)}
-            className={styles.row}
-          >
-            <div className={styles.g}>›</div>
-            <div>
-              <div className={styles.t}>Subscribe via RSS</div>
-              <div className={styles.s}>{SITE.social.rss}</div>
-            </div>
-            <div className={styles.tag}>feed</div>
           </Command.Item>
           <Command.Item
             value="action open archive"

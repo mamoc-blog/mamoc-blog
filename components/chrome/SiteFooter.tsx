@@ -36,7 +36,6 @@ export function SiteFooter() {
         <div className={`${styles.col} ${styles.main}`}>
           <div className={styles.h}>{SITE.name}</div>
           <p>{SITE.description}</p>
-          <Link href={SITE.social.rss} className={styles.rss}>◉ rss · {SITE.social.rss}</Link>
         </div>
         <div className={styles.col}>
           <div className={styles.h}>Read</div>

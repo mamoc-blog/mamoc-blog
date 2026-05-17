@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation';
 import { AUTHOR_SLUGS, getAuthorBySlug } from '@/lib/authors';
 import { getSortedPostsData } from '@/lib/posts';
 import { AuthorPage } from '@/components/pages/AuthorPage';
-import { SubscribeBlock } from '@/components/marketing/SubscribeBlock';
 
 export const dynamicParams = false;
 
@@ -30,10 +29,5 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   if (!author) notFound();
   const allPosts = await getSortedPostsData();
   const posts = allPosts.filter((p) => p.author === author.name);
-  return (
-    <>
-      <AuthorPage author={author} posts={posts} />
-      <SubscribeBlock />
-    </>
-  );
+  return <AuthorPage author={author} posts={posts} />;
 }

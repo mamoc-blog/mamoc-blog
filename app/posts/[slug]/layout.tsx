@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getPostMetadata } from '@/lib/posts';
 import { PostSummary } from '@/components/post/PostSummary';
-import { SubscribeBlock } from '@/components/marketing/SubscribeBlock';
 
 export default async function PostLayout({
   children,
@@ -21,7 +20,6 @@ export default async function PostLayout({
     <>
       <PostSummary slug={slug} metadata={metadata} />
       {children}
-      <SubscribeBlock />
     </>
   );
 }
