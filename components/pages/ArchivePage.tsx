@@ -42,8 +42,7 @@ export function ArchivePage({ posts, topicCounts }: Props) {
       <div className={styles.head}>
         <h2>The <span className={styles.slash}>/</span> archive.</h2>
         <p className={styles.lede}>
-          Every post, every topic, every author — organised by year. Filter by topic on the left,
-          or jump into a commonly-read starter trail.
+          All posts, organised by year. Filter by topic on the left.
         </p>
       </div>
 
