@@ -4,6 +4,10 @@
   "author": "Alexander Cheetham & Cameron Michie",
   "version": "0.1.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mamoc-blog/mamoc-blog.git"
+  },
   "scripts": {
     "build": "next build",
     "dev": "next dev",

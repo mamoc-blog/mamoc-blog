@@ -6,8 +6,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { format, parseISO } from 'date-fns';
 import { type Issue } from '@/lib/site';
+import { AUTHORS } from '@/lib/authors';
 import { CommandTrigger } from '@/components/chrome/CommandTrigger';
 import styles from './Frontpage.module.scss';
+
+const BYLINE_NAMES = Object.values(AUTHORS).map((a) => a.shortName ?? a.name);
+const BYLINE = BYLINE_NAMES.length === 2
+  ? `${BYLINE_NAMES[0]} and ${BYLINE_NAMES[1]}`
+  : BYLINE_NAMES.join(', ');
 
 export type FrontpagePost = {
   id: string;
@@ -58,12 +64,12 @@ export function Frontpage({ posts, issue }: Props) {
       </header>
 
       <section className={styles.masthead}>
-        <h1>Notes <span className={styles.amp}>&amp;</span><br />simulations.</h1>
+        <h1>Maths, <span className={styles.amp}>&amp;</span><br />Some Code.</h1>
         <div className={styles.issue}>
           Issue<span className={styles.big}>{issue.number}</span>volume {issue.volume}
         </div>
         <p className={styles.tag}>
-          Long-form articles on mathematical and technical topics, with a focus on generating data to create interesting visuals. Written in the first person by Cameron Michie and Alexander Cheetham — often with an interactive component at the bottom of each post.
+          Long-form articles on mathematical and technical topics, with a focus on generating data to create interesting visuals. A blog written and maintained by {BYLINE}.
         </p>
       </section>
 

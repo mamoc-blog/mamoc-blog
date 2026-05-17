@@ -74,12 +74,6 @@ export function ArchivePage({ posts, topicCounts }: Props) {
             <Link href="/authors/alex-cheetham">· Alex Cheetham</Link>
             <Link href="/authors/cameron-michie">· Cameron Michie</Link>
           </div>
-          <div className={styles.grp}>
-            <div className={styles.hd}>Feeds</div>
-            <a href="/rss.xml">/ rss.xml</a>
-            <a href="/atom.xml">/ atom.xml</a>
-            <a href="/feed.json">/ json</a>
-          </div>
         </aside>
 
         <div>

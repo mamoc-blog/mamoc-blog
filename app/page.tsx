@@ -1,6 +1,5 @@
 import { getSortedPostsData } from '@/lib/posts';
 import { Frontpage, type FrontpagePost } from '@/components/pages/Frontpage';
-import { SubscribeBlock } from '@/components/marketing/SubscribeBlock';
 import { getIssue } from '@/lib/site';
 
 export default async function Page() {
@@ -16,10 +15,5 @@ export default async function Page() {
     featured: p.featured ?? false,
   }));
   const issue = getIssue(posts);
-  return (
-    <>
-      <Frontpage posts={posts} issue={issue} />
-      <SubscribeBlock />
-    </>
-  );
+  return <Frontpage posts={posts} issue={issue} />;
 }
