@@ -28,3 +28,6 @@ tsconfig.tsbuildinfo
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# design reference bundle (kept locally, not shipped)
+/design_handoff_mamoc_modernized/
