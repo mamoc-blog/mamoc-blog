@@ -33,7 +33,7 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const allPosts = await getSortedPostsData();
-  const palettePosts = allPosts.map((p: any) => ({
+  const palettePosts = allPosts.map((p) => ({
     id: p.id,
     title: p.title,
     summary: p.summary,
