@@ -31,3 +31,7 @@ yarn-error.log*
 
 # design reference bundle (kept locally, not shipped)
 /design_handoff_mamoc_modernized/
+
+# Playwright artifacts
+/test-results/
+/playwright-report/
