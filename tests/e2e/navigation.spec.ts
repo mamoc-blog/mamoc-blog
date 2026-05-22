@@ -1,5 +1,9 @@
 import { test, expect } from '@playwright/test';
 
+// Smoke checks for header links. Each test is a single click + URL assertion,
+// so we don't tag with `@multistep` — the combined PR video only includes
+// tagged tests. See tests/e2e/multistep.spec.ts for the convention.
+
 test.describe('Site navigation', () => {
   test('header links navigate correctly', async ({ page }) => {
     await page.goto('/');
