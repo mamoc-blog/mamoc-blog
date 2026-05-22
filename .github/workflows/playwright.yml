@@ -6,16 +6,25 @@ on:
   push:
     branches: [main]
 
-permissions:
-  contents: write
-  pull-requests: write
-  issues: write
+# Cancel in-flight runs when a new commit lands on the same PR/branch — prevents
+# multiple workflow runs racing to upload to the same release tag and posting
+# duplicate PR comments.
+concurrency:
+  group: playwright-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+# Default token has no permissions; each job declares only what it needs.
+# The test job executes repo-controlled code (npm ci, build, Playwright tests)
+# so it MUST stay read-only — only the report job (no repo code) gets write.
+permissions: {}
 
 jobs:
   test:
     name: Playwright (${{ matrix.browser }})
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    permissions:
+      contents: read
     strategy:
       fail-fast: false
       matrix:
@@ -23,6 +32,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Don't persist the install token in .git/config; subsequent npm/build
+          # steps would otherwise have read access to it via the working tree.
+          persist-credentials: false
 
       - uses: actions/setup-node@v4
         with:
@@ -72,9 +85,17 @@ jobs:
 
   report:
     name: Combined video report
-    if: always() && github.event_name == 'pull_request'
+    # Skip on fork PRs — their GITHUB_TOKEN is read-only regardless of the
+    # permissions block, so the release upload + PR comment would 403.
+    if: |
+      always() && github.event_name == 'pull_request'
+      && github.event.pull_request.head.repo.full_name == github.repository
     needs: [test]
     runs-on: ubuntu-latest
+    permissions:
+      contents: write        # upload release assets
+      pull-requests: write   # post PR comment
+      issues: write          # /issues/{number}/comments endpoint
     steps:
       - name: Download all browser videos
         uses: actions/download-artifact@v4
@@ -237,7 +258,11 @@ jobs:
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner, repo: context.repo.repo, issue_number: prNumber, per_page: 100
             });
-            const existing = comments.find(c => c.body && c.body.includes(marker));
+            // Also constrain by author to prevent marker hijack — only edit
+            // comments we ourselves posted.
+            const existing = comments.find(c =>
+              c.user?.login === 'github-actions[bot]' && c.body?.includes(marker)
+            );
             if (existing) {
               await github.rest.issues.updateComment({
                 owner: context.repo.owner, repo: context.repo.repo, comment_id: existing.id, body
