@@ -6,6 +6,11 @@ import { test, expect } from '@playwright/test';
 //   step 2 — #prob_graph with #STARTWFC (text "start collapse →")
 //   step 3 — #wfc-container hosting a p5.js <canvas> inside #wfc-canvas
 // The p5 library is loaded from a CDN, so we give it generous timeouts in CI.
+//
+// Multi-step convention: tests that exercise the full flow are tagged
+// `@multistep` so their videos show up in the combined PR comment. The first
+// test below is a single-step smoke check and intentionally omits the tag.
+// See tests/e2e/multistep.spec.ts header for the full rule.
 
 const WFC_URL = '/posts/wfc';
 
@@ -21,7 +26,7 @@ test.describe('WFC interactive widget', () => {
     await expect(page.locator('#wfc-container')).toBeHidden();
   });
 
-  test('selecting a tileset reveals the probability distribution editor', async ({ page }) => {
+  test('selecting a tileset reveals the probability distribution editor @multistep', async ({ page }) => {
     await page.goto(WFC_URL);
     const firstSelect = page.locator('#tileselect .image-container button').first();
     await expect(firstSelect).toBeVisible({ timeout: 15_000 });
@@ -35,7 +40,7 @@ test.describe('WFC interactive widget', () => {
     await expect(startBtn).toHaveText(/start collapse/i);
   });
 
-  test('running the collapse renders a p5 canvas', async ({ page }) => {
+  test('running the collapse renders a p5 canvas @multistep', async ({ page }) => {
     await page.goto(WFC_URL);
     await page.locator('#tileselect .image-container button').first().click();
     await expect(page.locator('#STARTWFC')).toBeVisible();
@@ -56,7 +61,7 @@ test.describe('WFC interactive widget', () => {
     await page.waitForTimeout(2500);
   });
 
-  test('reset returns the widget to step 1', async ({ page }) => {
+  test('reset returns the widget to step 1 @multistep', async ({ page }) => {
     await page.goto(WFC_URL);
     await page.locator('#tileselect .image-container button').first().click();
     await expect(page.locator('#STARTWFC')).toBeVisible();
