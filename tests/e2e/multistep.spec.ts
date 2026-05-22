@@ -74,7 +74,10 @@ test.describe('Command palette', () => {
 
 test.describe('Theme switcher', () => {
   test('toggling theme updates data-theme and persists across reload @multistep', async ({ page }) => {
-    await page.goto('/');
+    // SiteHeader (and therefore the ThemeSwitch pill) returns null on '/' —
+    // see SiteHeader.tsx. Use /archive so the header — and the theme buttons
+    // — actually render.
+    await page.goto('/archive');
 
     const html = page.locator('html');
 
