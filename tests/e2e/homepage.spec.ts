@@ -27,7 +27,7 @@ test.describe('Homepage', () => {
 
   test('navigation links are present', async ({ page }) => {
     await page.goto('/');
-    await expect(page.getByRole('link', { name: /archive/i })).toBeVisible();
-    await expect(page.getByRole('link', { name: /about/i })).toBeVisible();
+    await expect(page.locator('header').getByRole('link', { name: /archive/i })).toBeVisible();
+    await expect(page.locator('header').getByRole('link', { name: /about/i })).toBeVisible();
   });
 });
