@@ -97,10 +97,15 @@ jobs:
             [ -d "$dir" ] || continue
             list_file="${browser}-list.txt"
             : > "$list_file"
-            # find absolute paths in deterministic order
+            # Only include videos for tests tagged `@multistep` — Playwright
+            # slugifies test titles into the directory name, so the literal
+            # substring `multistep` appears in the path for tagged tests only.
+            # Convention is documented in playwright.config.ts and
+            # tests/e2e/multistep.spec.ts. All videos are still uploaded as
+            # raw artifacts above; this filter only affects the stitched MP4.
             while IFS= read -r f; do
               printf "file '%s'\n" "$(realpath "$f")" >> "$list_file"
-            done < <(find "$dir" -name '*.webm' | sort)
+            done < <(find "$dir" -name '*.webm' | grep -i multistep | sort)
             if [ ! -s "$list_file" ]; then
               echo "no webm files for $browser"
               continue
