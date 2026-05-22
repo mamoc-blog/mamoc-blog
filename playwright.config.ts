@@ -1,5 +1,12 @@
 import { defineConfig, devices } from '@playwright/test';
 
+// `video: 'on'` records every test. The CI workflow
+// (.github/workflows/playwright.yml) stitches per-browser videos side-by-side
+// into one MP4 + animated WebP that gets embedded in the PR comment, but it
+// only includes tests whose title contains the `@multistep` tag. Mark new
+// tests with `@multistep` when they exercise a multi-action flow worth
+// watching in motion. See tests/e2e/multistep.spec.ts for the full rule.
+
 export default defineConfig({
   testDir: './tests/e2e',
   fullyParallel: true,
