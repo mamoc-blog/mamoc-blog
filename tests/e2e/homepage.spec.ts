@@ -1,5 +1,10 @@
 import { test, expect } from '@playwright/test';
 
+// These are single-assertion smoke checks (one navigation + one expectation
+// each), so they intentionally do NOT carry the `@multistep` tag — their
+// videos would just be 1-second blips in the combined PR video. Add the tag
+// only when a test chains multiple actions. See tests/e2e/multistep.spec.ts.
+
 test.describe('Homepage', () => {
   test('loads and shows site header', async ({ page }) => {
     await page.goto('/');
