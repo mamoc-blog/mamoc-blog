@@ -3,13 +3,13 @@ import { test, expect } from '@playwright/test';
 test.describe('Site navigation', () => {
   test('header links navigate correctly', async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('link', { name: /archive/i }).click();
+    await page.locator('header').getByRole('link', { name: /archive/i }).click();
     await expect(page).toHaveURL('/archive');
   });
 
   test('about link navigates to about page', async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('link', { name: /about/i }).click();
+    await page.locator('header').getByRole('link', { name: /about/i }).click();
     await expect(page).toHaveURL('/about');
   });
 
