@@ -17,6 +17,8 @@ npm run test:e2e:ui  # Playwright UI mode
 
 ### E2E test convention: the `@multistep` tag
 
+**Rule: every new interactive component or user-facing feature ships with at least one `@multistep` test.** "Interactive" means anything the user clicks, types into, drags, or watches change over time — the chart sims under `components/interactive/`, the WFC widget, the command palette, theme toggle, archive filter, etc. "Feature" means anything with a perceivable state transition — new page, new nav surface, new search/filter/sort. Single-assertion smoke tests don't count for this rule; the multistep test is what proves the *flow* still works and what shows up in the PR video.
+
 Playwright records video for every test (`video: 'on'` in `playwright.config.ts`). On every PR push, the workflow stitches per-browser videos **side-by-side** (chromium │ firefox │ webkit) into one MP4 + animated WebP and **upserts a single PR comment** (marker `<!-- playwright-video-report -->`) with the WebP embedded inline.
 
 The combined PR video only includes tests whose title contains the literal substring `@multistep` — the workflow `grep -i multistep`'s the test-results paths. Apply the tag when a test:
@@ -42,7 +44,7 @@ Posts are `.mdx` files in `content/posts/<slug>.mdx`. They are **not** parsed wi
 
 ### MDX component map (`mdx-components.tsx`)
 
-The MDX renderer is told which custom React components are usable inside posts. Interactive sim/chart components are imported from `components/interactive/_dynamic.tsx`, which wraps them in `next/dynamic({ ssr: false })` because they touch browser APIs (Chart.js, p5, WebGPU, Ably) at import time. When adding a new interactive: add the raw component, add a `dynamic()` wrapper in `_dynamic.tsx`, register it in `mdx-components.tsx`. Don't import the raw component from MDX — SSR will crash.
+The MDX renderer is told which custom React components are usable inside posts. Interactive sim/chart components are imported from `components/interactive/_dynamic.tsx`, which wraps them in `next/dynamic({ ssr: false })` because they touch browser APIs (Chart.js, p5, WebGPU, Ably) at import time. When adding a new interactive: add the raw component, add a `dynamic()` wrapper in `_dynamic.tsx`, register it in `mdx-components.tsx`, **and add an `@multistep` e2e test under `tests/e2e/` that exercises the interaction end-to-end** (see the @multistep rule above). Don't import the raw component from MDX — SSR will crash.
 
 ### Chrome and the command palette
 
