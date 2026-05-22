@@ -1,38 +1,16 @@
 import { test, expect, type Page } from '@playwright/test';
 
-// Headless racetrack: p5.js, wfc.js, and wfc_flow.js are three sibling
-// <Script>s in WFCCONTAINER.tsx. p5 runs in global mode — it scans
-// `window.setup` exactly once during its own bootstrap. If p5 finishes
-// bootstrapping *before* wfc.js has executed and defined `setup` on
-// `window`, p5 silently no-ops, the canvas is never created, and the
-// STARTWFC click handler throws on `createSlider(...)`. We paper over
-// it: wait for both globals to load, then if no canvas exists yet
-// (p5 missed setup), construct a fresh p5 instance which re-scans the
-// globals and runs setup ourselves. The proper fix is to convert wfc.js
-// to p5 instance mode — tracked in a separate issue.
+// wfc.js exposes `window.__wfcReady = true` once its deterministic p5
+// bootstrap has run (see public/WFC_code/wfc.js for why a bootstrap is
+// needed — p5 global mode has a one-shot setup-scan that races wfc.js's
+// load order). One flag, one wait — no need to probe p5/createSlider/
+// setup independently or kick a second `new p5()` from the test side.
 async function waitForP5Ready(page: Page) {
   await page.waitForFunction(
-    () => {
-      const w = window as unknown as {
-        p5?: unknown;
-        createSlider?: unknown;
-        setup?: unknown;
-      };
-      return (
-        typeof w.p5 === 'function' &&
-        typeof w.createSlider === 'function' &&
-        typeof w.setup === 'function'
-      );
-    },
-    { timeout: 30_000 },
+    () => (window as unknown as { __wfcReady?: boolean }).__wfcReady === true,
+    { timeout: 15_000 },
   );
-  await page.evaluate(() => {
-    if (!document.querySelector('#wfc-canvas canvas')) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any, new-cap
-      new (window as any).p5();
-    }
-  });
-  await page.locator('#wfc-canvas canvas').waitFor({ state: 'attached', timeout: 10_000 });
+  await page.locator('#wfc-canvas canvas').waitFor({ state: 'attached', timeout: 5_000 });
 }
 
 // The Wave Function Collapse post embeds a 3-step interactive widget

@@ -726,3 +726,23 @@ function draw() {
   //actually do stuff
   slider_text.html(bslider.value())
 }
+
+// Deterministic p5 bootstrap. p5's global mode auto-scans `window.setup`
+// exactly once on its own DOMContentLoaded handler — if wfc.js hasn't
+// executed yet, p5 finds nothing and silently no-ops, leaving STARTWFC's
+// `createSlider(...)` to throw later. Instead of relying on script load
+// order, we explicitly `new p5()` here once p5 is available, which forces
+// a re-scan of window.setup/draw at a known-good time. The `__wfcReady`
+// flag lets the e2e tests wait on a single deterministic signal rather
+// than racing through multiple global-existence checks.
+(function bootstrapP5() {
+  if (typeof window === 'undefined') return;
+  if (typeof window.p5 === 'function') {
+    if (!document.querySelector('#wfc-canvas canvas')) {
+      new window.p5();
+    }
+    window.__wfcReady = true;
+  } else {
+    setTimeout(bootstrapP5, 50);
+  }
+})();
