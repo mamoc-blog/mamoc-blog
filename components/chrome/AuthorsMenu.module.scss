@@ -167,3 +167,14 @@
   color: var(--color-gray);
   transition: transform 160ms ease, color 120ms ease;
 }
+
+@media (max-width: 768px) {
+  .panel {
+    position: fixed;
+    left: 16px;
+    right: 16px;
+    top: 56px;
+    min-width: 0;
+    width: auto;
+  }
+}
