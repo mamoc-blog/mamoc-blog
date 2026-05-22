@@ -5,13 +5,27 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-npm run dev        # http://localhost:3000 (Turbopack)
-npm run build      # production build
-npm run start      # serve the production build
-npm run typecheck  # tsc --noEmit
+npm run dev          # http://localhost:3000 (Turbopack)
+npm run build        # production build
+npm run start        # serve the production build
+npm run typecheck    # tsc --noEmit
+npm run test:e2e     # Playwright suite (chromium/firefox/webkit/mobile-chrome)
+npm run test:e2e:ui  # Playwright UI mode
 ```
 
-There is no test suite. There is no lint script — Next.js's built-in lint is not wired up. `typecheck` is the only static check.
+`typecheck` is the only static check; there is no lint script (Next.js's built-in lint is not wired up). The e2e suite lives under `tests/e2e/` and runs in CI via `.github/workflows/playwright.yml`.
+
+### E2E test convention: the `@multistep` tag
+
+Playwright records video for every test (`video: 'on'` in `playwright.config.ts`). On every PR push, the workflow stitches per-browser videos **side-by-side** (chromium │ firefox │ webkit) into one MP4 + animated WebP and **upserts a single PR comment** (marker `<!-- playwright-video-report -->`) with the WebP embedded inline.
+
+The combined PR video only includes tests whose title contains the literal substring `@multistep` — the workflow `grep -i multistep`'s the test-results paths. Apply the tag when a test:
+
+- chains multiple user actions (click → type → click → assert),
+- exercises a progressive state change worth watching in motion, or
+- triggers cross-page navigation via interaction.
+
+Do NOT tag single-assertion smoke checks (page-loads, footer-visible, title-matches). They still run and upload as raw artifacts; they just don't bloat the combined video. See `tests/e2e/multistep.spec.ts` for the canonical examples and `tests/e2e/homepage.spec.ts` / `navigation.spec.ts` for what NOT to tag.
 
 ## Architecture
 
