@@ -37,17 +37,29 @@ var svgFilenames = [];
 
 
 
-const imageHolder = document.getElementById('imageholder'); // Get the div with the ID "imageholder"
-// Create an empty array to store the filenames
-
-const svgImages = imageHolder.querySelectorAll('img'); // Get all img elements within the div
-
-svgImages.forEach(image => {
-const filename = image.src.split('/posts').pop(); // Extract the filename from the src attribute
-if (filename.endsWith('.svg')||filename.endsWith('.png')) { // Check if it's an SVG file
-  svgFilenames.push('.'.concat(filename)); // Add the filename to the list
+// Tile manifest is rendered as a JSON blob inside <script id="imageholder">
+// by WFCCONTAINER.tsx. This used to be 128 hidden <img> tags, which the
+// browser preloaded on every page visit — the JSON form costs zero extra
+// HTTP requests until p5's loadImage() is called in setup().
+const manifestNode = document.getElementById('imageholder');
+let manifest = [];
+try {
+  manifest = JSON.parse(manifestNode.textContent || '[]');
+} catch (e) {
+  // Manifest missing or malformed — interactive will degrade gracefully.
+}
+manifest.forEach(src => {
+  // Strip everything before "/posts" to match the legacy relative-path
+  // format that the rest of wfc.js (and wfc_flow.js's CITY override) expect.
+  const tail = src.split('/posts').pop();
+  if (tail && (tail.endsWith('.svg') || tail.endsWith('.png'))) {
+    svgFilenames.push('.' + tail);
   }
 });
+// createGrid (and any other downstream consumer) used to iterate over the
+// NodeList returned by querySelectorAll('img'); preserve that shape with a
+// tiny `{ src }` shim so existing code keeps working without rewrites.
+const svgImages = manifest.map(src => ({ src }));
 
 function startWFC() {
   try {
