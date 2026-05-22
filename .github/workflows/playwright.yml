@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 permissions:
-  contents: read
+  contents: write
   pull-requests: write
   issues: write
 
@@ -59,7 +59,7 @@ jobs:
           name: playwright-videos-${{ matrix.browser }}
           path: test-results/**/*.webm
           if-no-files-found: ignore
-          retention-days: 30
+          retention-days: 7
 
       - name: Upload HTML report
         if: always()
@@ -68,27 +68,177 @@ jobs:
           name: playwright-report-${{ matrix.browser }}
           path: playwright-report/
           if-no-files-found: ignore
-          retention-days: 30
+          retention-days: 7
 
-      - name: Comment videos on PR
-        if: always() && github.event_name == 'pull_request'
+  report:
+    name: Combined video report
+    if: always() && github.event_name == 'pull_request'
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all browser videos
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          pattern: playwright-videos-*
+
+      - name: Install ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: Stitch per-browser videos
+        id: stitch
+        shell: bash
+        run: |
+          set -e
+          mkdir -p stitched
+          have_any=0
+          for browser in chromium firefox webkit; do
+            dir="artifacts/playwright-videos-${browser}"
+            [ -d "$dir" ] || continue
+            list_file="${browser}-list.txt"
+            : > "$list_file"
+            # find absolute paths in deterministic order
+            while IFS= read -r f; do
+              printf "file '%s'\n" "$(realpath "$f")" >> "$list_file"
+            done < <(find "$dir" -name '*.webm' | sort)
+            if [ ! -s "$list_file" ]; then
+              echo "no webm files for $browser"
+              continue
+            fi
+            # Re-encode each concatenated stream to a normalised mp4 so hstack works
+            ffmpeg -y -f concat -safe 0 -i "$list_file" \
+              -c:v libx264 -pix_fmt yuv420p \
+              -vf "scale=640:360:force_original_aspect_ratio=decrease,pad=640:360:(ow-iw)/2:(oh-ih)/2,setsar=1,drawtext=text='${browser}':x=10:y=10:fontcolor=white:fontsize=20:box=1:boxcolor=black@0.5:boxborderw=4" \
+              -an -r 30 "stitched/${browser}.mp4"
+            have_any=1
+          done
+          echo "have_any=${have_any}" >> "$GITHUB_OUTPUT"
+
+      - name: Build combined MP4 + animated WebP
+        if: steps.stitch.outputs.have_any == '1'
+        id: build
+        shell: bash
+        run: |
+          set -e
+          inputs=()
+          n=0
+          for browser in chromium firefox webkit; do
+            f="stitched/${browser}.mp4"
+            if [ -f "$f" ]; then
+              inputs+=("-i" "$f")
+              n=$((n + 1))
+            fi
+          done
+          if [ "$n" -eq 1 ]; then
+            cp stitched/*.mp4 combined.mp4
+          else
+            ffmpeg -y "${inputs[@]}" \
+              -filter_complex "hstack=inputs=${n}" \
+              -c:v libx264 -pix_fmt yuv420p -movflags +faststart combined.mp4
+          fi
+          # Animated WebP — 8fps, capped width 1200 for inline embed
+          ffmpeg -y -i combined.mp4 \
+            -vf "fps=8,scale='min(1200,iw)':-2:flags=lanczos" \
+            -loop 0 -q:v 55 combined.webp
+          ls -lah combined.*
+          echo "mp4_size=$(stat -c%s combined.mp4)" >> "$GITHUB_OUTPUT"
+          echo "webp_size=$(stat -c%s combined.webp)" >> "$GITHUB_OUTPUT"
+
+      - name: Upload combined assets to PR release
+        if: steps.stitch.outputs.have_any == '1'
+        id: release
         uses: actions/github-script@v7
         with:
           script: |
-            const { owner, repo } = context.repo;
+            const fs = require('fs');
+            const pr = context.payload.pull_request.number;
+            const tag = 'playwright-pr-videos';
+            const releaseName = 'Playwright PR run videos';
+
+            let release;
+            try {
+              const r = await github.rest.repos.getReleaseByTag({
+                owner: context.repo.owner, repo: context.repo.repo, tag
+              });
+              release = r.data;
+            } catch (e) {
+              const r = await github.rest.repos.createRelease({
+                owner: context.repo.owner, repo: context.repo.repo,
+                tag_name: tag, name: releaseName,
+                body: 'Auto-generated Playwright run videos. Assets named `pr-<N>-combined.*`.',
+                draft: false, prerelease: true
+              });
+              release = r.data;
+            }
+
+            const assetNames = [`pr-${pr}-combined.mp4`, `pr-${pr}-combined.webp`];
+            const existing = await github.rest.repos.listReleaseAssets({
+              owner: context.repo.owner, repo: context.repo.repo, release_id: release.id, per_page: 100
+            });
+            for (const a of existing.data) {
+              if (assetNames.includes(a.name)) {
+                await github.rest.repos.deleteReleaseAsset({
+                  owner: context.repo.owner, repo: context.repo.repo, asset_id: a.id
+                });
+              }
+            }
+
+            const urls = {};
+            for (const [localName, assetName] of [
+              ['combined.mp4', `pr-${pr}-combined.mp4`],
+              ['combined.webp', `pr-${pr}-combined.webp`],
+            ]) {
+              if (!fs.existsSync(localName)) continue;
+              const data = fs.readFileSync(localName);
+              const r = await github.rest.repos.uploadReleaseAsset({
+                owner: context.repo.owner, repo: context.repo.repo,
+                release_id: release.id, name: assetName, data
+              });
+              urls[localName] = r.data.browser_download_url;
+            }
+            core.setOutput('mp4_url', urls['combined.mp4'] || '');
+            core.setOutput('webp_url', urls['combined.webp'] || '');
+
+      - name: Upsert PR comment
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const marker = '<!-- playwright-video-report -->';
             const prNumber = context.payload.pull_request.number;
-            const browser = '${{ matrix.browser }}';
-            const runId = context.runId;
-            const artifactUrl = `https://github.com/${owner}/${repo}/actions/runs/${runId}`;
+            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const sha = context.payload.pull_request.head.sha.substring(0, 7);
 
-            const body = [
-              `### 🎬 Playwright test videos — ${browser}`,
-              ``,
-              `Videos and HTML report for the \`${browser}\` run are attached as artifacts on the [workflow run](${artifactUrl}).`,
-              ``,
-              `**Artifacts:**`,
-              `- \`playwright-videos-${browser}\` — \`.webm\` recordings of every test`,
-              `- \`playwright-report-${browser}\` — interactive HTML report`,
-            ].join('\n');
+            const haveVideo = '${{ steps.stitch.outputs.have_any }}' === '1';
+            const webpUrl = '${{ steps.release.outputs.webp_url }}';
+            const mp4Url = '${{ steps.release.outputs.mp4_url }}';
 
-            await github.rest.issues.createComment({ owner, repo, issue_number: prNumber, body });
+            const lines = [
+              marker,
+              `### 🎬 Playwright run · chromium │ firefox │ webkit`,
+              ``,
+              `Commit \`${sha}\` · [workflow run](${runUrl})`,
+              ``,
+            ];
+            if (haveVideo && webpUrl) {
+              lines.push(`![combined playwright run](${webpUrl})`);
+              lines.push(``);
+              if (mp4Url) lines.push(`**Full-quality MP4:** [download](${mp4Url})`);
+            } else {
+              lines.push(`_No videos produced this run (all browser jobs failed before recording, or no tests ran)._`);
+            }
+            const body = lines.join('\n');
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner, repo: context.repo.repo, issue_number: prNumber, per_page: 100
+            });
+            const existing = comments.find(c => c.body && c.body.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner, repo: context.repo.repo, comment_id: existing.id, body
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner, repo: context.repo.repo, issue_number: prNumber, body
+              });
+            }
