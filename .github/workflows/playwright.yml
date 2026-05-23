@@ -187,8 +187,8 @@ jobs:
             list_file="${browser}-list.txt"
             : > "$list_file"
             # Filter to @multistep tests only. Playwright slugifies the
-            # title `…thing @multistep` to `…thing-multistep` (dropping the
-            # @), so we look for `-multistep` followed by `-` or `/` to
+            # title `...thing @multistep` to `...thing-multistep` (dropping
+            # the @), so we look for `-multistep` followed by `-` or `/` to
             # anchor the match inside a test-directory name and avoid
             # accidentally matching the substring elsewhere in the path.
             # Convention documented in playwright.config.ts and
@@ -312,10 +312,10 @@ jobs:
             //   - webp_url / mp4_url: GitHub-issued release asset URLs
             // None are user-controlled. NEVER expand this set to include any
             // field derived from PR title, body, branch name, or other
-            // attacker-influenceable input — `${{ … }}` interpolated into a
-            // JS string literal is a script-injection vector. If that's ever
-            // needed, plumb the value through `env:` and read it with
-            // `process.env.X` instead.
+            // attacker-influenceable input — a GitHub Actions expression
+            // interpolated into a JS string literal is a script-injection
+            // vector. If that is ever needed, plumb the value through `env:`
+            // and read it with `process.env.X` instead.
             const haveVideo = '${{ steps.stitch.outputs.have_any }}' === '1';
             const webpUrl = '${{ steps.release.outputs.webp_url }}';
             const mp4Url = '${{ steps.release.outputs.mp4_url }}';
