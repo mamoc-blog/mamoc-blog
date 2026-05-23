@@ -35,8 +35,13 @@ test.describe('Archive topic filter', () => {
     const totalBefore = await postLinks.count();
     expect(totalBefore).toBeGreaterThan(0);
 
-    // `simulation` is used by spatial-ecology, neuroev, PINNS — guaranteed
-    // multiple matches but strictly fewer than total.
+    // Invariant this test depends on: at least one post is tagged
+    // `simulation` AND at least one is not. Today that's true (spatial-ecology
+    // / neuroev / PINNS are tagged; better-python-testing-with-expecttest is
+    // not). If a future content shuffle violates this — every post tagged
+    // simulation, or none — `expect(filteredCount).toBeLessThan(totalBefore)`
+    // will fail loudly. The mirror assertion in tests/e2e/mobile.spec.ts
+    // depends on the same invariant; update both together.
     const simChip = page.getByRole('button', { name: /#simulation/i });
     await expect(simChip).toBeVisible();
     await simChip.click();

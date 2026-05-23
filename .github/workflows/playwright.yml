@@ -19,6 +19,58 @@ concurrency:
 permissions: {}
 
 jobs:
+  # Sniff the diff to decide whether the report job should regenerate videos.
+  # Content-only PRs (new MDX post, README edit) still run the matrix tests
+  # (they catch real regressions when MDX components change), but the expensive
+  # stitch + release upload + comment update is skipped.
+  detect-changes:
+    name: Detect frontend changes
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      frontend: ${{ steps.filter.outputs.frontend }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history so the diff against the PR base resolves on first push.
+          fetch-depth: 0
+          persist-credentials: false
+      - id: filter
+        shell: bash
+        run: |
+          set -e
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base="${{ github.event.pull_request.base.sha }}"
+            head="${{ github.event.pull_request.head.sha }}"
+          else
+            base="${{ github.event.before }}"
+            head="${{ github.sha }}"
+          fi
+          # First push to a new branch sends an all-zeros `before` SHA; fall
+          # back to HEAD~1 (or HEAD if shallow) so the diff still produces
+          # something meaningful.
+          if [ -z "$base" ] || [ "$base" = "0000000000000000000000000000000000000000" ]; then
+            base=$(git rev-parse HEAD~1 2>/dev/null || git rev-parse HEAD)
+          fi
+          changed=$(git diff --name-only "$base" "$head" || true)
+          echo "Changed files between $base and $head:"
+          echo "$changed"
+          # Paths that do NOT trigger video regeneration:
+          #   - content/posts/**     (MDX posts; render through the existing
+          #                           pipeline and don't change other pages' UI)
+          #   - root-level *.md      (README.md, CLAUDE.md, etc. — docs only)
+          # Everything else (app/, components/, styles/, public/, lib/, the
+          # tests themselves, the workflow file) is treated as frontend.
+          non_frontend='^(content/posts/|[^/]+\.md$)'
+          if [ -z "$changed" ] || echo "$changed" | grep -Ev "$non_frontend" | grep -q .; then
+            echo "frontend=true" >> "$GITHUB_OUTPUT"
+            echo "→ frontend changes detected; report job will regenerate videos"
+          else
+            echo "frontend=false" >> "$GITHUB_OUTPUT"
+            echo "→ content-only diff; report job will be skipped"
+          fi
+
   test:
     name: Playwright (${{ matrix.browser }})
     runs-on: ubuntu-latest
@@ -28,7 +80,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        browser: [chromium, firefox, webkit]
+        # mobile-chrome runs only mobile.spec.ts (see playwright.config.ts).
+        # Its videos upload as raw artifacts but are not included in the
+        # combined PR video — see the stitch step for why.
+        browser: [chromium, firefox, webkit, mobile-chrome]
 
     steps:
       - uses: actions/checkout@v4
@@ -85,12 +140,20 @@ jobs:
 
   report:
     name: Combined video report
-    # Skip on fork PRs — their GITHUB_TOKEN is read-only regardless of the
-    # permissions block, so the release upload + PR comment would 403.
+    # Three gates, all required:
+    #   1. always() — run even if a matrix test failed (failure videos are
+    #      worth seeing).
+    #   2. pull_request from this repo — fork tokens are forced read-only
+    #      regardless of the permissions block, so release upload + PR
+    #      comment would 403.
+    #   3. detect-changes says the diff touched frontend code — content-only
+    #      PRs leave the previous video comment in place rather than
+    #      regenerating identical output.
     if: |
       always() && github.event_name == 'pull_request'
       && github.event.pull_request.head.repo.full_name == github.repository
-    needs: [test]
+      && needs.detect-changes.outputs.frontend == 'true'
+    needs: [detect-changes, test]
     runs-on: ubuntu-latest
     permissions:
       contents: write        # upload release assets
@@ -113,20 +176,27 @@ jobs:
           set -e
           mkdir -p stitched
           have_any=0
+          # Desktop browsers only. mobile-chrome runs a different test set
+          # (mobile.spec.ts), so its concat stream would differ in length
+          # from the desktop streams — hstack truncates to the shortest input,
+          # which would cut desktop content. Mobile videos are still available
+          # as raw artifacts for download.
           for browser in chromium firefox webkit; do
             dir="artifacts/playwright-videos-${browser}"
             [ -d "$dir" ] || continue
             list_file="${browser}-list.txt"
             : > "$list_file"
-            # Only include videos for tests tagged `@multistep` — Playwright
-            # slugifies test titles into the directory name, so the literal
-            # substring `multistep` appears in the path for tagged tests only.
-            # Convention is documented in playwright.config.ts and
+            # Filter to @multistep tests only. Playwright slugifies the
+            # title `…thing @multistep` to `…thing-multistep` (dropping the
+            # @), so we look for `-multistep` followed by `-` or `/` to
+            # anchor the match inside a test-directory name and avoid
+            # accidentally matching the substring elsewhere in the path.
+            # Convention documented in playwright.config.ts and
             # tests/e2e/multistep.spec.ts. All videos are still uploaded as
             # raw artifacts above; this filter only affects the stitched MP4.
             while IFS= read -r f; do
               printf "file '%s'\n" "$(realpath "$f")" >> "$list_file"
-            done < <(find "$dir" -name '*.webm' | grep -i multistep | sort)
+            done < <(find "$dir" -name '*.webm' | grep -E -- '-multistep[-/]' | sort)
             if [ ! -s "$list_file" ]; then
               echo "no webm files for $browser"
               continue
@@ -167,8 +237,10 @@ jobs:
             -vf "fps=8,scale='min(1200,iw)':-2:flags=lanczos" \
             -loop 0 -q:v 55 combined.webp
           ls -lah combined.*
-          echo "mp4_size=$(stat -c%s combined.mp4)" >> "$GITHUB_OUTPUT"
-          echo "webp_size=$(stat -c%s combined.webp)" >> "$GITHUB_OUTPUT"
+          # `wc -c` is portable; `stat -c%s` would be GNU-only. Runners are
+          # ubuntu-latest today but a portable form costs nothing.
+          echo "mp4_size=$(wc -c < combined.mp4)" >> "$GITHUB_OUTPUT"
+          echo "webp_size=$(wc -c < combined.webp)" >> "$GITHUB_OUTPUT"
 
       - name: Upload combined assets to PR release
         if: steps.stitch.outputs.have_any == '1'
@@ -235,6 +307,15 @@ jobs:
             const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
             const sha = context.payload.pull_request.head.sha.substring(0, 7);
 
+            // The three values interpolated below are workflow-internal:
+            //   - have_any: a 0/1 flag set by the stitch step
+            //   - webp_url / mp4_url: GitHub-issued release asset URLs
+            // None are user-controlled. NEVER expand this set to include any
+            // field derived from PR title, body, branch name, or other
+            // attacker-influenceable input — `${{ … }}` interpolated into a
+            // JS string literal is a script-injection vector. If that's ever
+            // needed, plumb the value through `env:` and read it with
+            // `process.env.X` instead.
             const haveVideo = '${{ steps.stitch.outputs.have_any }}' === '1';
             const webpUrl = '${{ steps.release.outputs.webp_url }}';
             const mp4Url = '${{ steps.release.outputs.mp4_url }}';

@@ -23,22 +23,31 @@ export default defineConfig({
     video: 'on',
     screenshot: 'only-on-failure',
   },
+  // Desktop projects share the same desktop spec set and skip mobile.spec.ts;
+  // mobile-chrome runs ONLY mobile.spec.ts. Keeping the split via
+  // testMatch/testIgnore (rather than tags) means CI's `--project=` selector
+  // naturally fans tests out the right way and the file you're editing tells
+  // you which device(s) will run it.
   projects: [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+      testIgnore: ['**/mobile.spec.ts'],
     },
     {
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
+      testIgnore: ['**/mobile.spec.ts'],
     },
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
+      testIgnore: ['**/mobile.spec.ts'],
     },
     {
       name: 'mobile-chrome',
       use: { ...devices['Pixel 5'] },
+      testMatch: ['**/mobile.spec.ts'],
     },
   ],
   webServer: process.env.CI

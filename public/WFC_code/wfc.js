@@ -46,7 +46,9 @@ let manifest = [];
 try {
   manifest = JSON.parse(manifestNode.textContent || '[]');
 } catch (e) {
-  // Manifest missing or malformed — interactive will degrade gracefully.
+  // Surface a console.warn so a regression here is visible in DevTools
+  // instead of a silently empty tileset picker.
+  console.warn('[wfc] tile manifest unreadable, falling back to empty', e);
 }
 manifest.forEach(src => {
   // Strip everything before "/posts" to match the legacy relative-path
@@ -737,12 +739,23 @@ function draw() {
 // than racing through multiple global-existence checks.
 (function bootstrapP5() {
   if (typeof window === 'undefined') return;
-  if (typeof window.p5 === 'function') {
-    if (!document.querySelector('#wfc-canvas canvas')) {
-      new window.p5();
+  // Bound the polling loop so a missing p5 CDN doesn't spin forever — fail
+  // loudly after ~10s (200 × 50ms) so the cause is visible in DevTools.
+  var MAX_TRIES = 200;
+  var tries = 0;
+  function tick() {
+    if (typeof window.p5 === 'function') {
+      if (!document.querySelector('#wfc-canvas canvas')) {
+        new window.p5();
+      }
+      window.__wfcReady = true;
+      return;
     }
-    window.__wfcReady = true;
-  } else {
-    setTimeout(bootstrapP5, 50);
+    if (++tries >= MAX_TRIES) {
+      console.error('[wfc] p5 never loaded after ' + (MAX_TRIES * 50) + 'ms; CDN blocked?');
+      return;
+    }
+    setTimeout(tick, 50);
   }
+  tick();
 })();

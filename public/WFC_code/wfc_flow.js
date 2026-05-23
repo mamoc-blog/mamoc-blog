@@ -16,7 +16,9 @@ let manifestPaths = [];
 try {
   manifestPaths = JSON.parse(imageload.textContent || '[]');
 } catch (e) {
-  // Malformed/missing manifest — UI will render no tileset cards.
+  // Surface a console.warn so a regression here is visible in DevTools
+  // instead of a silently empty tileset picker.
+  console.warn('[wfc_flow] tile manifest unreadable, no tileset cards will render', e);
 }
 const folderPaths = [];
 const image_list = [];

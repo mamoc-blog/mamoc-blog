@@ -48,11 +48,16 @@ export default function WFCCONTAINER() {
       <Script src="https://cdn.jsdelivr.net/npm/p5@1.8.0/lib/p5.js" />
       <Script type="text/javascript" src="/WFC_code/wfc.js" />
 
-      {/* Tile manifest as JSON — wfc.js parses it; nothing is fetched here. */}
+      {/* Tile manifest as JSON — wfc.js parses it; nothing is fetched here.
+          Escape `<` so an attacker can never close the script tag from
+          inside the payload. Today the payload is purely server-derived
+          filenames, but cheap defense-in-depth. */}
       <script
         id="imageholder"
         type="application/json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(tiles) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(tiles).replace(/</g, '\\u003c'),
+        }}
       />
 
       <div className="wfc-shell">

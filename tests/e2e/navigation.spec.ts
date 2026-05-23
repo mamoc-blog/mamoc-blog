@@ -25,20 +25,13 @@ test.describe('Site navigation', () => {
   });
 
   test('theme toggle is present', async ({ page }) => {
-    await page.goto('/');
-    // next-themes renders a toggle; look for a button in the header area
+    // SiteHeader returns null on '/', so navigate somewhere that renders it.
+    await page.goto('/archive');
     const themeToggle = page.locator('header button, nav button').first();
     await expect(themeToggle).toBeVisible();
   });
 
-  test('command palette opens with keyboard shortcut', async ({ page }) => {
-    await page.goto('/');
-    // Trigger the cmdk command palette
-    await page.keyboard.press('Meta+k');
-    // A dialog / listbox should appear
-    const palette = page.getByRole('dialog').or(page.getByRole('listbox'));
-    await expect(palette).toBeVisible({ timeout: 3000 }).catch(() => {
-      // Keyboard shortcut may behave differently in headless — skip gracefully
-    });
-  });
+  // Keyboard-driven palette open + navigate is covered by
+  // tests/e2e/multistep.spec.ts ("Command palette" describe). No need for a
+  // smoke version that swallowed assertion failures and reported false green.
 });

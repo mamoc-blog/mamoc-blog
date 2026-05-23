@@ -13,11 +13,12 @@ test.describe('Archive page', () => {
     await expect(links.first()).toBeVisible();
   });
 
-  test('shows topic filters', async ({ page }) => {
+  test('shows topic filter chips', async ({ page }) => {
     await page.goto('/archive');
-    // Topic counts are shown; look for any label-style element
-    const body = page.locator('body');
-    await expect(body).toContainText(/.+/);
+    // ArchivePage.tsx renders each topic as `<button>#name <count></button>`,
+    // so the accessible name starts with `#`. At least one chip must render.
+    const topicChips = page.getByRole('button', { name: /^#[a-z0-9-]+/i });
+    await expect(topicChips.first()).toBeVisible();
   });
 
   test('navigating back to homepage works', async ({ page }) => {
