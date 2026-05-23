@@ -80,10 +80,21 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # `browser` is the Playwright project name passed to --project=, and
+        # `install_target` is the browser binary `npx playwright install`
+        # actually knows about. They differ for mobile-chrome — that project
+        # uses the chromium binary with Pixel 5 device emulation, but
+        # `npx playwright install mobile-chrome` is not a valid command.
         # mobile-chrome runs only mobile.spec.ts (see playwright.config.ts).
-        # Its videos upload as raw artifacts but are not included in the
-        # combined PR video — see the stitch step for why.
-        browser: [chromium, firefox, webkit, mobile-chrome]
+        include:
+          - browser: chromium
+            install_target: chromium
+          - browser: firefox
+            install_target: firefox
+          - browser: webkit
+            install_target: webkit
+          - browser: mobile-chrome
+            install_target: chromium
 
     steps:
       - uses: actions/checkout@v4
@@ -101,7 +112,7 @@ jobs:
         run: npm ci
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps ${{ matrix.browser }}
+        run: npx playwright install --with-deps ${{ matrix.install_target }}
 
       - name: Build app
         run: npm run build
@@ -176,12 +187,11 @@ jobs:
           set -e
           mkdir -p stitched
           have_any=0
-          # Desktop browsers only. mobile-chrome runs a different test set
-          # (mobile.spec.ts), so its concat stream would differ in length
-          # from the desktop streams — hstack truncates to the shortest input,
-          # which would cut desktop content. Mobile videos are still available
-          # as raw artifacts for download.
-          for browser in chromium firefox webkit; do
+          # Include mobile-chrome alongside the three desktop browsers; it
+          # runs a different test set (mobile.spec.ts) but its multistep
+          # videos are stitched into a separate row in the combined PR
+          # video (see the build step's xstack layout).
+          for browser in chromium firefox webkit mobile-chrome; do
             dir="artifacts/playwright-videos-${browser}"
             [ -d "$dir" ] || continue
             list_file="${browser}-list.txt"
@@ -216,21 +226,46 @@ jobs:
         shell: bash
         run: |
           set -e
-          inputs=()
-          n=0
+          desktop_streams=()
           for browser in chromium firefox webkit; do
-            f="stitched/${browser}.mp4"
-            if [ -f "$f" ]; then
-              inputs+=("-i" "$f")
-              n=$((n + 1))
-            fi
+            [ -f "stitched/${browser}.mp4" ] && desktop_streams+=("stitched/${browser}.mp4")
           done
-          if [ "$n" -eq 1 ]; then
-            cp stitched/*.mp4 combined.mp4
-          else
-            ffmpeg -y "${inputs[@]}" \
-              -filter_complex "hstack=inputs=${n}" \
+          have_mobile=0
+          [ -f "stitched/mobile-chrome.mp4" ] && have_mobile=1
+          n_desktop=${#desktop_streams[@]}
+
+          # Preferred layout (all 4 streams present): T-shape via xstack.
+          # Each per-browser stream is exactly 640x360 (forced by the stitch
+          # step), so the canvas is 1920x720 with the mobile column centered
+          # on the bottom row (black gutters either side).
+          if [ "$n_desktop" -eq 3 ] && [ "$have_mobile" -eq 1 ]; then
+            ffmpeg -y \
+              -i "${desktop_streams[0]}" \
+              -i "${desktop_streams[1]}" \
+              -i "${desktop_streams[2]}" \
+              -i "stitched/mobile-chrome.mp4" \
+              -filter_complex "xstack=inputs=4:layout=0_0|w0_0|w0+w1_0|w0_h0:fill=black" \
               -c:v libx264 -pix_fmt yuv420p -movflags +faststart combined.mp4
+          else
+            # Degraded fallback (some browser stream missing): single
+            # horizontal row of whatever is present. Better to ship a
+            # partial video than no video.
+            all_inputs=()
+            n_total=0
+            for s in "${desktop_streams[@]}"; do all_inputs+=("-i" "$s"); n_total=$((n_total + 1)); done
+            if [ "$have_mobile" -eq 1 ]; then
+              all_inputs+=("-i" "stitched/mobile-chrome.mp4")
+              n_total=$((n_total + 1))
+            fi
+            if [ "$n_total" -eq 1 ]; then
+              # Lone stream: just copy it. ${all_inputs[1]} is the file path
+              # (index 0 is the literal "-i" flag).
+              cp "${all_inputs[1]}" combined.mp4
+            else
+              ffmpeg -y "${all_inputs[@]}" \
+                -filter_complex "hstack=inputs=${n_total}" \
+                -c:v libx264 -pix_fmt yuv420p -movflags +faststart combined.mp4
+            fi
           fi
           # Animated WebP — 8fps, capped width 1200 for inline embed
           ffmpeg -y -i combined.mp4 \

@@ -8,10 +8,10 @@ import { test, expect } from '@playwright/test';
 // interaction; for plain navigation/visibility checks, `.click()` is fine on a
 // touch context too.
 //
-// Videos for this spec upload as a raw artifact (`playwright-videos-mobile-chrome`)
-// but are NOT included in the combined side-by-side PR video. The hstack
-// stitcher assumes equal per-browser stream duration; mobile runs a different,
-// smaller test set, so mixing it in would truncate the desktop streams.
+// Videos for this spec upload as a raw artifact
+// (`playwright-videos-mobile-chrome`) and are stitched into the combined
+// PR video on the bottom row of an xstack T-shape (the three desktop
+// browsers fill the top row). See .github/workflows/playwright.yml.
 
 const POSTS_DIR = path.join(process.cwd(), 'content', 'posts');
 const FIRST_POST_SLUG = fs

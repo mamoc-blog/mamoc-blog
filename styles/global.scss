@@ -362,6 +362,19 @@ button {
   .post-body { width: auto; padding: 0 18px 60px; }
 }
 
+/* KaTeX display math: long equations would otherwise push document scrollWidth
+   past the viewport on mobile (e.g. /posts/PINNS — caught by mobile.spec.ts).
+   Adding a horizontal scroll container keeps the equation rendering crisp
+   while letting users pan it within its row. */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  // KaTeX adds outer padding/margin via .katex; preserve visible affordance
+  // by giving the scroll container a soft inset so the scrollbar doesn't
+  // collide with the equation glyphs.
+  padding: 0.25em 0;
+}
+
 /* ── PRISM TOKENS (kept inline for now; rehype-prism-plus picks them up) ── */
 code[class*="language-"],
 pre[class*="language-"] {
