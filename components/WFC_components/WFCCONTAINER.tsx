@@ -3,7 +3,12 @@ import path from 'node:path';
 import Script from 'next/script';
 
 // Walks public/posts/WFC and returns paths like "/posts/WFC/CITY/foo.png".
-// wfc.js / wfc_flow.js read these at runtime by querying #imageholder.
+// wfc.js / wfc_flow.js read this list at runtime by parsing the JSON inside
+// `<script id="imageholder">`. Previously this was rendered as 128 `<img>`
+// tags, which the browser eagerly preloaded on every page visit (the `hidden`
+// HTML attribute does not suppress image preloading). Switching to a JSON
+// blob means zero image fetches happen until the user actually picks a
+// tileset and the algorithm calls p5's loadImage().
 function loadTileManifest(): string[] {
   const root = path.join(process.cwd(), 'public', 'posts', 'WFC');
   const out: string[] = [];
@@ -11,7 +16,11 @@ function loadTileManifest(): string[] {
     for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
       const full = path.join(dir, entry.name);
       if (entry.isDirectory()) walk(full);
-      else if (/\.(svg|png)$/i.test(entry.name)) {
+      // PNG only: REDGRID SVGs use CSS transform-box: fill-box which p5's
+      // loadImage rasteriser doesn't honour faithfully. Pre-rendered PNGs
+      // sit beside the SVGs in REDGRID_*; CITY is PNG-native. SVGs remain
+      // as source-of-truth and aren't shipped to the browser.
+      else if (/\.png$/i.test(entry.name)) {
         out.push(
           '/' +
             path
@@ -39,12 +48,17 @@ export default function WFCCONTAINER() {
       <Script src="https://cdn.jsdelivr.net/npm/p5@1.8.0/lib/p5.js" />
       <Script type="text/javascript" src="/WFC_code/wfc.js" />
 
-      {/* Hidden manifest the WFC scripts read at runtime to discover tiles. */}
-      <div hidden id="imageholder">
-        {tiles.map((src) => (
-          <img src={src} key={src} alt={src} />
-        ))}
-      </div>
+      {/* Tile manifest as JSON — wfc.js parses it; nothing is fetched here.
+          Escape `<` so an attacker can never close the script tag from
+          inside the payload. Today the payload is purely server-derived
+          filenames, but cheap defense-in-depth. */}
+      <script
+        id="imageholder"
+        type="application/json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(tiles).replace(/</g, '\\u003c'),
+        }}
+      />
 
       <div className="wfc-shell">
         <div className="wfc-toolbar">

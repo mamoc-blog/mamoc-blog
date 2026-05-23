@@ -8,14 +8,26 @@ var tileset ='';
 // Get a reference to the images container
 const imagesContainer = document.querySelector(".images");
 
-// Fetch the list of folders in the "media/wfc/" folder
+// Tile manifest is a JSON blob in <script id="imageholder"> — see
+// WFCCONTAINER.tsx. (Was 128 <img> tags; switched to JSON to stop the
+// browser from eagerly preloading every tile on page visit.)
 const imageload = document.getElementById("imageholder");
-const images = imageload.querySelectorAll("img");
+let manifestPaths = [];
+try {
+  manifestPaths = JSON.parse(imageload.textContent || '[]');
+} catch (e) {
+  // Surface a console.warn so a regression here is visible in DevTools
+  // instead of a silently empty tileset picker.
+  console.warn('[wfc_flow] tile manifest unreadable, no tileset cards will render', e);
+}
 const folderPaths = [];
 const image_list = [];
-var img_array = ['G_G_G_G_G_G_G_G_H1.png','DRLT.svg','DR.svg']
-images.forEach(image => {
-  const imageSrc = image.getAttribute("src").replace(/\\/g, "/");
+// Representative image filename per tileset folder (used for the tileset
+// preview card on step 1). Order must match the alphabetical scan order
+// of the manifest folders: CITY, REDGRID_EASY, REDGRID_HARD.
+var img_array = ['G_G_G_G_G_G_G_G_H1.png','DRLT.png','DR.png']
+manifestPaths.forEach(imageSrc => {
+  imageSrc = imageSrc.replace(/\\/g, "/");
   const lastIndex = imageSrc.lastIndexOf("/");
   var folderPath = imageSrc.substring(0, lastIndex);
   image_list.push(imageSrc)

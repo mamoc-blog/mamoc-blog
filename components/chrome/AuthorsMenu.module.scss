@@ -70,6 +70,20 @@
     transform: translateY(0);
     pointer-events: auto;
   }
+
+  // On narrow viewports the trigger can sit anywhere in the nav row, and an
+  // absolute-positioned panel anchored to the trigger would extend past the
+  // viewport edge (caught by tests/e2e/mobile.spec.ts). Switch to fixed
+  // positioning with viewport gutters so the panel always fits.
+  @media (max-width: 480px) {
+    position: fixed;
+    top: 64px;
+    left: 16px;
+    right: 16px;
+    margin-top: 0;
+    min-width: 0;
+    max-width: none;
+  }
 }
 
 .label {
