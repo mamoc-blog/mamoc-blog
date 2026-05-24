@@ -262,9 +262,21 @@
 }
 
 @media (max-width: 768px) {
-  .hdr2 { padding: 16px 20px; flex-wrap: wrap; gap: 12px; }
-  .hdr2 .dt { display: none; }
-  .hdr2 nav { flex-wrap: wrap; gap: 14px; }
+  .hdr2 {
+    padding: 16px 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    .dt { display: none; }
+
+    // nav is a single flex line by default with `gap: 28px`; on Pixel-5-
+    // narrow viewports the 4 links + CommandTrigger overflow the row.
+    // Allow internal wrap and shrink the gap so the nav fits.
+    nav {
+      flex-wrap: wrap;
+      gap: 14px 16px;
+    }
+  }
   .masthead { padding: 32px 20px; }
   .masthead .issue { position: static; text-align: left; margin-bottom: 16px; }
   .hero2 { grid-template-columns: 1fr; gap: 24px; padding: 32px 20px; }
