@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import { getSortedPostsData } from '@/lib/posts';
 import { ArchivePage } from '@/components/pages/ArchivePage';
 
@@ -12,5 +13,9 @@ export default async function Page() {
   const counts = new Map<string, number>();
   posts.forEach((p) => p.topics?.forEach((t) => counts.set(t, (counts.get(t) ?? 0) + 1)));
   const topicCounts = [...counts.entries()].sort((a, b) => b[1] - a[1]);
-  return <ArchivePage posts={posts} topicCounts={topicCounts} />;
+  return (
+    <Suspense fallback={null}>
+      <ArchivePage posts={posts} topicCounts={topicCounts} />
+    </Suspense>
+  );
 }

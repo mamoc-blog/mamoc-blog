@@ -32,12 +32,32 @@
   animation: slideIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
   [data-theme='dark'] & { background: #161618; border-color: #2a2a2a; }
+
+  /* Mobile/small-viewport pattern: render as a bottom-anchored sheet rather
+     than a centered modal. Matches the shadcn responsive Dialog→Drawer
+     convention and Notion's mobile palette behaviour. CSS-only swap (no
+     useMediaQuery hook) avoids SSR hydration mismatch. */
+  @media (max-width: 640px) {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 16px 16px 0 0;
+    border-bottom: 0;
+    animation: slideUp 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  }
 }
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideIn {
   from { opacity: 0; transform: translate(-50%, -8px); }
   to { opacity: 1; transform: translate(-50%, 0); }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .hd {
@@ -80,11 +100,21 @@
     border-radius: 3px;
     [data-theme='dark'] & { border-color: #333; }
   }
+
+  /* Keycap hints (↑↓ ↵ esc) have no meaning without a physical keyboard. */
+  @media (max-width: 640px) { display: none; }
 }
 
 .list {
   max-height: 60vh;
   overflow-y: auto;
+
+  /* On mobile we own the bottom of the screen; let the list grow to fit
+     while leaving room for the input header and the device's bottom UI.
+     `dvh` accounts for the dynamic viewport (URL bar collapse on iOS). */
+  @media (max-width: 640px) {
+    max-height: calc(100dvh - 140px);
+  }
 }
 
 .empty {
@@ -172,4 +202,7 @@
     margin: 0 3px;
     [data-theme='dark'] & { border-color: #333; }
   }
+
+  /* The footer is a keyboard-hint surface; hide on touch viewports. */
+  @media (max-width: 640px) { display: none; }
 }

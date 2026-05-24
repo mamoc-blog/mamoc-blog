@@ -75,6 +75,68 @@ test.describe('Command palette', () => {
     await page.keyboard.press('Enter');
     await expect(page).toHaveURL(/\/posts\/wfc/);
   });
+
+  test('selecting a topic in the palette lands on archive with that filter pre-applied @multistep', async ({ page }) => {
+    await page.goto('/');
+
+    // The palette's `mod+k` handler is registered in a useEffect — waiting for
+    // the visible palette trigger guarantees hydration has completed so the
+    // keypress will actually be heard.
+    await expect(page.getByRole('button', { name: /search palette/i })).toBeVisible();
+    await page.keyboard.press(`${MOD}+k`);
+
+    const input = page.getByPlaceholder(/search posts/i);
+    await expect(input).toBeVisible({ timeout: 5_000 });
+
+    // Filter the palette down to rows containing "simulation". cmdk's
+    // accessible name for the topic row is `§ #simulation N posts topic`,
+    // which uniquely contains `#simulation` (post rows render the bare topic
+    // name as a tag, never prefixed with `#`).
+    await input.fill('simulation');
+
+    const topicRow = page.getByRole('option', { name: /#simulation/i });
+    await expect(topicRow).toBeAttached();
+    // Click rather than Enter — cmdk's selection cursor sits on the first
+    // post row, not the topic row, and ArrowDown'ing past 7 posts is fragile.
+    // Click auto-scrolls into view.
+    await topicRow.click();
+
+    // Lands on /archive with ?topic=simulation in the URL.
+    await expect(page).toHaveURL(/\/archive\?topic=simulation/);
+    await expect(page.getByRole('heading', { name: /archive/i })).toBeVisible();
+
+    // The filter is applied behaviourally: the post count on this filtered
+    // visit is strictly less than the unfiltered post count. The mirror
+    // assertion in the "Archive topic filter" test above relies on the same
+    // content invariant — at least one post tagged `simulation`, at least one
+    // not — so if that invariant breaks, both tests fail loudly.
+    const filteredCount = await page.locator('a[href^="/posts/"]').count();
+    expect(filteredCount).toBeGreaterThan(0);
+
+    await page.goto('/archive');
+    await expect(page.getByRole('heading', { name: /archive/i })).toBeVisible();
+    const totalCount = await page.locator('a[href^="/posts/"]').count();
+    expect(filteredCount).toBeLessThan(totalCount);
+  });
+});
+
+test.describe('Archive deep-link', () => {
+  test('visiting /archive?topic=… directly applies the filter on first paint @multistep', async ({ page }) => {
+    // Independent of the palette flow: a shared link or bookmark to
+    // /archive?topic=simulation must apply the filter on the very first
+    // render. This exercises the `useSearchParams` initial-read path in
+    // ArchivePage that the palette test only covers indirectly.
+    await page.goto('/archive?topic=simulation');
+    await expect(page.getByRole('heading', { name: /archive/i })).toBeVisible();
+
+    const filteredCount = await page.locator('a[href^="/posts/"]').count();
+    expect(filteredCount).toBeGreaterThan(0);
+
+    await page.goto('/archive');
+    await expect(page.getByRole('heading', { name: /archive/i })).toBeVisible();
+    const totalCount = await page.locator('a[href^="/posts/"]').count();
+    expect(filteredCount).toBeLessThan(totalCount);
+  });
 });
 
 test.describe('Theme switcher', () => {
