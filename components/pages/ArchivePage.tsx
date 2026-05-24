@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { format, parseISO } from 'date-fns';
 import type { Post } from '@/lib/posts';
 import styles from './ArchivePage.module.scss';
@@ -20,7 +21,31 @@ function readingTime(): string {
 }
 
 export function ArchivePage({ posts, topicCounts }: Props) {
-  const [activeTopic, setActiveTopic] = useState<string | null>(null);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const urlTopic = searchParams.get('topic');
+
+  // Local state stays the source of truth for rendering so chip clicks update
+  // synchronously without waiting for a router round-trip. We mirror it to the
+  // URL via router.replace (so deep-linking + the command palette's
+  // `/archive?topic=…` navigation works), and in turn sync FROM the URL when
+  // it changes from outside this component (e.g. the palette while we're
+  // already mounted on /archive, or back/forward).
+  const [activeTopic, setActiveTopicState] = useState<string | null>(urlTopic);
+
+  useEffect(() => {
+    setActiveTopicState(urlTopic);
+  }, [urlTopic]);
+
+  const setActiveTopic = (next: string | null) => {
+    setActiveTopicState(next);
+    const params = new URLSearchParams(searchParams.toString());
+    if (next) params.set('topic', next);
+    else params.delete('topic');
+    const qs = params.toString();
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+  };
 
   const visible = useMemo(
     () => (activeTopic ? posts.filter((p) => p.topics?.includes(activeTopic)) : posts),

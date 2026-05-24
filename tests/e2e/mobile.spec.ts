@@ -43,6 +43,21 @@ test.describe('Mobile · Pixel 5', () => {
     const input = page.getByPlaceholder(/search posts/i);
     await expect(input).toBeVisible({ timeout: 5_000 });
 
+    // On mobile the palette renders as a bottom-anchored sheet, not a
+    // centered modal. Assert that the dialog content sits at the bottom of
+    // the viewport and spans its full width — that's the visual contract of
+    // the @media (max-width: 640px) styles in CommandPalette.module.scss.
+    const dialogBox = await page.locator('[cmdk-dialog]').boundingBox();
+    const viewport = page.viewportSize();
+    expect(dialogBox).not.toBeNull();
+    expect(viewport).not.toBeNull();
+    if (dialogBox && viewport) {
+      // Sheet hugs the bottom edge (within 2px of viewport bottom).
+      expect(dialogBox.y + dialogBox.height).toBeGreaterThanOrEqual(viewport.height - 2);
+      // Sheet spans the full viewport width.
+      expect(dialogBox.width).toBe(viewport.width);
+    }
+
     await input.fill('wave');
     await expect(
       page.getByRole('option').filter({ hasText: /wave function collapse/i }).first(),
