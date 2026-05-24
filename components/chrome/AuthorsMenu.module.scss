@@ -71,18 +71,48 @@
     pointer-events: auto;
   }
 
-  // On narrow viewports the trigger can sit anywhere in the nav row, and an
-  // absolute-positioned panel anchored to the trigger would extend past the
-  // viewport edge (caught by tests/e2e/mobile.spec.ts). Switch to fixed
-  // positioning with viewport gutters so the panel always fits.
-  @media (max-width: 480px) {
+  // Mobile bottom-sheet, mirroring the CommandPalette pattern: full-width,
+  // anchored to the bottom edge, slides up. The 640px breakpoint matches
+  // CommandPalette.module.scss so the two surfaces engage at the same width.
+  @media (max-width: 640px) {
     position: fixed;
-    top: 64px;
-    left: 16px;
-    right: 16px;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
     margin-top: 0;
     min-width: 0;
     max-width: none;
+    width: 100%;
+    border-radius: 16px 16px 0 0;
+    border-bottom: 0;
+    max-height: 70dvh;
+    overflow-y: auto;
+    transform: translateY(16px);
+
+    &.open { transform: translateY(0); }
+  }
+}
+
+.backdrop {
+  display: none;
+
+  @media (max-width: 640px) {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(3px);
+    z-index: 29;
+
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 160ms ease;
+
+    &.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
   }
 }
 

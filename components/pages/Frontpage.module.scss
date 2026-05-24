@@ -267,6 +267,8 @@
     flex-wrap: wrap;
     gap: 12px;
 
+    .dt { display: none; }
+
     // nav is a single flex line by default with `gap: 28px`; on Pixel-5-
     // narrow viewports the 4 links + CommandTrigger overflow the row.
     // Allow internal wrap and shrink the gap so the nav fits.

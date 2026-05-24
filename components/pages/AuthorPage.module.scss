@@ -209,10 +209,11 @@
 
 @media (max-width: 768px) {
   .root { padding: 0 20px 56px; }
-  .masthead { grid-template-columns: 1fr; gap: 24px; padding: 32px 0 24px; }
+  .masthead { grid-template-columns: 1fr; gap: 32px; padding: 32px 0 24px; }
+  .avatar { padding-bottom: 16px; }
   .avatar img { width: 160px; height: 160px; }
-  .avatar .handle { right: 0; }
-  .intro h1 { font-size: 56px; }
+  .avatar .handle { right: 0; top: 10px; }
+  .intro h1 { font-size: clamp(32px, 10vw, 56px); overflow-wrap: break-word; }
   .metaRow { grid-template-columns: 1fr; }
   .metaRow .m { border-right: 0; border-bottom: 1px solid var(--color-border); }
   .body { grid-template-columns: 1fr; gap: 24px; padding: 24px 0; }

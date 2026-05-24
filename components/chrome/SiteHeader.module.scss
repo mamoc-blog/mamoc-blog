@@ -37,6 +37,7 @@
 }
 
 @media (max-width: 768px) {
-  .bar { padding: 16px 20px; flex-wrap: wrap; gap: 12px; }
-  .tools { gap: 12px; }
+  .bar { padding: 16px 20px; gap: 12px; }
+  .tools { gap: 8px; }
+  .dt { display: none; }
 }

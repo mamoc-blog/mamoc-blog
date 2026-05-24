@@ -78,6 +78,15 @@ export function AuthorsMenu() {
         <span className={styles.caret} aria-hidden="true">▾</span>
       </button>
 
+      {/* Mobile bottom-sheet backdrop. Hidden on desktop via CSS; on touch
+          viewports it darkens the page behind the sheet and dismisses on tap,
+          matching the CommandPalette dialog behaviour. */}
+      <div
+        className={`${styles.backdrop} ${open ? styles.open : ''}`}
+        aria-hidden="true"
+        onClick={() => setOpen(false)}
+      />
+
       <div
         className={`${styles.panel} ${open ? styles.open : ''}`}
         role="menu"

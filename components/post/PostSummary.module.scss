@@ -10,7 +10,8 @@
   letter-spacing: 0.06em;
   margin-bottom: 32px;
   display: flex;
-  gap: 10px;
+  flex-wrap: wrap;
+  gap: 6px 10px;
   align-items: center;
 
   a {

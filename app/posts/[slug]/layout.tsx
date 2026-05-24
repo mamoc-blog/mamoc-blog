@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { getPostMetadata } from '@/lib/posts';
 import { PostSummary } from '@/components/post/PostSummary';
+import { ScrollToTopOnNav } from '@/components/post/ScrollToTopOnNav';
 
 export default async function PostLayout({
   children,
@@ -18,6 +19,7 @@ export default async function PostLayout({
   }
   return (
     <>
+      <ScrollToTopOnNav />
       <PostSummary slug={slug} metadata={metadata} />
       {children}
     </>
