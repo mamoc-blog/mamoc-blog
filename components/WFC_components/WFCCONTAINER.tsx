@@ -69,6 +69,26 @@ export default function WFCCONTAINER() {
         </div>
 
         <div className="wfc-stage">
+          {/* Help panel: hidden in step 1, revealed by wfc_flow.js once a
+              tileset is selected. <details> drives the collapse/expand
+              natively — no JS state to keep in sync. */}
+          <details id="wfc-help" className="wfc-help" hidden>
+            <summary className="wfc-help-summary">
+              <span>How to use this demo</span>
+              <span className="wfc-help-toggle" aria-hidden>+</span>
+            </summary>
+            <ul className="wfc-help-list">
+              <li><b>Grid size</b> — drag the slider to choose how many cells the canvas is divided into.</li>
+              <li><b>Run / Restart</b> — kick off a new collapse with your current weights. Your seed determines the outcome.</li>
+              <li><b>Pause / Play</b> — freeze the algorithm to study an in-progress state, then resume.</li>
+              <li><b>Step ▶|</b> — advance exactly one cell-collapse (also pauses auto-run so you can step further).</li>
+              <li><b>Speed</b> — slow the auto-loop down to watch constraint propagation move across the grid.</li>
+              <li><b>Click an uncollapsed cell</b> on the canvas to choose its tile manually — the algorithm propagates from your pick.</li>
+              <li><b>Seed</b> — same number = same run. <b>Share</b> copies a URL that reproduces this run on someone else's machine.</li>
+              <li><b>Save PNG</b> — download the completed grid as an image.</li>
+            </ul>
+          </details>
+
           <div id="tileselect">
             <p className="wfc-step"><b>step 1</b> · pick a tileset</p>
             <div className="images" />

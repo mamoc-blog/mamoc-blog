@@ -1,25 +1,106 @@
+'use strict';
+
+// Wave Function Collapse — vanilla JS + p5 global mode. Shares a few
+// top-level vars with wfc_flow.js (tileset, prob_distr) via window.
+// `var` at top level binds onto the global object so the cross-script
+// reads here pick up wfc_flow.js's assignments at runtime.
+
 var w = window.innerWidth;
 var h = window.innerHeight;
 var cnv_w = 600;
 var cnv_h = 400;
-var bslider
-var slider_text
-var status_button
-var step_button
-var status_bool = false
+var bslider;          // grid size slider (p5)
+var slider_text;      // grid size value readout (p5)
+var status_button;    // Start/Reset toggle (p5)
+var step_button;      // legacy unused; kept to preserve shape
+var status_bool = false;
 var grid_list = [];
 var gridimages = [];
-var testimage
+var testimage;
 var tracking = [];
-var global_options =[];
+var global_options = [];
 var old_grids = [];
 var backtracking = false;
 var slider_max = 30;
+var filled_count;
+var svgFilenames = [];
+
+// --- New: animation pacing + mixed-initiative state ---------------------
+
+let stepIntervalMs = 0;       // 0 = run flat-out; >0 throttles draw-loop steps
+let lastStepTime = 0;
+let isPaused = false;
+let forceStepOnce = false;    // one-shot from the Step button
+let recentBacktrack = null;   // { position, framesLeft } — for the red flash
+const BACKTRACK_FLASH_FRAMES = 18;
+let manualCollapseQueued = null; // { cell, tile } from click-to-collapse
+
+// --- Seeded RNG (mulberry32) -------------------------------------------
+
+// Pull initial seed from ?seed= so a run is shareable; otherwise mint one.
+let rngSeed = readSeedFromURL();
+let rng = mulberry32(rngSeed);
+
+function mulberry32(seed) {
+  let s = seed >>> 0;
+  return function () {
+    s = (s + 0x6D2B79F5) >>> 0;
+    let t = s;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function readSeedFromURL() {
+  try {
+    const p = new URLSearchParams(window.location.search);
+    const raw = p.get('seed');
+    if (raw !== null && raw !== '') {
+      const n = parseInt(raw, 10);
+      if (Number.isFinite(n)) return n >>> 0;
+    }
+  } catch (_) { /* SSR or sandboxed — fall through */ }
+  return (Math.random() * 0xFFFFFFFF) >>> 0;
+}
+function reseed(value) {
+  rngSeed = (value >>> 0);
+  rng = mulberry32(rngSeed);
+}
+function updateShareURL() {
+  try {
+    const u = new URL(window.location.href);
+    u.searchParams.set('seed', String(rngSeed));
+    window.history.replaceState({}, '', u.toString());
+  } catch (_) { /* no-op */ }
+}
+
+// --- Direction vectors --------------------------------------------------
+
+const CARD_DIRS = [[0, -1], [0, 1], [-1, 0], [1, 0]];
+const EIGHT_DIRS = [[0, -1], [0, 1], [-1, 0], [1, 0], [1, -1], [-1, -1], [1, 1], [-1, 1]];
+const dirsFor = () => (tileset.includes('CITY') ? EIGHT_DIRS : CARD_DIRS);
+
+// --- Grid helpers -------------------------------------------------------
+
+const samePos = (a, b) => a[0] === b[0] && a[1] === b[1];
+const findByPos = (grid, pos) => grid.find(c => samePos(c.position, pos));
+
+// Cheap deep-clone for backtracking snapshots. Drops the gridSquare class
+// identity (downstream code only touches plain fields), so a plain shape
+// is ~10x faster than JSON.parse(JSON.stringify(...)).
+function cloneGrid(grid) {
+  return grid.map(c => ({
+    position: c.position.slice(),
+    options: c.options.slice(),
+    underInspection: c.underInspection,
+    fixed: c.fixed,
+  }));
+}
 
 // Canvas dimensions track the #wfc-canvas host element so the demo fits the
 // post body instead of overflowing the viewport. Recomputed on resize.
 function computeCanvasSize() {
-  var host = document.getElementById('wfc-canvas');
+  const host = document.getElementById('wfc-canvas');
   if (host && host.clientWidth > 0) {
     cnv_w = host.clientWidth;
     cnv_h = Math.round(cnv_w * (2 / 3));
@@ -29,725 +110,1003 @@ function computeCanvasSize() {
   }
 }
 
+// --- Tile manifest ------------------------------------------------------
 
-var filled_count;
-
-
-var svgFilenames = [];
-
-
-
-// Tile manifest is rendered as a JSON blob inside <script id="imageholder">
-// by WFCCONTAINER.tsx. This used to be 128 hidden <img> tags, which the
-// browser preloaded on every page visit — the JSON form costs zero extra
-// HTTP requests until p5's loadImage() is called in setup().
 const manifestNode = document.getElementById('imageholder');
 let manifest = [];
 try {
   manifest = JSON.parse(manifestNode.textContent || '[]');
 } catch (e) {
-  // Surface a console.warn so a regression here is visible in DevTools
-  // instead of a silently empty tileset picker.
   console.warn('[wfc] tile manifest unreadable, falling back to empty', e);
 }
 manifest.forEach(src => {
-  // Strip everything before "/posts" to match the legacy relative-path
-  // format that the rest of wfc.js (and wfc_flow.js's CITY override) expect.
   const tail = src.split('/posts').pop();
   if (tail && (tail.endsWith('.svg') || tail.endsWith('.png'))) {
     svgFilenames.push('.' + tail);
   }
 });
-// createGrid (and any other downstream consumer) used to iterate over the
-// NodeList returned by querySelectorAll('img'); preserve that shape with a
-// tiny `{ src }` shim so existing code keeps working without rewrites.
 const svgImages = manifest.map(src => ({ src }));
+
+// `?autostart=0` opts out of the auto-run-on-STARTWFC behaviour. Used by
+// e2e tests that need a frozen post-STARTWFC state so they can poke at
+// grid_list / sample directly without the draw loop mutating it
+// underneath them.
+function shouldAutoStart() {
+  try {
+    const p = new URLSearchParams(window.location.search);
+    const v = p.get('autostart');
+    if (v === '0' || v === 'false') return false;
+  } catch (_) { /* SSR — fall through */ }
+  return true;
+}
 
 function startWFC() {
   try {
-    bslider.remove()
+    bslider.remove();
+  } catch (TypeError) {
+    // no-op: bslider may not exist on first run
   }
-  catch (TypeError) {
-  }
-  var max = tileset.includes('CITY') ? 8 : 30;
+  const max = tileset.includes('CITY') ? 32 : 30;
   bslider = createSlider(1, max, 2);
-  bslider.parent("wfc-controls")
-  createGrid(bslider.value(), true)
+  bslider.parent('wfc-primary');
+
+  // Keep bslider adjacent to its readout: position it after the "Grid
+  // size" label but before slider_text within the wfc-primary wrapper.
+  const primary = document.getElementById('wfc-primary');
+  if (primary && bslider.elt && slider_text && slider_text.elt) {
+    primary.insertBefore(bslider.elt, slider_text.elt);
+  }
+
+  // Full state reset so a second STARTWFC starts from scratch — without
+  // this, grid_list (and the canvas) still showed the completed grid
+  // from the previous run, and the Step/click pathways short-circuited
+  // on finishedCollapse(grid_list).
+  grid_list = createGrid(bslider.value(), true);
+  backtracking = false;
+  tracking = [];
+  old_grids = [];
+  recentBacktrack = null;
+  manualCollapseQueued = null;
+  forceStepOnce = false;
+  isPaused = false;
+
+  // Auto-run by default — clicking "start collapse →" should actually
+  // start the collapse, not just transition to step 3. Tests that need
+  // a frozen state use ?autostart=0.
+  const autostart = shouldAutoStart();
+  status_bool = autostart;
+  if (status_button) status_button.html(autostart ? 'Restart' : 'Run');
+
+  // Surface the run-extras UI now that we're entering step 3.
+  ensureRunControls();
+
+  // Sync the wfc-extras controls so they reflect the freshly-reset run
+  // state (Pause label, speed readout, seed input).
+  const playBtn = document.getElementById('wfc-play');
+  if (playBtn) playBtn.textContent = 'Pause';
+  const seedInput = document.getElementById('wfc-seed');
+  if (seedInput) seedInput.value = String(rngSeed);
+
+  // Belt-and-braces: re-bind the canvas click handler in case setup()'s
+  // attempt ran before the canvas was in the DOM.
+  bindCanvasClickHandler();
 }
 
-// Represents a square within the grid.
+// --- Classes ------------------------------------------------------------
+
 class gridSquare {
-constructor(position, options) {
-  this.position = position;  // Stores the position of the square within the grid of type [x,y]
-  this.options = options;  // Contains the possible values or options for the square
-  this.underInspection = false;  // Flags whether the square is currently being examined while solving
-  this.fixed = false;  // Indicates whether the value of the square has been definitively set
-}
+  constructor(position, options) {
+    this.position = position;
+    this.options = options;
+    this.underInspection = false;
+    this.fixed = false;
+  }
 }
 
-// Object for tracking information required for backtracking.
 class trackingObj {
-constructor(gridSquare, options) {
-  this.gridSquare = gridSquare;  // References the grid square being tracked
-  this.options = options;  // Stores the current possible options for the tracked square
-  this.indexes = [];  // Holds the options that have been tried
-}
+  constructor(gridSquare, options) {
+    this.gridSquare = gridSquare;
+    this.options = options;
+    this.indexes = [];
+  }
 }
 
-// Represents an error encountered when the propogationn algorithm causes a cell to have no remaining options.
 class optionsError extends Error {
-constructor(message, broken_cell, grid_list) {
-  super(message);  // Inherits from the base Error class
-  this.name = "OptionError";  // Specifies the error's name
-  this.broken_cell = broken_cell;  // References the grid square causing the error
-}
+  constructor(message, broken_cell, grid_list) {
+    super(message);
+    this.name = 'OptionError';
+    this.broken_cell = broken_cell;
+  }
 }
 
+// --- Rendering ----------------------------------------------------------
 
-// Function to visually render a grid of squares onto the canvas.
+// Heatmap: blue (low option count = constrained) → red (many options =
+// uncertain). Uncollapsed cells used to be flat black; this colours them
+// by entropy proxy so propagation is visible at a glance.
+function entropyColor(optCount, maxOpts) {
+  if (maxOpts <= 1) return [40, 40, 50];
+  const t = Math.max(0, Math.min(1, (optCount - 1) / (maxOpts - 1)));
+  // hue 220 (cool blue) → 0 (hot red); saturation/lightness fixed
+  const hue = 220 - 220 * t;
+  return hslToRgb(hue, 70, 38);
+}
+function hslToRgb(h, s, l) {
+  s /= 100; l /= 100;
+  const c = (1 - Math.abs(2 * l - 1)) * s;
+  const hp = h / 60;
+  const x = c * (1 - Math.abs((hp % 2) - 1));
+  let [r, g, b] = [0, 0, 0];
+  if (hp < 1)      [r, g, b] = [c, x, 0];
+  else if (hp < 2) [r, g, b] = [x, c, 0];
+  else if (hp < 3) [r, g, b] = [0, c, x];
+  else if (hp < 4) [r, g, b] = [0, x, c];
+  else if (hp < 5) [r, g, b] = [x, 0, c];
+  else             [r, g, b] = [c, 0, x];
+  const m = l - c / 2;
+  return [Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)];
+}
+
 function renderGrid(grid_array) {
-// Calculate grid dimensions
-var grid_size = Math.sqrt(grid_array.length);
-var [grid_w, grid_h] = [cnv_w / grid_size, cnv_h / grid_size];  // Adjust based on canvas size
+  const grid_size = Math.sqrt(grid_array.length);
+  const grid_w = cnv_w / grid_size;
+  const grid_h = cnv_h / grid_size;
+  const maxOpts = global_options.length || 1;
 
-// Iterate through each square in the grid
-for (let i = 0; i < grid_array.length; i++) {
-  // Get the square's position
-  var [x, y] = grid_array[i].position;
+  for (let i = 0; i < grid_array.length; i++) {
+    const [x, y] = grid_array[i].position;
+    const cell = grid_array[i];
 
-  // Render based on the number of options and state:
-
-  // If only one option (likely a solved square):
-  if (grid_array[i].options.length == 1) {
-    fill('black');       // Black background
-    strokeWeight(2);     // White border (default)
-    stroke('white');
-
-    // If the square is fixed (value cannot change):
-    if (grid_array[i].fixed == true) {
-      strokeWeight(2);  // Thicker blue border for emphasis
-      stroke('blue');
-    }
-
-    rect(x * grid_w, y * grid_h, grid_w, grid_h);  // Draw the square
-    strokeWeight(0);  // Reset stroke for text
-    image(gridimages[grid_array[i].options[0]], x * grid_w, y * grid_h, grid_w, grid_h);  // Display image based on option
-
-  // If no options (error or invalid state):
-  } else if (grid_array[i].options.length == 0) {
-    fill('orange');      // Orange background to indicate issue
-    rect(x * grid_w, y * grid_h, grid_w, grid_h);
-
-  // Otherwise (multiple options, unsolved):
-  } else {
-    fill('black');      // Black background
-    rect(x * grid_w, y * grid_h, grid_w, grid_h);
-  }
-
-  // Display text information for each square:
-  fill('white');         // White text for visibility
-  strokeWeight(0);       // No stroke for text
-  options_coords = grid_array[i].options.length.toString() //.concat(' ').concat(grid_array[i].position.toString());
-  // Display number of options and position coordinates
-  text(options_coords, (x + 0.1) * grid_w, (y + 0.1) * grid_h, grid_w, grid_h);
-}
-}
-
-// Function to create array representing the grid of gridSquare objects
-function createGrid(grid_size,tilebool=false) {
-// Initialize arrays to hold the grid and options
-let grid_array = [];
-let options = [];
-global_options = [];  // reset global options
-
-// Extract options from SVG images:
-svgImages.forEach(image => {
-  var filename =''
-  if (!tilebool) {
-    filename = image.src.split('/').pop();
-  } else {
-    if (image.src.includes(tileset)) {
-      filename = image.src.split('/').pop();
+    if (cell.options.length === 1) {
+      fill('black');
+      strokeWeight(2);
+      stroke('white');
+      if (cell.fixed === true) {
+        strokeWeight(2);
+        stroke('blue');
+      }
+      rect(x * grid_w, y * grid_h, grid_w, grid_h);
+      strokeWeight(0);
+      image(gridimages[cell.options[0]], x * grid_w, y * grid_h, grid_w, grid_h);
+    } else if (cell.options.length === 0) {
+      fill('orange');
+      strokeWeight(0);
+      rect(x * grid_w, y * grid_h, grid_w, grid_h);
     } else {
-      filename = '';
+      const [r, g, b] = entropyColor(cell.options.length, maxOpts);
+      fill(r, g, b);
+      strokeWeight(0);
+      rect(x * grid_w, y * grid_h, grid_w, grid_h);
+    }
+
+    // Backtracking flash overlay — paints the recently-broken cell red
+    // for BACKTRACK_FLASH_FRAMES frames so failed propagations are
+    // visible instead of flickering past in a single tick.
+    if (recentBacktrack && samePos(cell.position, recentBacktrack.position)) {
+      const alpha = Math.round(180 * (recentBacktrack.framesLeft / BACKTRACK_FLASH_FRAMES));
+      fill(220, 40, 40, alpha);
+      strokeWeight(0);
+      rect(x * grid_w, y * grid_h, grid_w, grid_h);
+    }
+
+    fill('white');
+    strokeWeight(0);
+    text(cell.options.length.toString(), (x + 0.1) * grid_w, (y + 0.1) * grid_h, grid_w, grid_h);
+  }
+
+  if (recentBacktrack) {
+    recentBacktrack.framesLeft -= 1;
+    if (recentBacktrack.framesLeft <= 0) recentBacktrack = null;
+  }
+}
+
+// --- Grid construction --------------------------------------------------
+
+function createGrid(grid_size, tilebool = false) {
+  const grid_array = [];
+  const options = [];
+  global_options = [];
+
+  svgImages.forEach(image => {
+    let filename = '';
+    if (!tilebool) {
+      filename = image.src.split('/').pop();
+    } else if (image.src.includes(tileset)) {
+      filename = image.src.split('/').pop();
+    }
+    if (filename.endsWith('.svg') || filename.endsWith('.png')) {
+      const stem = filename.split('.')[0];
+      options.push(stem);
+      global_options.push(stem);
+    }
+  });
+
+  for (let x = 0; x < grid_size; x++) {
+    for (let y = 0; y < grid_size; y++) {
+      grid_array.push(new gridSquare([x, y], options));
     }
   }
-  if (filename.endsWith('.svg')||filename.endsWith('.png')) {  // Check if it's an SVG file
-    options.push(filename.split('.')[0]);  // Add filename (without extension) as an option
-    global_options.push(filename.split('.')[0]);  // Add to global options as well
-  }
-});
 
-// Create grid squares:
-for (let x = 0; x < grid_size; x++) {
-  for (let y = 0; y < grid_size; y++) {
-    var temp_square = new gridSquare([x, y], options);  // Create a gridSquare object with position and options
-    grid_array.push(temp_square);  // Add the square to the grid array
-  }
+  return grid_array;
 }
 
-return grid_array;  // Return the created grid
-}
+// --- Constraint propagation primitives ---------------------------------
 
-// Simple "not" function
 const not = x => !x;
-
-// Identity function (returns input as-is)
 const identity = x => x;
 
-// Function to check a neighboring cell in a specific direction
 function checkDirection(direction, cell, grid_list, visited, in_visited = not) {
-// Direction format: [x offset, y offset] (e.g., N = [0, -1])
-
-// Calculate the new position based on direction
-let new_position = [direction[0] + cell.position[0], direction[1] + cell.position[1]];
-
-// Check if the new position is within the grid
-position_match = grid_list.some(cell => JSON.stringify(cell.position) == JSON.stringify(new_position));
-
-// Check if the new position is included or excluded in the "visited" list, based on the "in_visited" function
-visited_match = in_visited(visited.some(cell => JSON.stringify(cell.position) == JSON.stringify(new_position)));
-
-// If both conditions are met, return the cell at the new position
-if (position_match && visited_match) {
-  found_cell = grid_list.filter(cell => JSON.stringify(cell.position) === JSON.stringify(new_position))[0];
-  return found_cell;
-} else {
-  return false; // Indicate no valid cell found
-}
+  const new_position = [direction[0] + cell.position[0], direction[1] + cell.position[1]];
+  const position_match = grid_list.some(c => samePos(c.position, new_position));
+  const visited_match = in_visited(visited.some(c => samePos(c.position, new_position)));
+  if (position_match && visited_match) {
+    return findByPos(grid_list, new_position);
+  }
+  return false;
 }
 
-// Function to check if a cell is present in a list of grid cells
 function inArray(input_cell, grid_list) {
-// Compare cell positions for equality (using JSON.stringify for consistent comparison)
-return grid_list.some(cell => JSON.stringify(cell.position) == JSON.stringify(input_cell.position));
+  return grid_list.some(c => samePos(c.position, input_cell.position));
 }
 
-// Map to convert numerical direction pairs to letters
 const directionsMap = new Map([
-[[0, -1].toString(), "U"],  // Up
-[[0, 1].toString(), "D"],  // Down
-[[-1, 0].toString(), "L"],  // Left
-[[1, 0].toString(), "R"]   // Right
+  [[0, -1].toString(), 'U'],
+  [[0, 1].toString(), 'D'],
+  [[-1, 0].toString(), 'L'],
+  [[1, 0].toString(), 'R'],
 ]);
 
-// Function to obtain the letter representation of a direction
 function mapDirectionToLetter(direction) {
-// Access the corresponding letter from the directionsMap, or return false for invalid directions
-return directionsMap.get(direction.toString()) || false;
-}
-function checkConnection(cell,direction){
-// cell is the cell to be checked, direction is the vector of the connection we are checking
-// e.g check cell x for [0,-1] i.e check if it has a connection to the North
-// returns true or false
-letter = mapDirectionToLetter(direction)
-return cell.options.toString().includes(letter)
-
+  return directionsMap.get(direction.toString()) || false;
 }
 
-function checkAllOptionsForDirection(adjacent_cell,direction) {
-return adjacent_cell.options.every(str => str.includes(mapDirectionToLetter(direction)))
+function checkConnection(cell, direction) {
+  const letter = mapDirectionToLetter(direction);
+  return cell.options.toString().includes(letter);
 }
 
-function adjustPossibilities(collapsedCell,grid_array) {
-/**
- * Returns an updated grid_array with reduced tile options
- *
- * @param {gridSquare} collapsedCell Cell to propogate entropy from.
- * @param {Array} grid_array The Array to propogate entropy through.
- * @return {Array} grid list with updated tileset.
- */
-
-// setup the queue and visited arrays for marking what cells in the grid
-// we need to visit/have visited
-var queue = [];
-var visited = [collapsedCell];
-
-// define the vector directions for NESW in the grid
-directions = [[0,-1],[0,1],[-1,0],[1,0]]
-if (tileset.includes('CITY')){
-  directions = [[0,-1],[0,1],[-1,0],[1,0],[1,-1],[-1,-1],[1,1],[-1,1]]
+function checkAllOptionsForDirection(adjacent_cell, direction) {
+  return adjacent_cell.options.every(str => str.includes(mapDirectionToLetter(direction)));
 }
-const directionstoindex = {
-  '0,-1': [0,4,5],
-  '0,1': [1,6,7],
-  '1,0': [2,4,6],
-  '-1,0': [3,5,7],
-  '1,-1': [4,0,2], // north, northeast, east
-  '-1,-1': [5,0,3], // north, west, northwest
-  '1,1': [6,1,2], // south, southeast, east
-  '-1,1': [7,1,3], //  south, southwest, west
+
+const CITY_DIR_INDEX = {
+  '0,-1': [0, 4, 5],
+  '0,1': [1, 6, 7],
+  '1,0': [2, 4, 6],
+  '-1,0': [3, 5, 7],
+  '1,-1': [4, 0, 2],
+  '-1,-1': [5, 0, 3],
+  '1,1': [6, 1, 2],
+  '-1,1': [7, 1, 3],
 };
 
-// // push the four adjacent cells surrounding the collapsed cell into the queue
-directions.forEach(direction => {
-  result = checkDirection(direction,collapsedCell,grid_array,visited);
-  if(result){
-    queue.push(result)
-  }
-  })
+const CITY_ALL_BIOME_TOKENS = ['G', 'Y', 'LB', 'DB', 'WL', 'WR', 'WU', 'WD'];
 
+function adjustPossibilities(collapsedCell, grid_array) {
+  const queue = [];
+  const visited = [collapsedCell];
+  const directions = dirsFor();
+  const isCity = tileset.includes('CITY');
 
-
-// until we run out of cells in the grid (== checking if the queue isnt empty)
-while (queue.length > 0){
-
-  // remove the first cell from the queue and mark it as current_cell
-  current_cell = queue.shift()
-
-  // if it has entropy 0 (== to only have one tile option skip it)
-  if (current_cell.fixed == true) {
-    continue;
-
-  }
-
-  // collect the four cells adjacent to the current cell and if they are already visited we add them to adjacent_visited
-  // if they aren't visited and not already in the queue we can add them to the queue
-  current_cell.underInspection = true;
-  adjacent_visited = [];
-  adjacent_not_visited = [];
   directions.forEach(direction => {
-    result = checkDirection(direction,current_cell,grid_array,visited,in_visited=identity);
-    if (result){
-      adjacent_visited.push([result,direction])
-    } else {
-      // add current_cells new adjacents to adjacent_not_visited
-      not_visited = checkDirection(direction,current_cell,grid_array,visited);
-      if(not_visited && !inArray(not_visited,queue)){
-        adjacent_not_visited.push(not_visited)
-      }
-    }
-    })
-    var split_adj = [[],[],[],[],[],[],[],[]];
-    var split_cur = [];
+    const result = checkDirection(direction, collapsedCell, grid_array, visited);
+    if (result) queue.push(result);
+  });
 
-  total_indices = [];
-  old_options = JSON.stringify(current_cell.options)
-  adjacent_visited.forEach(pair => {
-    // decompose adjacent_visited into a cell and direction
-    adjacent_cell=pair[0];
-      direction=pair[1];
+  while (queue.length > 0) {
+    const current_cell = queue.shift();
+    if (current_cell.fixed === true) continue;
 
-    if (tileset.includes('CITY')){
-
-
-      cur_indexes =  directionstoindex[direction.toString()]
-      //total_indices.concat(cur_indexes)
-      adj_indexes = directionstoindex[direction.map(function(x) {return x*-1}).toString()]
-      adj_indexes.forEach((adj_index,index) =>{
-        adjacent_cell.options.forEach(option => {
-          if (direction[0]*direction[1]!=0){
-            index = 0;
-          }
-          i=index;
-          if(!split_adj[cur_indexes[index]].includes(option.split('_')[adj_index])) {
-            if(!total_indices.includes(cur_indexes[index])) {
-              total_indices.push(cur_indexes[i])
-            }
-            if(option.split('_')[adj_index]=='WLWR'){
-              split_adj[cur_indexes[index]].push('WL','WR')
-            } else if (option.split('_')[adj_index]=='WUWD') {
-              split_adj[cur_indexes[index]].push('WU','WD')
-            } else {
-              split_adj[cur_indexes[index]].push(option.split('_')[adj_index])
-            }
-
-          }
-        })
-
-      })
-
-
-
-
-
-      // throw('i want a break')
-      // //current_cell.options = current_cell.options.filter(element => !to_remove.includes(element))
-      // current_cell.options = current_cell.options.filter((element,index) => !(to_remove[index]==adjacent_cell.options.length))
-
-    } else {
-
-
-      // if the adjacent cell does not have a connection towards the current cell we remove all tile with a connection towards the adjacent cell
-      if(!checkConnection(adjacent_cell,direction.map(function(x) { return x * -1; }))) {
-        connection = mapDirectionToLetter(direction);
-        current_cell.options = current_cell.options.filter(str => !str.includes(connection))
-      };
-      // check if for every option in the cell to be checked there is always a connector in that direction then we can enforce
-      // that current cell must have a connection in that direction
-      if(checkAllOptionsForDirection(adjacent_cell,direction.map(function(x) { return x * -1; }))) {
-        connection = mapDirectionToLetter(direction);
-        current_cell.options = current_cell.options.filter(str => str.includes(connection))
-      };
-    }
-  })
-  if(tileset.includes('CITY')) {
-    unvisited = [0,1,2,3,4,5,6,7].filter(item=>!total_indices.includes(item))
-    unvisited.forEach((item, i) => {
-      split_adj[item] = ['G','Y','LB','DB','WL','WR','WU','WD',];
-    });
-
-
-    current_cell.options.forEach(option => {
-      var c = 0;
-      split_adj.forEach((bucket,index) => {
-        if(bucket.includes(option.split('_')[index])) {
-          c+=1
+    current_cell.underInspection = true;
+    const adjacent_visited = [];
+    const adjacent_not_visited = [];
+    directions.forEach(direction => {
+      const result = checkDirection(direction, current_cell, grid_array, visited, identity);
+      if (result) {
+        adjacent_visited.push([result, direction]);
+      } else {
+        const not_visited = checkDirection(direction, current_cell, grid_array, visited);
+        if (not_visited && !inArray(not_visited, queue)) {
+          adjacent_not_visited.push(not_visited);
         }
-      })
-      if(c==8) {
-        split_cur.push(option)
-      }
-
-    })
-
-    current_cell.options = split_cur
-  }
-  current_cell.underInspection = false;
-
-  //if the current cell has no options we know this propogation can never work and therefore we throw an error
-  // in order to indicate that backtracking should start
-  if (current_cell.options.length==0){
-    throw new optionsError('No available options',current_cell,grid_array)
-  }
-
-  // add the current cell to visited
-  visited.push(current_cell)
-
-  // if the options post constraint satisfying have changed add the adjacent cells to the queue
-  if (old_options!=JSON.stringify(current_cell.options)) {
-    adjacent_not_visited.forEach((item, i) => {
-      if(!inArray(item,queue)) {
-        queue.push(item)
       }
     });
 
-    //queue = queue.concat(adjacent_not_visited)
+    const split_adj = [[], [], [], [], [], [], [], []];
+    const split_cur = [];
+    const total_indices = [];
+    const old_options = JSON.stringify(current_cell.options);
+
+    adjacent_visited.forEach(pair => {
+      const adjacent_cell = pair[0];
+      const direction = pair[1];
+
+      if (isCity) {
+        const cur_indexes = CITY_DIR_INDEX[direction.toString()];
+        const adj_indexes = CITY_DIR_INDEX[direction.map(x => x * -1).toString()];
+        adj_indexes.forEach((adj_index, index) => {
+          adjacent_cell.options.forEach(option => {
+            let slot = index;
+            if (direction[0] * direction[1] !== 0) slot = 0;
+            const token = option.split('_')[adj_index];
+            if (!split_adj[cur_indexes[slot]].includes(token)) {
+              if (!total_indices.includes(cur_indexes[slot])) {
+                total_indices.push(cur_indexes[slot]);
+              }
+              if (token === 'WLWR') {
+                split_adj[cur_indexes[slot]].push('WL', 'WR');
+              } else if (token === 'WUWD') {
+                split_adj[cur_indexes[slot]].push('WU', 'WD');
+              } else {
+                split_adj[cur_indexes[slot]].push(token);
+              }
+            }
+          });
+        });
+      } else {
+        const reverse = direction.map(x => x * -1);
+        if (!checkConnection(adjacent_cell, reverse)) {
+          const connection = mapDirectionToLetter(direction);
+          current_cell.options = current_cell.options.filter(str => !str.includes(connection));
+        }
+        if (checkAllOptionsForDirection(adjacent_cell, reverse)) {
+          const connection = mapDirectionToLetter(direction);
+          current_cell.options = current_cell.options.filter(str => str.includes(connection));
+        }
+      }
+    });
+
+    if (isCity) {
+      const unvisited = [0, 1, 2, 3, 4, 5, 6, 7].filter(i => !total_indices.includes(i));
+      unvisited.forEach(item => {
+        split_adj[item] = CITY_ALL_BIOME_TOKENS.slice();
+      });
+
+      current_cell.options.forEach(option => {
+        let c = 0;
+        const tokens = option.split('_');
+        for (let index = 0; index < 8; index++) {
+          if (split_adj[index].includes(tokens[index])) c += 1;
+        }
+        if (c === 8) split_cur.push(option);
+      });
+      current_cell.options = split_cur;
+    }
+
+    current_cell.underInspection = false;
+
+    if (current_cell.options.length === 0) {
+      throw new optionsError('No available options', current_cell, grid_array);
+    }
+
+    visited.push(current_cell);
+
+    if (old_options !== JSON.stringify(current_cell.options)) {
+      adjacent_not_visited.forEach(item => {
+        if (!inArray(item, queue)) queue.push(item);
+      });
+    }
   }
-
-
-
-}
-return grid_array
+  return grid_array;
 }
 
-// Function to check if all cells in a grid have been collapsed to a single option
 function finishedCollapse(grid_list) {
-// Initialize a counter to track cells with a single option
-count = 0;
-
-// Iterate through each cell in the grid list
-grid_list.forEach(cell => {
-  // If the cell has only one option, increment the counter
-  if (cell.options.length == 1) {
-    count += 1;
-  }
-});
-filled_count = count;
-// Return true if all cells have a single option (solved grid), false otherwise
-return count == grid_list.length;
+  let count = 0;
+  grid_list.forEach(cell => {
+    if (cell.options.length === 1) count += 1;
+  });
+  filled_count = count;
+  return count === grid_list.length;
 }
 
-// Function to get the position of a random uncollapsed cell from a grid list
 function getRandomUnCollapsedCell(grid_list) {
-// Define possible directions for reference (not directly used in this function)
-directions = [[0, -1], [0, 1], [-1, 0], [1, 0]];
-
-// Filter the grid list to include only cells with at least one option and not fixed
-uncollapsed = grid_list.filter(cell => cell.options.length >= 1 && cell.fixed == false);
-
-// Select a random index within the uncollapsed cells
-index = Math.floor(Math.random() * uncollapsed.length);
-
-// Return the position of the randomly selected uncollapsed cell
-return uncollapsed[index].position;
+  const uncollapsed = grid_list.filter(cell => cell.options.length >= 1 && cell.fixed === false);
+  const index = Math.floor(rng() * uncollapsed.length);
+  return uncollapsed[index].position;
 }
 
+// Run/Restart button — always (re-)initialises a fresh grid and ensures
+// we're in run mode. Pause/Play in wfc-extras handles pause/resume; the
+// top-right ↺ goes back to step 1 for a full teardown. This removes the
+// previous toggle behaviour where the label and state could fall out of
+// phase across runs.
 function changeState() {
-status_bool = !status_bool;
-status_button.html(status_button.html()=='Start' ? 'Reset' : 'Start');
-console.log('%cRESET', 'color: green; background: yellow; font-size: 30px');
-if (status_bool){
-  // if start state
-  grid_list = createGrid(bslider.value(),true);
+  status_bool = true;
+  status_button.html('Restart');
+  grid_list = createGrid(bslider.value(), true);
   backtracking = false;
-  console.log('prob',prob_distr)
-  redraw();
-
-} else{
-  grid_list = [];
   tracking = [];
-  backtracking=false;
-  grid_list = createGrid(bslider.value(),true);
+  old_grids = [];
+  recentBacktrack = null;
+  manualCollapseQueued = null;
+  isPaused = false;
+  const playBtn = document.getElementById('wfc-play');
+  if (playBtn) playBtn.textContent = 'Pause';
   redraw();
 }
-}
+
+// --- Distribution sampling ---------------------------------------------
 
 function createNewNormalisedDistr(options) {
-if(tileset.includes('CITY')){
-  valid_options = [];
-  options.forEach(item => {
-    valid_options.push([find_value(prob_distr,item),item])
-  })
-}
-else {
-  valid_options = prob_distr.filter(item => options.includes(item[1]) )
-}
+  let valid_options;
+  if (tileset.includes('CITY')) {
+    // CITY sliders are biome-level (Grass / Sand / Lagoon / Ocean / Wall) but
+    // the actual tileset has ~100 tiles, multiple per biome. Without the
+    // per-biome divisor below, a cell with 3 grass-dominant options and 1
+    // sand option would weight grass at w_G * 3 vs sand at w_S * 1 — so a
+    // slider set to "Grass 80%" produced ~96% grass in practice. Dividing
+    // each tile's weight by the count of options that share its biome marker
+    // makes the *aggregate* probability of each biome match the slider value.
+    const biomeCounts = {};
+    options.forEach(item => {
+      const key = cityBiomeMarker(item);
+      biomeCounts[key] = (biomeCounts[key] || 0) + 1;
+    });
+    valid_options = options.map(item => {
+      const wv = find_value(prob_distr, item);
+      const key = cityBiomeMarker(item);
+      return [(wv || 0) / biomeCounts[key], item];
+    });
+  } else {
+    valid_options = prob_distr.filter(item => options.includes(item[1]));
+  }
 
-total_prob = valid_options.reduce((sum, item) => sum + item[0], 0)
-new_distr = valid_options.map(item => [item[0] / total_prob, item[1]]);
-return new_distr
+  const total_prob = valid_options.reduce((sum, item) => sum + item[0], 0);
+  return valid_options.map(item => [item[0] / total_prob, item[1]]);
 }
 
 const mostFrequent = arr =>
-Object.entries(
-  arr.reduce((a, v) => {
-    a[v] = a[v] ? a[v] + 1 : 1;
-    return a;
-  }, {})
-).reduce((a, v) => (v[1] >= a[1] ? v : a), [null, 0])[0];
+  Object.entries(
+    arr.reduce((a, v) => {
+      a[v] = a[v] ? a[v] + 1 : 1;
+      return a;
+    }, {}),
+  ).reduce((a, v) => (v[1] >= a[1] ? v : a), [null, 0])[0];
+
+const _biomeMarkerCache = new Map();
+function cityBiomeMarker(name) {
+  const cached = _biomeMarkerCache.get(name);
+  if (cached !== undefined) return cached;
+  let marker;
+  if (name.includes('W')) {
+    marker = 'G_G_WD_WD_G_G_G_G';
+  } else {
+    const m = mostFrequent(name.split('_'));
+    marker = m + '_' + m + '_' + m + '_' + m + '_' + m + '_' + m + '_' + m + '_' + m;
+  }
+  _biomeMarkerCache.set(name, marker);
+  return marker;
+}
 
 function find_value(data, string) {
-if(tileset.includes('CITY')) {
-  if(string.includes('W')){
-    string = 'G_G_WD_WD_G_G_G_G'
-  } else {
-  string = mostFrequent(string.split('_'))
-  string=string+'_'+string+'_'+string+'_'+string+'_'+string+'_'+string+'_'+string+'_'+string
+  let key = string;
+  if (tileset.includes('CITY')) key = cityBiomeMarker(string);
+  for (const [value, string_value] of data) {
+    if (string_value === key) return value;
   }
-}
-for (const [value, string_value] of data) {
-  if (string_value === string) {
-    return value;
-  }
-}
-return null; // Indicate value not found using a clear signal
-
+  return null;
 }
 
 function leastEntropy(grid_list) {
-entropy_vals=new Array(grid_list.length).fill(0)
-grid_list.forEach((tile,index) =>{
-  if(tile.options.length==1) {
-    entropy_vals[index]=999
-  } else{
-    entropy_vals[index] = -1*tile.options.reduce((sum, item) => sum +find_value(prob_distr,item)*Math.log(find_value(prob_distr,item)), 0)
-  }
-
-})
-return grid_list[entropy_vals.indexOf(Math.min.apply(null,entropy_vals))]
+  const entropy_vals = new Array(grid_list.length).fill(0);
+  grid_list.forEach((tile, index) => {
+    if (tile.options.length === 1) {
+      entropy_vals[index] = 999;
+    } else {
+      entropy_vals[index] = -1 * tile.options.reduce((sum, item) => {
+        const p = find_value(prob_distr, item);
+        return sum + p * Math.log(p);
+      }, 0);
+    }
+  });
+  return grid_list[entropy_vals.indexOf(Math.min.apply(null, entropy_vals))];
 }
 
-// Function to reset the "fixed" state of neighboring cells
 function reset_neighbours(bad_cell, grid_array) {
-// Initialize an empty list to store adjacent cells
-adjacent = [];
-
-// Define possible directions to check
-directions = [[0, -1], [0, 1], [-1, 0], [1, 0]];
-if (tileset.includes('CITY')){
-  directions = [[0,-1],[0,1],[-1,0],[1,0],[1,-1],[-1,-1],[1,1],[-1,1]]
+  const directions = dirsFor();
+  directions.forEach(direction => {
+    const result = checkDirection(direction, bad_cell, grid_array, [new gridSquare([-100, -100], 'FG')]);
+    if (result) {
+      const found_cell = findByPos(grid_array, result.position);
+      if (found_cell) found_cell.fixed = false;
+    }
+  });
+  return grid_array;
 }
-
-// Iterate through each direction:
-directions.forEach(direction => {
-  // Check for a valid neighboring cell in that direction
-  result = checkDirection(direction, bad_cell, grid_array, [new gridSquare([-100, -100], 'FG')]);
-
-  // If a valid neighbor is found:
-  if (result) {
-    // Retrieve the neighbor cell from the grid array
-    found_cell = grid_array[grid_array.findIndex(cell => JSON.stringify(cell.position) == JSON.stringify(result.position))];
-
-    // Unfix the neighbor cell (make it changeable again)
-    found_cell.fixed = false;
-  }
-});
-
-// Return the updated grid array
-return grid_array;
-}
-
-
 
 function sampleOptionsFromDistribution(options) {
-new_distr = createNewNormalisedDistr(options)
-rand_sample = Math.random()
-var cumulative_sum = 0;
-for (item of new_distr) {
-  prob = item[0];
-  tile = item[1];
-  cumulative_sum += prob
-  if (cumulative_sum >= rand_sample) {
-    return tile
+  const new_distr = createNewNormalisedDistr(options);
+  const rand_sample = rng();
+  let cumulative_sum = 0;
+  let tile;
+  for (const item of new_distr) {
+    tile = item[1];
+    cumulative_sum += item[0];
+    if (cumulative_sum >= rand_sample) return tile;
   }
-
-}
-return tile
+  return tile;
 }
 
+// --- Run-extras UI (speed / step / seed / share / save / popover) ------
+
+function ensureRunControls() {
+  const host = document.getElementById('wfc-controls');
+  if (!host || document.getElementById('wfc-extras')) return;
+
+  const extras = document.createElement('div');
+  extras.id = 'wfc-extras';
+  extras.className = 'wfc-extras';
+  extras.innerHTML = `
+    <div class="wfc-row">
+      <button id="wfc-play" type="button" title="Pause / resume the run">Pause</button>
+      <button id="wfc-step" type="button" title="Advance one collapse step (pauses the auto-loop)">Step ▶|</button>
+      <label class="wfc-label" for="wfc-speed">Speed</label>
+      <input id="wfc-speed" type="range" min="0" max="500" step="10" value="0" />
+      <span id="wfc-speed-val" class="wfc-num">fast</span>
+    </div>
+    <div class="wfc-row">
+      <label class="wfc-label" for="wfc-seed">Seed</label>
+      <input id="wfc-seed" type="number" min="0" max="4294967295" />
+      <button id="wfc-share" type="button" title="Copy a URL that reproduces this run">Share</button>
+      <button id="wfc-save" type="button" title="Download the canvas as PNG">Save PNG</button>
+    </div>
+  `;
+  host.appendChild(extras);
+
+  const seedInput = extras.querySelector('#wfc-seed');
+  seedInput.value = String(rngSeed);
+  seedInput.addEventListener('change', () => {
+    const n = parseInt(seedInput.value, 10);
+    if (Number.isFinite(n)) {
+      reseed(n);
+      updateShareURL();
+    }
+  });
+
+  const playBtn = extras.querySelector('#wfc-play');
+  playBtn.addEventListener('click', () => {
+    isPaused = !isPaused;
+    playBtn.textContent = isPaused ? 'Play' : 'Pause';
+  });
+
+  extras.querySelector('#wfc-step').addEventListener('click', () => {
+    ensureGridReady();
+    forceStepOnce = true;
+    if (!status_bool && !backtracking) status_bool = true;
+    // Stepping implies pausing the auto-loop — otherwise the next frame
+    // immediately advances again and the "step" is invisible.
+    isPaused = true;
+    playBtn.textContent = 'Play';
+  });
+
+  const speedInput = extras.querySelector('#wfc-speed');
+  const speedReadout = extras.querySelector('#wfc-speed-val');
+  speedInput.addEventListener('input', () => {
+    stepIntervalMs = parseInt(speedInput.value, 10) || 0;
+    speedReadout.textContent = stepIntervalMs === 0 ? 'fast' : stepIntervalMs + 'ms';
+  });
+
+  extras.querySelector('#wfc-share').addEventListener('click', async () => {
+    updateShareURL();
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      flashButton(extras.querySelector('#wfc-share'), 'Copied!');
+    } catch (_) {
+      flashButton(extras.querySelector('#wfc-share'), 'URL updated');
+    }
+  });
+
+  extras.querySelector('#wfc-save').addEventListener('click', () => {
+    try {
+      saveCanvas('wfc-result-' + rngSeed, 'png');
+    } catch (e) {
+      console.warn('[wfc] saveCanvas failed', e);
+    }
+  });
+}
+
+function flashButton(btn, msg) {
+  const original = btn.textContent;
+  btn.textContent = msg;
+  btn.disabled = true;
+  setTimeout(() => { btn.textContent = original; btn.disabled = false; }, 1100);
+}
+
+// --- Click-to-collapse popover -----------------------------------------
+
+let popoverEl = null;
+
+function closePopover() {
+  if (popoverEl) {
+    popoverEl.remove();
+    popoverEl = null;
+  }
+}
+
+// Mobile width threshold — popovers below this collapse to a full-width
+// bottom sheet via CSS so we skip per-pixel positioning. Keep in sync
+// with the @media rule in wfc.css.
+const MOBILE_MAX_WIDTH = 640;
+
+function openPopoverForCell(cell, screenX, screenY) {
+  closePopover();
+  const host = document.getElementById('wfc-canvas');
+  if (!host) return;
+
+  const pop = document.createElement('div');
+  pop.className = 'wfc-popover';
+  // Hide during measure so the user doesn't see the popover jump from
+  // the click point to its final clamped position.
+  pop.style.visibility = 'hidden';
+  pop.style.left = '0px';
+  pop.style.top = '0px';
+
+  const header = document.createElement('div');
+  header.className = 'wfc-popover-title';
+  header.textContent = `Collapse (${cell.position[0]}, ${cell.position[1]}) — ${cell.options.length} options`;
+  pop.appendChild(header);
+
+  const grid = document.createElement('div');
+  grid.className = 'wfc-popover-grid';
+  cell.options.forEach(opt => {
+    const img = document.createElement('img');
+    img.src = thumbSrcForOption(opt);
+    img.alt = opt;
+    img.title = opt;
+    img.addEventListener('click', e => {
+      // Stop bubbling so the parent #wfc-canvas click listener doesn't
+      // immediately open a fresh popover for whatever cell sits under
+      // the thumbnail's screen position.
+      e.stopPropagation();
+      manualCollapseQueued = { cell, tile: opt };
+      closePopover();
+    });
+    grid.appendChild(img);
+  });
+  pop.appendChild(grid);
+
+  const close = document.createElement('button');
+  close.type = 'button';
+  close.className = 'wfc-popover-close';
+  close.textContent = '✕';
+  close.addEventListener('click', e => {
+    e.stopPropagation();
+    closePopover();
+  });
+  pop.appendChild(close);
+
+  host.appendChild(pop);
+  popoverEl = pop;
+
+  // Clamp to the canvas host bounds so the popover doesn't drift off
+  // the right/bottom edges when the click was near a corner. On mobile
+  // (<=640px) the popover becomes a full-width bottom sheet via CSS,
+  // so we leave its position alone and let the stylesheet drive it.
+  const isMobile = window.matchMedia(`(max-width: ${MOBILE_MAX_WIDTH}px)`).matches;
+  if (!isMobile) {
+    const hostRect = host.getBoundingClientRect();
+    const popW = pop.offsetWidth;
+    const popH = pop.offsetHeight;
+    let left = screenX;
+    let top = screenY;
+    if (left + popW + 8 > hostRect.width) left = hostRect.width - popW - 8;
+    if (top + popH + 8 > hostRect.height) top = hostRect.height - popH - 8;
+    left = Math.max(8, left);
+    top = Math.max(8, top);
+    pop.style.left = left + 'px';
+    pop.style.top = top + 'px';
+  } else {
+    // Mobile bottom sheet — let CSS handle position; clear the inline
+    // left/top so they don't override the stylesheet.
+    pop.style.left = '';
+    pop.style.top = '';
+  }
+  pop.style.visibility = '';
+}
+
+function thumbSrcForOption(name) {
+  // Walk the manifest for a tile file matching the active tileset whose
+  // basename (sans extension) equals `name`. Manifest paths are absolute
+  // (/posts/WFC/...), which is what the browser wants.
+  for (const src of manifest) {
+    if (!src.includes(tileset)) continue;
+    const base = src.split('/').pop().split('.')[0];
+    if (base === name) return src;
+  }
+  return '';
+}
+
+// Populate grid_list lazily so the new entry points (Step button,
+// canvas click) work even before the user has touched the legacy p5
+// "start" button. Idempotent — only runs if the grid is empty.
+function ensureGridReady() {
+  if (grid_list.length === 0 && bslider) {
+    grid_list = createGrid(bslider.value(), true);
+    tracking = [];
+    old_grids = [];
+    backtracking = false;
+    recentBacktrack = null;
+  }
+}
+
+function canvasClickHandler(evt) {
+  ensureGridReady();
+  if (!grid_list.length) return;
+  const cnvEl = document.querySelector('#wfc-canvas canvas');
+  if (!cnvEl) return;
+  const r = cnvEl.getBoundingClientRect();
+  const localX = evt.clientX - r.left;
+  const localY = evt.clientY - r.top;
+  if (localX < 0 || localY < 0 || localX > r.width || localY > r.height) return;
+
+  const grid_size = Math.sqrt(grid_list.length);
+  // Canvas is scaled via CSS to host width — map back to grid coords.
+  const cx = Math.floor((localX / r.width) * grid_size);
+  const cy = Math.floor((localY / r.height) * grid_size);
+  const cell = findByPos(grid_list, [cx, cy]);
+  if (!cell) return;
+  if (cell.options.length <= 1) return; // nothing to choose
+
+  // Pause so the popover sticks around while the reader decides.
+  isPaused = true;
+  const playBtn = document.getElementById('wfc-play');
+  if (playBtn) playBtn.textContent = 'Play';
+
+  // Position popover near the click, clamped to the host.
+  const host = document.getElementById('wfc-canvas');
+  const hostRect = host.getBoundingClientRect();
+  let px = evt.clientX - hostRect.left + 12;
+  let py = evt.clientY - hostRect.top + 12;
+  openPopoverForCell(cell, px, py);
+}
+
+// --- p5 hooks -----------------------------------------------------------
+
+// Build the primary-controls wrapper inside #wfc-controls so the
+// grid-size label, slider, readout, and Run button share a stable
+// parent. Without this, the p5-created bslider migrates to the end of
+// #wfc-controls on every startWFC (parent() always appends), which on
+// the second run leaves it sitting *after* #wfc-extras.
+function ensurePrimaryControlsDom() {
+  const ctrl = document.getElementById('wfc-controls');
+  if (!ctrl || document.getElementById('wfc-primary')) return;
+  const primary = document.createElement('div');
+  primary.id = 'wfc-primary';
+  primary.className = 'wfc-primary';
+  const label = document.createElement('label');
+  label.className = 'wfc-label';
+  label.textContent = 'Grid size';
+  primary.appendChild(label);
+  ctrl.appendChild(primary);
+}
 
 function setup() {
-//frameRate(10);
-svgFilenames.forEach(filename => {
-  gridimages[filename.split('/').at(-1).split('.')[0]] = loadImage(filename);
-    });
+  svgFilenames.forEach(filename => {
+    gridimages[filename.split('/').at(-1).split('.')[0]] = loadImage(filename);
+  });
 
-computeCanvasSize();
-var cnv = createCanvas(cnv_w, cnv_h);
-cnv.parent("wfc-canvas");
+  computeCanvasSize();
+  const cnv = createCanvas(cnv_w, cnv_h);
+  cnv.parent('wfc-canvas');
 
-bslider = createSlider(1, slider_max, 2);
-bslider.parent("wfc-controls")
+  ensurePrimaryControlsDom();
 
-slider_text = createP(bslider.value())
-slider_text.parent("wfc-controls")
+  bslider = createSlider(1, slider_max, 2);
+  bslider.parent('wfc-primary');
 
-status_button = createButton("start");
-status_button.parent("wfc-controls")
-status_button.mousePressed(changeState)
+  slider_text = createP(bslider.value());
+  slider_text.parent('wfc-primary');
+
+  status_button = createButton('Run');
+  status_button.parent('wfc-primary');
+  status_button.mousePressed(changeState);
+  if (status_button.elt) status_button.elt.classList.add('wfc-run-button');
+
+  bindCanvasClickHandler();
+}
+
+// Bind click-to-collapse via the #wfc-canvas host (clicks on the canvas
+// child bubble up) so we don't race p5's canvas-attachment order. The
+// _wfcClickBound flag keeps this idempotent across multiple invocations.
+function bindCanvasClickHandler() {
+  const host = document.getElementById('wfc-canvas');
+  if (!host || host._wfcClickBound) return;
+  host.addEventListener('click', evt => {
+    // Ignore clicks on the popover itself.
+    if (popoverEl && popoverEl.contains(evt.target)) return;
+    canvasClickHandler(evt);
+  });
+  host._wfcClickBound = true;
+}
+
+let neighbour;
+let forbacktrack;
+let old_grid_list;
+let toretry;
+let switch_bool;
+
+// Pick & sample the next cell to collapse. Pulled out of draw() so step
+// throttling + the manual-collapse path share the same pipeline.
+function pickAndCollapseOne() {
+  // Manual override from a popover click wins over the heuristic pick.
+  if (manualCollapseQueued) {
+    neighbour = manualCollapseQueued.cell;
+    const tile = manualCollapseQueued.tile;
+    forbacktrack = new trackingObj(neighbour, neighbour.options);
+    neighbour.options = [tile];
+    forbacktrack.indexes.push(tile);
+    forbacktrack.options = forbacktrack.options.filter(t => t !== tile);
+    manualCollapseQueued = null;
+    backtracking = true;
+    status_bool = false;
+    return;
+  }
+  if (finishedCollapse(grid_list)) return;
+
+  switch_bool = true;
+  if (switch_bool && filled_count < 0.2 * grid_list.length) {
+    const neighbour_pos = getRandomUnCollapsedCell(grid_list);
+    neighbour = findByPos(grid_list, neighbour_pos);
+  } else {
+    neighbour = leastEntropy(grid_list);
+  }
+  const collapsed_tile = sampleOptionsFromDistribution(neighbour.options);
+  forbacktrack = new trackingObj(neighbour, neighbour.options);
+  neighbour.options = [collapsed_tile];
+  forbacktrack.indexes.push(collapsed_tile);
+  forbacktrack.options = forbacktrack.options.filter(t => t !== collapsed_tile);
+  backtracking = true;
+  status_bool = false;
 }
 
 function draw() {
-  // Track viewport size (used by some unrelated formulas) and recompute the
-  // canvas size off its container so the demo stays inside the post body.
+  try {
+    drawImpl();
+  } catch (e) {
+    // Last-resort: an unexpected throw inside drawImpl must NOT kill
+    // p5's draw loop, otherwise the canvas freezes and the Restart
+    // button has nothing to render into. Wipe the run state and let
+    // the next frame start fresh.
+    console.error('[wfc] draw error, auto-recovering', e);
+    backtracking = false;
+    status_bool = false;
+    tracking = [];
+    old_grids = [];
+    recentBacktrack = null;
+    manualCollapseQueued = null;
+    grid_list = bslider ? createGrid(bslider.value(), true) : [];
+  }
+}
+
+function drawImpl() {
   w = window.innerWidth;
   h = window.innerHeight;
   computeCanvasSize();
   resizeCanvas(cnv_w, cnv_h);
   background(220);
-  if(status_bool){
-    switch_bool = true;
-    if (finishedCollapse(grid_list)==false) {
-      //get neighbour to a collapsed cell
 
-      if (switch_bool && filled_count<0.2*grid_list.length) {
-        //select randomly
-        neighbour_pos = getRandomUnCollapsedCell(grid_list);
-        neighbour = grid_list[grid_list.findIndex(cell =>JSON.stringify(cell.position)==JSON.stringify(neighbour_pos))];
-        switch_bool = !switch_bool;
-      } else {
-        //least entropy heuristic
-        neighbour = leastEntropy(grid_list);
-        switch_bool = !switch_bool;
-      }
-      // neighbour = leastEntropy(grid_list);
-      //collapse it
-      collapsed_tile = sampleOptionsFromDistribution(neighbour.options);
-      forbacktrack = new trackingObj(neighbour,neighbour.options);
-      neighbour.options = [collapsed_tile];
-      forbacktrack.indexes.push(collapsed_tile);
-      forbacktrack.options = forbacktrack.options.filter(tile => JSON.stringify(tile) != JSON.stringify(collapsed_tile))
-      backtracking = true;
-      status_bool = !status_bool
-  }
+  const now = (typeof performance !== 'undefined' ? performance.now() : Date.now());
+  const allowAdvance = forceStepOnce ||
+    (!isPaused && (stepIntervalMs === 0 || now - lastStepTime >= stepIntervalMs));
 
-  }
-  if (backtracking) {
-    try {
-      // try adjust probabilities
-      old_grid_list = JSON.parse(JSON.stringify(grid_list));
-      grid_list = adjustPossibilities(neighbour,grid_list);
+  // Manual collapse from the popover always advances, regardless of pause.
+  const hasManual = manualCollapseQueued !== null;
+  const advanceThisFrame = allowAdvance || hasManual;
 
-      // if it doesnt error add it to tracking/oldgrids, fix the cell
-      // and end backtracking and try to fix another cell
-      tracking.push(forbacktrack);
-      old_grids.push(old_grid_list)
-      neighbour.fixed = true;
-      backtracking = false;
-      status_bool = true;
-    } catch(error) {
-      // Log error details
-      console.error(`Error: ${error.name}: ${error.message}`);
-      console.error(error.stack);
-      // console.log(neighbour.position, neighbour.options, tracking.length);
-      // Handle a specific error type (optionsError)
-      if (error instanceof optionsError) {
-        // Restore previous grid state
-        grid_list = old_grid_list;
-        // Highlight the problematic cell
-        grid_list[grid_list.findIndex(cell => JSON.stringify(cell.position) == JSON.stringify(error.broken_cell.position))].underInspection = true;
+  if (advanceThisFrame) {
+    if (status_bool || hasManual) {
+      pickAndCollapseOne();
+    }
 
-        // Initiate backtracking
-        backtracking = true;
-        var solvable=true;
+    if (backtracking) {
+      let solvable = true;
+      try {
+        old_grid_list = cloneGrid(grid_list);
+        grid_list = adjustPossibilities(neighbour, grid_list);
 
-        // Find a cell with remaining options to retry
-        if(tracking.length == 0) {
-          solvable=false;
-        } else {
-          while (true) {
+        tracking.push(forbacktrack);
+        old_grids.push(old_grid_list);
+        neighbour.fixed = true;
+        backtracking = false;
+        status_bool = true;
+      } catch (error) {
+        if (error instanceof optionsError) {
+          // Surface the failed propagation as a red flash overlay.
+          recentBacktrack = {
+            position: error.broken_cell.position.slice(),
+            framesLeft: BACKTRACK_FLASH_FRAMES,
+          };
+          grid_list = old_grid_list;
+          const broken = findByPos(grid_list, error.broken_cell.position);
+          if (broken) broken.underInspection = true;
 
-            toretry = tracking.pop();
-            // console.log('h1',toretry)
-            // console.log('here',toretry.options)
-            if (toretry.options.length > 0) {
-              break;
-            } else if (tracking.length > 0) {
-              // move back another grid in history if a cell has no available options left to try
-              grid_list = old_grids.pop();
-              renderGrid(grid_list);
-            } else {
-              // Grid is unsolvable
-              //grid_list = [];
-              solvable=false;
-              break;
+          backtracking = true;
+
+          // Drain tracking + old_grids together. On big CITY grids (7+)
+          // it's easy to pop more than we pushed during nested backtracks,
+          // and an empty .pop() returns undefined — which then propagates
+          // into reset_neighbours → checkDirection.some(...) and throws
+          // a secondary error that escapes this catch, killing p5's draw
+          // loop. Guard every pop and bail to the auto-restart branch if
+          // history is exhausted.
+          if (tracking.length === 0) {
+            solvable = false;
+          } else {
+            while (true) {
+              toretry = tracking.pop();
+              if (!toretry) { solvable = false; break; }
+              if (toretry.options.length > 0) {
+                break;
+              } else if (tracking.length > 0 && old_grids.length > 0) {
+                const snapshot = old_grids.pop();
+                if (!snapshot) { solvable = false; break; }
+                grid_list = snapshot;
+                renderGrid(grid_list);
+              } else {
+                solvable = false;
+                break;
+              }
             }
           }
+
+          if (solvable) {
+            const snapshot = old_grids.pop();
+            if (!snapshot) {
+              solvable = false;
+            } else {
+              grid_list = snapshot;
+              grid_list = reset_neighbours(error.broken_cell, grid_list);
+
+              const new_tile = sampleOptionsFromDistribution(toretry.options);
+              toretry.options = toretry.options.filter(element => !element.includes(new_tile));
+              toretry.indexes.push(new_tile);
+              tracking.push(toretry);
+
+              const newNeighbour = findByPos(grid_list, toretry.gridSquare.position);
+              if (newNeighbour) {
+                neighbour = newNeighbour;
+                neighbour.options = [new_tile];
+              } else {
+                solvable = false;
+              }
+            }
+          }
+          if (!solvable) {
+            // Out of backtracking options — wipe history and start a
+            // fresh grid so the run can keep making forward progress.
+            old_grids = [];
+            tracking = [];
+            backtracking = false;
+            grid_list = bslider ? createGrid(bslider.value(), true) : [];
+          }
+        } else {
+          // Unknown error — log and continue rendering.
+          console.error('[wfc]', error);
         }
       }
-      if(solvable) {
-      // Restore grid state from history
-      grid_list = old_grids.pop();
-      grid_list = reset_neighbours(error.broken_cell, grid_list);  // Unfix affected neighbors
-
-      // Prepare for retry
-      new_tile = sampleOptionsFromDistribution(toretry.options) // Get a new option to try
-      // console.log(new_tile)
-      toretry.options = toretry.options.filter(element => !element.includes(new_tile))
-      toretry.indexes.push(new_tile);    // Track the attempted option
-      tracking.push(toretry);            // Add back to tracking for potential future backtracking
-
-      // Update the grid with the new option
-      neighbour = grid_list[grid_list.findIndex(cell => JSON.stringify(cell.position) == JSON.stringify(toretry.gridSquare.position))];
-      neighbour.options = [new_tile];
-
-      console.log('%cDIDABACKTRACK', 'color: red; background: white; font-size: 30px');
-      }
-      else {
-        old_grids=[];
-        grid_list = [];
-        tracking = [];
-        grid_list = createGrid(bslider.value())
-      }
     }
+
+    if (allowAdvance) lastStepTime = now;
+    forceStepOnce = false;
   }
 
-  renderGrid(grid_list)
-
-  //actually do stuff
-  slider_text.html(bslider.value())
+  renderGrid(grid_list);
+  if (slider_text) slider_text.html(bslider.value());
 }
 
-// Deterministic p5 bootstrap. p5's global mode auto-scans `window.setup`
-// exactly once on its own DOMContentLoaded handler — if wfc.js hasn't
-// executed yet, p5 finds nothing and silently no-ops, leaving STARTWFC's
-// `createSlider(...)` to throw later. Instead of relying on script load
-// order, we explicitly `new p5()` here once p5 is available, which forces
-// a re-scan of window.setup/draw at a known-good time. The `__wfcReady`
-// flag lets the e2e tests wait on a single deterministic signal rather
-// than racing through multiple global-existence checks.
+// Deterministic p5 bootstrap. See the long comment above the IIFE in the
+// original file — order-sensitive global-mode setup.
 (function bootstrapP5() {
   if (typeof window === 'undefined') return;
-  // Bound the polling loop so a missing p5 CDN doesn't spin forever — fail
-  // loudly after ~10s (200 × 50ms) so the cause is visible in DevTools.
-  var MAX_TRIES = 200;
-  var tries = 0;
+  const MAX_TRIES = 200;
+  let tries = 0;
   function tick() {
     if (typeof window.p5 === 'function') {
       if (!document.querySelector('#wfc-canvas canvas')) {
         new window.p5();
       }
+      // Expose the seed so the e2e tests can assert determinism across runs.
+      window.__wfcRngSeed = rngSeed;
       window.__wfcReady = true;
       return;
     }
