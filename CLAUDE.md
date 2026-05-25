@@ -62,7 +62,7 @@ The MDX renderer is told which custom React components are usable inside posts. 
 
 ### TypeScript strictness — deliberately loose
 
-`tsconfig.json:18-19` keeps `strict: true` but disables `noImplicitAny`, and there's no `noUnused*` / `noUncheckedIndexedAccess`. This is because legacy interactive components (the `WFC_components/`, older chart wrappers) have implicit-any errors that aren't worth fixing piecemeal. Don't tighten these flags without a sweep — turning on `noImplicitAny` alone produces dozens of errors.
+`tsconfig.json:18-19` keeps `strict: true` but disables `noImplicitAny`, and there's no `noUnused*` / `noUncheckedIndexedAccess`. This is because older chart wrappers have implicit-any errors that aren't worth fixing piecemeal. Don't tighten these flags without a sweep — turning on `noImplicitAny` alone produces dozens of errors.
 
 ### Styling
 

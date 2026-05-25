@@ -104,6 +104,18 @@ function setupProbGraph(folder) {
   tileselect.style.display = 'none';
   prob_graph.style.display = 'block';
   tileset = folder;
+  // Reveal the help panel from step 2 onwards so first-time users see
+  // all the controls they're about to encounter in step 3.
+  var help = document.getElementById('wfc-help');
+  if (help) {
+    help.removeAttribute('hidden');
+    // Default to open on first reveal, but respect the user's collapse
+    // state on subsequent reveals (e.g. via Reset → pick again).
+    if (!help.dataset.touched) {
+      help.open = true;
+      help.dataset.touched = '1';
+    }
+  }
 
   var biomes = folder.includes('CITY') ? ['Grass', 'Sand', 'Lagoon', 'Ocean', 'Wall'] : null;
   var n = folder_subset.length;

@@ -76,6 +76,57 @@
   width: 100%;
 }
 
+/* How-to-use info panel (revealed from step 2 onwards) ---------------- */
+
+.wfc-help {
+  margin: 0 0 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  background: var(--color-white);
+  overflow: hidden;
+}
+[data-theme='dark'] .wfc-help {
+  background: #161618;
+  border-color: #2a2a2a;
+}
+.wfc-help-summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-gray-dark);
+  user-select: none;
+}
+.wfc-help-summary::-webkit-details-marker { display: none; }
+.wfc-help-summary:hover { color: var(--color-primary); }
+.wfc-help[open] .wfc-help-summary { border-bottom: 1px solid var(--color-border); }
+[data-theme='dark'] .wfc-help[open] .wfc-help-summary { border-bottom-color: #2a2a2a; }
+.wfc-help-toggle {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  text-align: center;
+  line-height: 16px;
+  font-size: 14px;
+  color: var(--color-primary);
+}
+.wfc-help[open] .wfc-help-toggle { transform: rotate(45deg); }
+.wfc-help-list {
+  margin: 0;
+  padding: 12px 16px 14px 32px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--color-gray-dark);
+}
+.wfc-help-list li { margin-bottom: 4px; }
+.wfc-help-list b { color: var(--color-primary); font-weight: 700; }
+
 /* Tileset picker --------------------------------------------------------- */
 
 .images {
@@ -292,8 +343,278 @@
   border-color: var(--color-secondary);
 }
 
+/* Primary controls (step 3 first row): grid-size label + slider +
+   readout + the Run/Restart button.
+
+   Wrapping these in a stable container guarantees the p5-created
+   bslider sits next to its readout instead of migrating to the end of
+   #wfc-controls on every startWFC. */
+
+.wfc-primary {
+  flex-basis: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.wfc-primary > .wfc-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-gray);
+}
+
+.wfc-primary input[type='range'] {
+  flex: 1;
+  min-width: 140px;
+  max-width: 240px;
+  accent-color: var(--color-primary);
+}
+
+.wfc-primary p {
+  margin: 0;
+  min-width: 28px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+/* The Run / Restart button — primary affordance during step 3. */
+.wfc-primary .wfc-run-button {
+  margin-left: auto;
+}
+
+/* Run-extras: speed/step/seed/share/save (step 3 second row) ----------- */
+
+.wfc-extras {
+  flex-basis: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 6px;
+  border-top: 1px dashed var(--color-border);
+}
+
+.wfc-extras .wfc-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.wfc-extras .wfc-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--color-gray);
+  text-transform: uppercase;
+}
+
+.wfc-extras .wfc-num {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: 11px;
+  color: var(--color-primary);
+  min-width: 42px;
+}
+
+.wfc-extras input[type='number'] {
+  font-family: inherit;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  padding: 4px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  background: var(--color-white);
+  color: var(--color-gray-dark);
+  width: 130px;
+}
+[data-theme='dark'] .wfc-extras input[type='number'] {
+  background: #161618;
+  border-color: #2a2a2a;
+  color: #d6d6d6;
+}
+
+.wfc-extras button {
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-gray-dark);
+  padding: 5px 12px;
+  border-radius: var(--border-radius-sm);
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+.wfc-extras button:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+.wfc-extras button:disabled { opacity: 0.6; cursor: default; }
+
+/* Step is the primary control during step 3 — the headline button for
+   educational use. Filled, primary-coloured so readers find it first. */
+.wfc-extras #wfc-step {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+  padding: 5px 14px;
+}
+.wfc-extras #wfc-step:hover:not(:disabled) {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: #fff;
+}
+
+/* Click-to-collapse popover ------------------------------------------- */
+
+#wfc-canvas { position: relative; }
+
+.wfc-popover {
+  position: absolute;
+  z-index: 10;
+  min-width: 200px;
+  max-width: 320px;
+  padding: 10px 12px 12px;
+  background: var(--color-white);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--border-radius-md);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  font-family: var(--font-family-primary);
+}
+[data-theme='dark'] .wfc-popover {
+  background: #161618;
+  border-color: var(--color-primary);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+}
+
+.wfc-popover-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-gray);
+  margin-bottom: 8px;
+  padding-right: 18px;
+}
+
+.wfc-popover-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  gap: 6px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.wfc-popover-grid img {
+  width: 100%;
+  height: 40px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  background: var(--color-gray-vvvvlight);
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+.wfc-popover-grid img:hover {
+  border-color: var(--color-primary);
+  transform: scale(1.06);
+}
+[data-theme='dark'] .wfc-popover-grid img {
+  background: #0f0f10;
+  border-color: #2a2a2a;
+}
+
+.wfc-popover-close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-gray);
+  font-size: 14px;
+  line-height: 22px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+.wfc-popover-close:hover { background: var(--color-gray-vvvvlight); color: var(--color-primary); }
+
 @media (max-width: 768px) {
   .wfc-stage { padding: 14px 12px; }
   .images { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; }
   .prob-row { grid-template-columns: 32px 1fr 1.5fr 48px; gap: 8px; }
+  .wfc-extras input[type='number'] { width: 100px; }
+  .wfc-help-list { padding: 12px 14px 14px 28px; font-size: 12.5px; }
+}
+
+/* Mobile-only refinements: bottom-sheet popover, larger tappable
+   controls, and friendlier wrapping for the run-extras row. */
+@media (max-width: 640px) {
+  /* Popover: pin to viewport bottom as a full-width sheet so a tap
+     near the edge of a small canvas doesn't leave half the choices
+     off-screen. CSS supersedes the JS inline left/top — see the
+     `isMobile` branch in openPopoverForCell. */
+  .wfc-popover {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: auto;
+    bottom: 0;
+    width: 100vw;
+    max-width: none;
+    min-width: 0;
+    max-height: 60vh;
+    border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.25);
+    padding: 14px 14px calc(14px + env(safe-area-inset-bottom, 0px));
+    overflow-y: auto;
+  }
+  .wfc-popover-grid {
+    grid-template-columns: repeat(auto-fill, minmax(54px, 1fr));
+    gap: 8px;
+    max-height: 44vh;
+  }
+  .wfc-popover-grid img { height: 54px; }
+
+  /* Larger touch targets across the run controls. */
+  .wfc-extras button {
+    padding: 9px 14px;
+    font-size: 12px;
+    min-height: 38px;
+  }
+  .wfc-extras input[type='number'] {
+    padding: 7px 9px;
+    min-height: 36px;
+    width: 100px;
+  }
+  .wfc-extras .wfc-row { gap: 8px; }
+  .wfc-extras .wfc-label { flex-basis: 100%; }
+  /* Speed slider needs room to drag on mobile. */
+  .wfc-extras #wfc-speed { flex: 1 1 100%; max-width: none; min-width: 0; }
+
+  /* Primary row: stack so the slider gets the full width and the Run
+     button doesn't get squeezed into a corner. */
+  .wfc-primary { gap: 8px 12px; }
+  .wfc-primary input[type='range'] {
+    flex: 1 1 100%;
+    max-width: none;
+  }
+  .wfc-primary .wfc-run-button {
+    margin-left: 0;
+    min-height: 40px;
+    padding: 8px 18px;
+  }
+
+  /* Toolbar reset chip — keep the tap target generous. */
+  .wfc-toolbar .resetButton { min-height: 34px; padding: 6px 12px; font-size: 12px; }
+
+  .wfc-help-summary { padding: 12px 14px; font-size: 12px; }
 }

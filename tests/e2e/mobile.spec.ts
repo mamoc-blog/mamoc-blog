@@ -200,4 +200,68 @@ test.describe('Mobile · Pixel 5', () => {
     await expect.poll(() => page.evaluate(() => window.scrollY), { timeout: 3000 }).toBeLessThanOrEqual(1);
     await expect(page.getByLabel('Breadcrumb')).toBeInViewport();
   });
+
+  // WFC widget — mobile click-to-collapse should turn the popover into a
+  // bottom sheet anchored to the viewport, not the desktop floating
+  // panel that can drift off the canvas on small screens.
+  test('WFC click-to-collapse popover is a bottom sheet on mobile @multistep', async ({ page }) => {
+    await page.goto('/posts/wfc?autostart=0');
+    await page.waitForFunction(
+      () => (window as unknown as { __wfcReady?: boolean }).__wfcReady === true,
+      { timeout: 20_000 },
+    );
+    // Pick the first available tileset card and start the canvas step.
+    await page.locator('#tileselect .image-container button').first().click();
+    await expect(page.locator('#STARTWFC')).toBeVisible();
+    await page.locator('#STARTWFC').click();
+    const canvas = page.locator('#wfc-canvas canvas');
+    await expect(canvas).toBeVisible({ timeout: 15_000 });
+
+    // Help panel should be visible on mobile too.
+    await expect(page.locator('#wfc-help')).toBeVisible();
+
+    // Tap a cell to open the popover.
+    const box = await canvas.boundingBox();
+    if (!box) throw new Error('canvas box missing');
+    await page.tap('#wfc-canvas canvas', { position: { x: box.width / 2, y: box.height / 2 } });
+    const popover = page.locator('.wfc-popover');
+    await expect(popover).toBeVisible({ timeout: 5_000 });
+
+    // On the Pixel 5 viewport (393×851), CSS makes the popover a bottom
+    // sheet: full-width, anchored to the bottom of the viewport.
+    const layout = await page.evaluate(() => {
+      const pop = document.querySelector('.wfc-popover');
+      if (!pop) return null;
+      const r = pop.getBoundingClientRect();
+      return {
+        left: r.left,
+        right: r.right,
+        bottom: r.bottom,
+        width: r.width,
+        viewportWidth: window.innerWidth,
+        viewportHeight: window.innerHeight,
+      };
+    });
+    if (!layout) throw new Error('popover layout read failed');
+    // Spans the full viewport width (within 1px).
+    expect(layout.width).toBeGreaterThanOrEqual(layout.viewportWidth - 1);
+    expect(layout.left).toBeLessThanOrEqual(1);
+    // Anchored at (or beyond, due to safe-area padding) the viewport
+    // bottom — `bottom` should equal viewportHeight, not float above.
+    expect(layout.bottom).toBeGreaterThanOrEqual(layout.viewportHeight - 1);
+  });
+
+  test('WFC widget renders without horizontal overflow on mobile', async ({ page }) => {
+    await page.goto('/posts/wfc?autostart=0');
+    await page.waitForFunction(
+      () => (window as unknown as { __wfcReady?: boolean }).__wfcReady === true,
+      { timeout: 20_000 },
+    );
+    await page.locator('#tileselect .image-container button').first().click();
+    await page.locator('#STARTWFC').click();
+    await expect(page.locator('#wfc-canvas canvas')).toBeVisible({ timeout: 15_000 });
+    // Both the help panel and the run-extras row are revealed by now;
+    // none of them should push the page wider than the viewport.
+    expect(await horizontalOverflowPx(page)).toBeLessThanOrEqual(1);
+  });
 });
