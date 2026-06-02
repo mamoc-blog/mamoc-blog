@@ -1,0 +1,21 @@
+#!/bin/sh
+# Pre-push hook: typecheck + chromium-only Playwright e2e.
+#
+# Wired in via `git config core.hooksPath .githooks`, which the `prepare`
+# script in package.json sets after `npm install`. Anyone who clones the
+# repo and runs `npm install` gets this hook automatically. Bypass with
+# `git push --no-verify` if you genuinely need to (e.g. a WIP branch).
+#
+# Chromium-only (~15s) is the local fast lane. The full
+# chromium/firefox/webkit/mobile-chrome matrix continues to run in CI on
+# every PR push, so cross-browser regressions are still gated.
+
+set -e
+
+echo "[pre-push] typecheck"
+npm run typecheck
+
+echo "[pre-push] e2e (chromium only)"
+npx playwright test --project=chromium --reporter=line
+
+echo "[pre-push] all checks passed"
