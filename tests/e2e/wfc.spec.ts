@@ -570,4 +570,83 @@ test.describe('WFC interactive widget', () => {
     });
     expect(progress).toBeGreaterThan(0);
   });
+
+  // Block-WFC regression: at CITY grid sizes above 8 the widget activates
+  // Merrell's modification-in-blocks solver (6x6 blocks, stride 5, ground
+  // pre-fill, boundary constraints pre-propagated). Pre-block solver,
+  // sizes 16-30 would auto-restart the whole grid every few seconds and
+  // effectively never finish. This test sets a fixed seed, runs a 16x16
+  // CITY grid to completion, and asserts the final state — proving the
+  // solver makes forward progress past the single-pass cap.
+  test('CITY at grid 16 completes via block solver @multistep', async ({ page }) => {
+    // Seed the run for determinism, but don't freeze the draw loop —
+    // we need it advancing to completion.
+    await page.goto(`${WFC_URL}?seed=42`);
+    await waitForP5Ready(page);
+
+    await page.locator('#tileselect .image-container').filter({ hasText: /CITY/i }).locator('button').click();
+    await expect(page.locator('#STARTWFC')).toBeVisible();
+
+    // Bump the grid size slider to 16 BEFORE clicking STARTWFC so
+    // initBlockSolver picks up the larger size when the run starts.
+    // The slider is created inside startWFC, so it doesn't exist yet —
+    // instead, we click STARTWFC and then resize before any cells are
+    // collapsed. p5's createSlider mounts a native input we can drive
+    // via change events.
+    await page.locator('#STARTWFC').click();
+    await expect(page.locator('#wfc-canvas canvas')).toBeVisible({ timeout: 15_000 });
+
+    // Block solver should be live now with the default slider value (2),
+    // which is below the threshold — so blockSolver is null. Bump the
+    // slider, hit the p5 Restart button to re-init with size 16.
+    await page.evaluate(() => {
+      const slider = document.querySelector('#wfc-primary input[type="range"]') as HTMLInputElement | null;
+      if (!slider) throw new Error('grid-size slider not found');
+      slider.value = '16';
+      slider.dispatchEvent(new Event('input', { bubbles: true }));
+      slider.dispatchEvent(new Event('change', { bubbles: true }));
+      // Trigger the p5 Restart button (status_button.mousePressed = changeState).
+      const w = window as unknown as { changeState: () => void };
+      w.changeState();
+    });
+
+    // Verify the block solver actually activated.
+    const blockActive = await page.evaluate(() => {
+      const w = window as unknown as { blockSolver: unknown };
+      return w.blockSolver !== null;
+    });
+    expect(blockActive).toBe(true);
+
+    // The block status readout should appear.
+    await expect(page.locator('#wfc-block-status')).toBeVisible();
+
+    // Poll for completion. 16x16 = 256 cells, ~30 blocks. Allow up to
+    // 45s on cold CI; locally this finishes in 5–10s.
+    const finished = await page.waitForFunction(
+      () => {
+        const w = window as unknown as {
+          grid_list: Array<{ options: string[] }>;
+        };
+        return w.grid_list.length === 256 && w.grid_list.every(c => c.options.length === 1);
+      },
+      { timeout: 45_000, polling: 250 },
+    );
+    expect(await finished.evaluate(v => v)).toBeTruthy();
+
+    // No orange (zero-option) cells in the final grid — every cell
+    // must have collapsed to exactly one tile (real or ground fallback).
+    const summary = await page.evaluate(() => {
+      const w = window as unknown as {
+        grid_list: Array<{ options: string[] }>;
+      };
+      return {
+        size: w.grid_list.length,
+        collapsed: w.grid_list.filter(c => c.options.length === 1).length,
+        broken: w.grid_list.filter(c => c.options.length === 0).length,
+      };
+    });
+    expect(summary.size).toBe(256);
+    expect(summary.collapsed).toBe(256);
+    expect(summary.broken).toBe(0);
+  });
 });
