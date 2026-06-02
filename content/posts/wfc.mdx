@@ -74,13 +74,12 @@ video game esque maps up to the 8x8 grid size.
 
 
 ## Increasing generality
-The astute readers may have noticed that, when changing tileset from Red Grid to City, the maximum grid size is reduced from
-30 down to 8, this is because the City tileset is considerably more prone to reaching unsolvable states due to the significantly
-larger set of tiles and inherent incompatibility between tiles from different biomes. In order to remedy this Merrell, in his Ph.D. Thesis[^Thesis], 
-describes an adapation to the WFC algorithm that allows it to drastically increase its chances of solving large grid sizes.
-The adaptation is called 'Modification in Blocks' and solves the problem by breaking down the grid into smaller subsections
-then performing the following:
-- Precompute: set of known good tiles that will always allow a path to continue beyond the border of a subsection,
+The City tileset is considerably more prone to reaching unsolvable states than Red Grid, due to the significantly
+larger set of tiles (107 vs. a handful) and inherent incompatibility between tiles from different biomes. Without help,
+the global backtracking tree blows up well before a 30x30 grid is filled. Merrell, in his Ph.D. Thesis[^Thesis],
+describes an adapation to the WFC algorithm that addresses this: **Modification in Blocks**. Instead of solving the
+whole grid at once, the algorithm breaks it down into smaller subsections:
+- Precompute: a set of known good tiles that will always allow a path to continue beyond the border of a subsection,
 1. Select a subsection,
 2. Run WFC on the subsection, while adherring to any adjacent subsection's adjacency constraints,
     - When running WFC on the edge of a subsection intersect the domain of the tiles with the set of precomputed "good" tiles,
@@ -90,7 +89,13 @@ then performing the following:
 The subsections are selected in an order that is exactly like a convolutional filter from a Convolutional Neural network and as such Figure 2, adapted from NamyaLG[^Namya],
 shows where/how the WFC algorithm is run on the overall grid.
 <Figure src='/WFC_code/filter.gif' caption='Visualisation of a Convolutional Filter/Modification in Blocks Subsection Selection' number='2' />
-In the future I plan to implement "Modification in Blocks" and to allow the grid size to be increased up to 30 again, a subsequent blog article will follow.
+This is now wired into the City tileset above: at grid sizes above 8, the widget switches to a 6x6 block solver with a 1-cell
+overlap (stride 5), scan-line traversal, and the all-grass tile `G_G_G_G_G_G_G_G` used as the known-good "ground" pre-fill on
+open block borders. Before the first cell in each block is sampled, constraints from already-fixed neighbours (the prior block's
+overlap edge plus the ground seeds) are propagated inward so the block samples from an already-filtered option set — without
+this step, blocks meet at visibly incompatible seams. Each block has a bounded retry budget; on the rare cases where a block
+still can't satisfy its constraints the un-collapsed cells fall back to ground rather than triggering a whole-grid restart.
+A `block X / Y` readout under the canvas tracks progress so you can watch the convolutional fill in motion.
 ## Conclusion
 This article explored the Wave Function Collapse (WFC) algorithm, a powerful tool for procedural content generation.
  It delved into the step-by-step process, from cell selection to resolving conflicts through backtracking. 

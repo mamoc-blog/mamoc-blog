@@ -420,6 +420,21 @@
   min-width: 42px;
 }
 
+/* Block-WFC progress readout. Visible only while the block solver is
+   active — single-pass runs (REDGRID, small CITY) keep this hidden. */
+.wfc-block-status {
+  font-family: var(--font-family-mono, monospace);
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  color: var(--color-gray);
+  letter-spacing: 0.03em;
+  padding: 4px 0 0;
+}
+.wfc-block-status-toast {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
 .wfc-extras input[type='number'] {
   font-family: inherit;
   font-size: 12px;

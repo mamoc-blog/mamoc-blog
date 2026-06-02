@@ -80,6 +80,38 @@ const CARD_DIRS = [[0, -1], [0, 1], [-1, 0], [1, 0]];
 const EIGHT_DIRS = [[0, -1], [0, 1], [-1, 0], [1, 0], [1, -1], [-1, -1], [1, 1], [-1, 1]];
 const dirsFor = () => (tileset.includes('CITY') ? EIGHT_DIRS : CARD_DIRS);
 
+// --- Block-WFC constants (Merrell's "modification in blocks") ----------
+// Activated only for CITY at grid sizes above BLOCK_THRESHOLD. Below
+// that, the single-pass solver still works and adding seams + retries
+// would cost more than it pays. Above it, the 107-tile / 8-direction
+// search space makes global backtracking pathological.
+const BLOCK_SIZE = 6;
+const BLOCK_STRIDE = 5;           // overlap = BLOCK_SIZE - BLOCK_STRIDE = 1 cell
+// Retry budget per block — 6×6 = 36 cells × 107 CITY tiles has a much wider
+// internal search than 4×4, so the historical "8 retries" budget exhausted
+// before finding a feasible configuration at grid sizes ~25+. 24 gives the
+// inner WFC enough attempts to thread the needle on most blocks; remaining
+// failures still ground-fill cleanly.
+const BLOCK_MAX_RETRIES = 24;
+const BLOCK_THRESHOLD = 8;
+const BLOCK_GROUND_TILE = 'G_G_G_G_G_G_G_G';
+
+// blockSolver shape — null when single-pass mode is active.
+//   {
+//     gridSize,
+//     blocks: [{bx, by}, ...],
+//     blockIdx,                       // 0..blocks.length
+//     state: null | {                 // null between blocks
+//       bx, by,
+//       modRegionPositions,           // [[x,y]] — positions, not refs (refs go
+//                                     //   stale on cloneGrid+replace)
+//       tempSeedSnapshots,            // [{pos, prevOptions, prevFixed}]
+//       retryCount,
+//       snapshot,                     // [{pos, options, fixed}] for modRegion
+//     }
+//   }
+var blockSolver = null;
+
 // --- Grid helpers -------------------------------------------------------
 
 const samePos = (a, b) => a[0] === b[0] && a[1] === b[1];
@@ -169,6 +201,8 @@ function startWFC() {
   manualCollapseQueued = null;
   forceStepOnce = false;
   isPaused = false;
+  resetBlockSolver();
+  if (shouldUseBlockSolver()) initBlockSolver();
 
   // Auto-run by default — clicking "start collapse →" should actually
   // start the collapse, not just transition to step 3. Tests that need
@@ -520,6 +554,8 @@ function changeState() {
   recentBacktrack = null;
   manualCollapseQueued = null;
   isPaused = false;
+  resetBlockSolver();
+  if (shouldUseBlockSolver()) initBlockSolver();
   const playBtn = document.getElementById('wfc-play');
   if (playBtn) playBtn.textContent = 'Pause';
   redraw();
@@ -604,9 +640,22 @@ function leastEntropy(grid_list) {
 
 function reset_neighbours(bad_cell, grid_array) {
   const directions = dirsFor();
+  // Block-WFC: confine reset_neighbours to the current block's footprint.
+  // Otherwise it can un-fix cells from previously-solved blocks (the
+  // broken cell sitting near a block edge has neighbours outside the
+  // current block), letting subsequent propagation overwrite work the
+  // block solver considers permanent.
+  const blockState = blockSolver && blockSolver.state;
   directions.forEach(direction => {
     const result = checkDirection(direction, bad_cell, grid_array, [new gridSquare([-100, -100], 'FG')]);
     if (result) {
+      if (blockState) {
+        const [x, y] = result.position;
+        const inFootprint =
+          x >= blockState.bx && x < blockState.bx + BLOCK_SIZE &&
+          y >= blockState.by && y < blockState.by + BLOCK_SIZE;
+        if (!inFootprint) return;
+      }
       const found_cell = findByPos(grid_array, result.position);
       if (found_cell) found_cell.fixed = false;
     }
@@ -625,6 +674,267 @@ function sampleOptionsFromDistribution(options) {
     if (cumulative_sum >= rand_sample) return tile;
   }
   return tile;
+}
+
+// --- Block-WFC solver --------------------------------------------------
+//
+// Implementation of Merrell's "modification in blocks" from the WFC post
+// (content/posts/wfc.mdx:76-93). The grid is solved as a sequence of
+// overlapping 6×6 sub-grids in scanline order, with each block's open
+// boundary preseeded to the all-grass "ground" tile so the block always
+// has a feasible outward neighbour. Each block restarts up to N times on
+// failure; the final fallback is a ground-tile fill — never a full-grid
+// wipe, which is what the user previously saw as the canvas-wiping
+// "auto-restart" loop at large CITY sizes.
+//
+// Operates by mutating the shared grid_list — leaning on the existing
+// adjustPossibilities / leastEntropy / sampleOptionsFromDistribution
+// helpers. State is stored as POSITIONS, not cell refs, so it survives
+// the cloneGrid+replace pattern in the drawImpl error handler.
+
+function shouldUseBlockSolver() {
+  if (!tileset || !tileset.includes('CITY')) return false;
+  if (!bslider) return false;
+  return bslider.value() > BLOCK_THRESHOLD;
+}
+
+function blockGridIdx(pos) {
+  return pos[0] * blockSolver.gridSize + pos[1];
+}
+
+function blockCellAt(pos) {
+  // createGrid fills row-major as x outer, y inner — so x*N+y is the index.
+  return grid_list[blockGridIdx(pos)];
+}
+
+function initBlockSolver() {
+  const gridSize = bslider.value();
+  const blocks = [];
+  const seen = new Set();
+  const pushBlock = (bx, by) => {
+    const key = bx + ',' + by;
+    if (!seen.has(key)) { seen.add(key); blocks.push({ bx, by }); }
+  };
+  // Scanline scan; clamp the final block in each row/column to the grid
+  // edge when stride doesn't divide evenly so we still cover the corner.
+  for (let by = 0; by + BLOCK_SIZE <= gridSize; by += BLOCK_STRIDE) {
+    for (let bx = 0; bx + BLOCK_SIZE <= gridSize; bx += BLOCK_STRIDE) {
+      pushBlock(bx, by);
+    }
+    if ((gridSize - BLOCK_SIZE) % BLOCK_STRIDE !== 0) {
+      pushBlock(gridSize - BLOCK_SIZE, by);
+    }
+  }
+  if ((gridSize - BLOCK_SIZE) % BLOCK_STRIDE !== 0) {
+    for (let bx = 0; bx + BLOCK_SIZE <= gridSize; bx += BLOCK_STRIDE) {
+      pushBlock(bx, gridSize - BLOCK_SIZE);
+    }
+    pushBlock(gridSize - BLOCK_SIZE, gridSize - BLOCK_SIZE);
+  }
+  blockSolver = { gridSize, blocks, blockIdx: 0, state: null };
+}
+
+function startBlock() {
+  const bs = blockSolver;
+  if (!bs || bs.blockIdx >= bs.blocks.length) return false;
+  const { bx, by } = bs.blocks[bs.blockIdx];
+  const gridSize = bs.gridSize;
+
+  const modRegionPositions = [];
+  for (let dx = 0; dx < BLOCK_SIZE; dx++) {
+    for (let dy = 0; dy < BLOCK_SIZE; dy++) {
+      const x = bx + dx, y = by + dy;
+      const cell = blockCellAt([x, y]);
+      if (cell && !cell.fixed) modRegionPositions.push([x, y]);
+    }
+  }
+
+  // Boundary: 1-cell ring around the footprint, within grid bounds.
+  // Already-fixed boundary cells contribute constraints as-is; unsolved
+  // boundary cells get temporarily seeded to GROUND so the block always
+  // has a feasible outward neighbour (Merrell's "ground" pre-fill).
+  const tempSeedSnapshots = [];
+  const isInFootprint = (x, y) =>
+    x >= bx && x < bx + BLOCK_SIZE && y >= by && y < by + BLOCK_SIZE;
+  for (let dx = -1; dx <= BLOCK_SIZE; dx++) {
+    for (let dy = -1; dy <= BLOCK_SIZE; dy++) {
+      const x = bx + dx, y = by + dy;
+      if (x < 0 || y < 0 || x >= gridSize || y >= gridSize) continue;
+      if (isInFootprint(x, y)) continue;
+      const cell = blockCellAt([x, y]);
+      if (!cell || cell.fixed) continue;
+      tempSeedSnapshots.push({
+        pos: [x, y],
+        prevOptions: cell.options.slice(),
+        prevFixed: cell.fixed,
+      });
+      cell.options = [BLOCK_GROUND_TILE];
+      cell.fixed = true;
+    }
+  }
+
+  // Pre-propagate fixed-cell constraints into modRegion BEFORE the first
+  // collapse samples. adjustPossibilities skips already-fixed cells when
+  // it encounters them mid-BFS (`if (current_cell.fixed === true)
+  // continue;`), so a fixed cell only acts as a constraint source when
+  // it's the BFS seed — i.e. when adjustPossibilities is called with it
+  // explicitly. Without this pass, the first collapse in a new block
+  // samples from un-filtered options, picks something incompatible with
+  // the prior-block overlap or the boundary seeds, and creates the
+  // visible inter-block seam. We loop over every fixed cell adjacent to
+  // modRegion and propagate from each.
+  const dirs = dirsFor();
+  const seeded = new Set();
+  let preProp_ok = true;
+  for (const [x, y] of modRegionPositions) {
+    if (!preProp_ok) break;
+    for (const [dx, dy] of dirs) {
+      const nx = x + dx, ny = y + dy;
+      if (nx < 0 || ny < 0 || nx >= gridSize || ny >= gridSize) continue;
+      const key = nx + ',' + ny;
+      if (seeded.has(key)) continue;
+      const neighbour = blockCellAt([nx, ny]);
+      if (!neighbour || !neighbour.fixed) continue;
+      seeded.add(key);
+      try {
+        adjustPossibilities(neighbour, grid_list);
+      } catch (e) {
+        if (e instanceof optionsError) {
+          preProp_ok = false;
+          break;
+        }
+        throw e;
+      }
+    }
+  }
+
+  if (!preProp_ok) {
+    // Boundary configuration is internally inconsistent — the prior
+    // block's edge cells contradict our ground seeds, or two prior
+    // blocks meet with incompatible tiles at this corner. Retrying with
+    // the same boundary won't help (it's deterministic), so we skip
+    // straight to ground-fill of the modRegion and advance. This is the
+    // same fallback as exhausting BLOCK_MAX_RETRIES.
+    console.warn('[wfc] block pre-propagation contradiction at (' + bx + ',' + by + '); ground-filling');
+    modRegionPositions.forEach(pos => {
+      const c = blockCellAt(pos);
+      if (!c) return;
+      c.options = [BLOCK_GROUND_TILE];
+      c.fixed = true;
+      c.underInspection = false;
+    });
+    tempSeedSnapshots.forEach(({ pos, prevOptions, prevFixed }) => {
+      const c = blockCellAt(pos);
+      if (!c) return;
+      c.options = prevOptions.slice();
+      c.fixed = prevFixed;
+    });
+    bs.blockIdx += 1;
+    bs.state = null;
+    tracking = [];
+    old_grids = [];
+    return false;
+  }
+
+  // Snapshot of modRegion AFTER pre-propagation — block-local restart
+  // reverts the working set to this filtered state, not back to all-
+  // options. Restoring to the unconstrained pre-propagation state would
+  // re-introduce the seam bug on every retry.
+  const snapshot = modRegionPositions.map(pos => {
+    const c = blockCellAt(pos);
+    return { pos: pos.slice(), options: c.options.slice(), fixed: c.fixed };
+  });
+
+  bs.state = {
+    bx, by,
+    modRegionPositions,
+    tempSeedSnapshots,
+    retryCount: 0,
+    snapshot,
+  };
+  // Per-block backtracking history. The shared `tracking` / `old_grids`
+  // arrays must not span block boundaries — otherwise a contradiction in
+  // block N can roll back grid state to before block 1 (undoing every
+  // earlier block's solved cells). Clearing here bounds the rollback
+  // depth to "within the current block".
+  tracking = [];
+  old_grids = [];
+  return true;
+}
+
+// Live cell refs for the current block's modification region. Recomputed
+// each time because cloneGrid+replace in the error handler swaps the cell
+// object identities — keeping refs in state would point at stale cells.
+function blockModRegionCells() {
+  const bs = blockSolver;
+  if (!bs || !bs.state) return [];
+  return bs.state.modRegionPositions
+    .map(pos => blockCellAt(pos))
+    .filter(Boolean);
+}
+
+function blockModRegionDone() {
+  const cells = blockModRegionCells();
+  if (cells.length === 0) return true;
+  return cells.every(c => c.options.length === 1);
+}
+
+function restoreBlockSnapshot() {
+  const st = blockSolver && blockSolver.state;
+  if (!st) return;
+  st.snapshot.forEach(s => {
+    const c = blockCellAt(s.pos);
+    if (!c) return;
+    c.options = s.options.slice();
+    c.fixed = s.fixed;
+    c.underInspection = false;
+  });
+}
+
+function finishBlock(success) {
+  const bs = blockSolver;
+  if (!bs || !bs.state) return;
+  const st = bs.state;
+
+  if (success) {
+    // Mark modRegion cells as permanently fixed so they constrain future
+    // blocks without being re-collapsed.
+    st.modRegionPositions.forEach(pos => {
+      const c = blockCellAt(pos);
+      if (c) c.fixed = true;
+    });
+  } else {
+    // Retries exhausted — ground-fill remaining modRegion cells. Visually
+    // plain but never locks up. Boris-the-Brave's writeup of Merrell's
+    // fallback describes the same approach.
+    st.modRegionPositions.forEach(pos => {
+      const c = blockCellAt(pos);
+      if (!c) return;
+      c.options = [BLOCK_GROUND_TILE];
+      c.fixed = true;
+      c.underInspection = false;
+    });
+  }
+
+  // Unseed temporary boundary tiles so the next overlapping block can
+  // re-collapse them with proper context.
+  st.tempSeedSnapshots.forEach(({ pos, prevOptions, prevFixed }) => {
+    const c = blockCellAt(pos);
+    if (!c) return;
+    c.options = prevOptions.slice();
+    c.fixed = prevFixed;
+  });
+
+  bs.state = null;
+  bs.blockIdx += 1;
+  // Block-local backtracking history must not leak across block
+  // boundaries (see comment in startBlock).
+  tracking = [];
+  old_grids = [];
+}
+
+function resetBlockSolver() {
+  blockSolver = null;
 }
 
 // --- Run-extras UI (speed / step / seed / share / save / popover) ------
@@ -650,6 +960,7 @@ function ensureRunControls() {
       <button id="wfc-share" type="button" title="Copy a URL that reproduces this run">Share</button>
       <button id="wfc-save" type="button" title="Download the canvas as PNG">Save PNG</button>
     </div>
+    <div id="wfc-block-status" class="wfc-block-status" hidden></div>
   `;
   host.appendChild(extras);
 
@@ -804,6 +1115,21 @@ function openPopoverForCell(cell, screenX, screenY) {
   pop.style.visibility = '';
 }
 
+// Brief inline toast under the canvas. Reuses #wfc-block-status as the
+// visual surface — the block-status text reappears on the next frame
+// after the timeout expires.
+function flashCanvasToast(msg) {
+  const el = document.getElementById('wfc-block-status');
+  if (!el) return;
+  el.hidden = false;
+  el.textContent = msg;
+  el.classList.add('wfc-block-status-toast');
+  setTimeout(() => {
+    el.classList.remove('wfc-block-status-toast');
+    updateBlockStatus();
+  }, 1800);
+}
+
 function thumbSrcForOption(name) {
   // Walk the manifest for a tile file matching the active tileset whose
   // basename (sans extension) equals `name`. Manifest paths are absolute
@@ -826,6 +1152,8 @@ function ensureGridReady() {
     old_grids = [];
     backtracking = false;
     recentBacktrack = null;
+    resetBlockSolver();
+    if (shouldUseBlockSolver()) initBlockSolver();
   }
 }
 
@@ -846,6 +1174,22 @@ function canvasClickHandler(evt) {
   const cell = findByPos(grid_list, [cx, cy]);
   if (!cell) return;
   if (cell.options.length <= 1) return; // nothing to choose
+
+  // Block-WFC: manual collapse is only meaningful for cells in the block
+  // currently being solved. Other cells are either already fixed (handled
+  // above) or scheduled to be reached by a future block — show a brief
+  // toast and bail out rather than opening a popover that would queue a
+  // collapse the engine can't apply.
+  if (blockSolver) {
+    const st = blockSolver.state;
+    const inCurrentBlock = st &&
+      cx >= st.bx && cx < st.bx + BLOCK_SIZE &&
+      cy >= st.by && cy < st.by + BLOCK_SIZE;
+    if (!inCurrentBlock) {
+      flashCanvasToast('not yet reachable — that cell is in a future block');
+      return;
+    }
+  }
 
   // Pause so the popover sticks around while the reader decides.
   isPaused = true;
@@ -943,12 +1287,44 @@ function pickAndCollapseOne() {
   }
   if (finishedCollapse(grid_list)) return;
 
+  // Block-WFC: pick within the current block's modification region
+  // instead of the whole grid. Block transitions happen lazily here so
+  // the per-frame budget in drawImpl stays unchanged.
+  let pickPool = grid_list;
+  if (blockSolver) {
+    if (!blockSolver.state) {
+      if (blockSolver.blockIdx >= blockSolver.blocks.length) return;
+      startBlock();
+      // If startBlock found nothing to do (entire footprint already fixed
+      // from prior-block overlap), advance and try the next block. Don't
+      // loop indefinitely — capped at blocks.length to keep this O(N).
+      let safety = blockSolver.blocks.length;
+      while (blockSolver.state &&
+             blockSolver.state.modRegionPositions.length === 0 &&
+             safety-- > 0) {
+        finishBlock(true);
+        if (blockSolver.blockIdx >= blockSolver.blocks.length) return;
+        startBlock();
+      }
+      if (!blockSolver.state) return;
+    }
+    if (blockModRegionDone()) {
+      finishBlock(true);
+      return;
+    }
+    pickPool = blockModRegionCells();
+    if (pickPool.length === 0) {
+      finishBlock(true);
+      return;
+    }
+  }
+
   switch_bool = true;
   if (switch_bool && filled_count < 0.2 * grid_list.length) {
-    const neighbour_pos = getRandomUnCollapsedCell(grid_list);
+    const neighbour_pos = getRandomUnCollapsedCell(pickPool);
     neighbour = findByPos(grid_list, neighbour_pos);
   } else {
-    neighbour = leastEntropy(grid_list);
+    neighbour = leastEntropy(pickPool);
   }
   const collapsed_tile = sampleOptionsFromDistribution(neighbour.options);
   forbacktrack = new trackingObj(neighbour, neighbour.options);
@@ -1072,12 +1448,35 @@ function drawImpl() {
             }
           }
           if (!solvable) {
-            // Out of backtracking options — wipe history and start a
-            // fresh grid so the run can keep making forward progress.
-            old_grids = [];
-            tracking = [];
-            backtracking = false;
-            grid_list = bslider ? createGrid(bslider.value(), true) : [];
+            if (blockSolver && blockSolver.state) {
+              // Block-WFC failure path: per-block restart instead of a
+              // grid-wide wipe. After BLOCK_MAX_RETRIES the block falls
+              // back to ground-fill and the next block kicks in — so the
+              // overall run keeps making forward progress even on hard
+              // CITY configurations.
+              old_grids = [];
+              tracking = [];
+              backtracking = false;
+              if (blockSolver.state.retryCount < BLOCK_MAX_RETRIES) {
+                blockSolver.state.retryCount += 1;
+                restoreBlockSnapshot();
+              } else {
+                finishBlock(false);
+              }
+              status_bool = true;
+            } else {
+              // Single-pass path (REDGRID, or CITY below the block-solver
+              // threshold) — wipe history and start a fresh grid so the
+              // run can keep making forward progress. status_bool was
+              // turned off by pickAndCollapseOne earlier this frame; flip
+              // it back on so the next frame picks again instead of
+              // stalling with status_bool=false and backtracking=false.
+              old_grids = [];
+              tracking = [];
+              backtracking = false;
+              grid_list = bslider ? createGrid(bslider.value(), true) : [];
+              status_bool = true;
+            }
           }
         } else {
           // Unknown error — log and continue rendering.
@@ -1092,6 +1491,27 @@ function drawImpl() {
 
   renderGrid(grid_list);
   if (slider_text) slider_text.html(bslider.value());
+  updateBlockStatus();
+}
+
+function updateBlockStatus() {
+  const el = document.getElementById('wfc-block-status');
+  if (!el) return;
+  if (!blockSolver) {
+    if (!el.hidden) el.hidden = true;
+    return;
+  }
+  el.hidden = false;
+  const total = blockSolver.blocks.length;
+  // blockIdx is 0-based and points at the *current* block while solving;
+  // bumps to `total` once the final block finishes. Show "X / total"
+  // where X is min(blockIdx+1, total) so the readout never overflows.
+  const human = Math.min(blockSolver.blockIdx + 1, total);
+  const retry = blockSolver.state ? blockSolver.state.retryCount : 0;
+  const done = blockSolver.blockIdx >= total;
+  el.textContent = done
+    ? `blocks ${total} / ${total} · done`
+    : `block ${human} / ${total}${retry > 0 ? ` · retry ${retry}` : ''}`;
 }
 
 // Deterministic p5 bootstrap. See the long comment above the IIFE in the
