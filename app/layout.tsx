@@ -5,7 +5,7 @@ import { ThemeProvider } from '@/components/theme/ThemeProvider';
 import { CommandPaletteRoot } from '@/components/chrome/CommandPaletteRoot';
 import { SiteHeader } from '@/components/chrome/SiteHeader';
 import { SiteFooter } from '@/components/chrome/SiteFooter';
-import { SITE, getIssue } from '@/lib/site';
+import { SITE } from '@/lib/site';
 import 'katex/dist/katex.min.css';
 import '@/styles/global.scss';
 
@@ -41,14 +41,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     date: p.date,
     topics: p.topics,
   }));
-  const issue = getIssue(allPosts);
 
   return (
     <html lang="en" suppressHydrationWarning className={`${firaCode.variable} ${sourceSerif.variable}`}>
       <body>
         <ThemeProvider>
           <CommandPaletteRoot posts={palettePosts}>
-            <SiteHeader issueLabel={issue.label} />
+            <SiteHeader />
             <main>{children}</main>
             <SiteFooter />
           </CommandPaletteRoot>

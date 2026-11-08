@@ -24,12 +24,6 @@
   img { height: 22px; width: auto; }
 }
 
-.dt {
-  font-size: 11px;
-  color: var(--color-gray);
-  letter-spacing: 0.1em;
-}
-
 .tools {
   display: flex;
   align-items: center;
@@ -39,5 +33,4 @@
 @media (max-width: 768px) {
   .bar { padding: 16px 20px; gap: 12px; }
   .tools { gap: 8px; }
-  .dt { display: none; }
 }

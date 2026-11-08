@@ -26,31 +26,7 @@
     filter: grayscale(0.15);
   }
 
-  .tag {
-    position: absolute;
-    bottom: -12px;
-    left: 20px;
-    background: var(--color-primary);
-    color: #fff;
-    font-size: 10px;
-    padding: 6px 10px;
-    border-radius: 999px;
-    letter-spacing: 0.14em;
-    font-weight: 700;
-  }
 
-  .handle {
-    position: absolute;
-    top: 14px;
-    right: -14px;
-    background: var(--color-white);
-    border: 1px solid var(--color-border);
-    font-size: 11px;
-    padding: 5px 8px;
-    border-radius: 6px;
-    color: var(--color-gray);
-    [data-theme='dark'] & { background: #141415; border-color: #2a2a2a; }
-  }
 }
 
 .intro {
@@ -97,7 +73,7 @@
 
 .metaRow {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 0;
   border-bottom: 1px solid var(--color-border);
   [data-theme='dark'] & { border-color: #222; }
@@ -126,36 +102,9 @@
 
 .body {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1fr;
   gap: 48px;
   padding: 40px 0;
-}
-
-.sidebar {
-  font-size: 12px;
-
-  .block {
-    padding: 20px 0;
-    border-top: 1px solid var(--color-border);
-    [data-theme='dark'] & { border-color: #222; }
-
-    .hl {
-      font-size: 10px;
-      color: var(--color-gray);
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      margin-bottom: 14px;
-    }
-    p { line-height: 1.6; margin: 0 0 10px; font-size: 13px; }
-    .row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 8px;
-      padding: 6px 0;
-      font-size: 12px;
-      b { font-weight: 700; color: var(--color-primary); }
-    }
-  }
 }
 
 .right {
@@ -212,7 +161,6 @@
   .masthead { grid-template-columns: 1fr; gap: 32px; padding: 32px 0 24px; }
   .avatar { padding-bottom: 16px; }
   .avatar img { width: 160px; height: 160px; }
-  .avatar .handle { right: 0; top: 10px; }
   .intro h1 { font-size: clamp(32px, 10vw, 56px); overflow-wrap: break-word; }
   .metaRow { grid-template-columns: 1fr; }
   .metaRow .m { border-right: 0; border-bottom: 1px solid var(--color-border); }

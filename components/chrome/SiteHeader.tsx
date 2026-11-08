@@ -9,9 +9,7 @@ import { CommandTrigger } from './CommandTrigger';
 import { ThemeSwitch } from './ThemeSwitch';
 import styles from './SiteHeader.module.scss';
 
-type Props = { issueLabel: string };
-
-export function SiteHeader({ issueLabel }: Props) {
+export function SiteHeader() {
   const pathname = usePathname() ?? '/';
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -29,7 +27,6 @@ export function SiteHeader({ issueLabel }: Props) {
       <div className={styles.bar}>
         <Link href="/" className={styles.brand} aria-label="mamoc home">
           <Image src={logoSrc} alt="mamoc" width={140} height={22} priority />
-          <span className={styles.dt}>{issueLabel}</span>
         </Link>
 
         <div className={styles.tools}>

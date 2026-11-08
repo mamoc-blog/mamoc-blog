@@ -1,6 +1,5 @@
 import { getSortedPostsData } from '@/lib/posts';
 import { Frontpage, type FrontpagePost } from '@/components/pages/Frontpage';
-import { getIssue } from '@/lib/site';
 
 export default async function Page() {
   const raw = await getSortedPostsData();
@@ -13,7 +12,7 @@ export default async function Page() {
     imageSrc: p.imageSrc,
     topics: p.topics ?? [],
     featured: p.featured ?? false,
+    readingTime: p.readingTime,
   }));
-  const issue = getIssue(posts);
-  return <Frontpage posts={posts} issue={issue} />;
+  return <Frontpage posts={posts} />;
 }

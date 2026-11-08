@@ -16,10 +16,6 @@ function shortDate(d: string) {
   try { return format(parseISO(d), 'MMM dd'); } catch { return d; }
 }
 
-function readingTime(): string {
-  return '~12 min';
-}
-
 export function ArchivePage({ posts, topicCounts }: Props) {
   const router = useRouter();
   const pathname = usePathname();
@@ -117,7 +113,7 @@ export function ArchivePage({ posts, topicCounts }: Props) {
                       {p.topics?.[0] && <div className={styles.tg}>#{p.topics[0]}</div>}
                     </div>
                     <div className={styles.a}>{p.author}</div>
-                    <div className={styles.rt}>{readingTime()}</div>
+                    <div className={styles.rt}>{p.readingTime}</div>
                   </Link>
                 ))}
               </div>

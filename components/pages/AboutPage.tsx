@@ -1,4 +1,4 @@
-import { format, parseISO } from 'date-fns';
+import { format } from 'date-fns';
 import type { Colophon } from '@/lib/colophon';
 import styles from './AboutPage.module.scss';
 
@@ -7,11 +7,6 @@ function joinNames(names: string[]): string {
   if (names.length === 1) return names[0];
   if (names.length === 2) return `${names[0]} and ${names[1]}`;
   return `${names.slice(0, -1).join(', ')}, and ${names[names.length - 1]}`;
-}
-
-function safeDate(iso: string | null): string | null {
-  if (!iso) return null;
-  try { return format(parseISO(iso), 'MMM d, yyyy'); } catch { return iso; }
 }
 
 function safePushed(unixSec: string | null): string | null {
@@ -28,7 +23,6 @@ function hostname(url: string): string {
 
 export function AboutPage({ colophon }: { colophon: Colophon }) {
   const names = colophon.authors.map((a) => a.name);
-  const latestDate = safeDate(colophon.stats.latestDate);
   const pushedDate = safePushed(colophon.git.pushedAt);
 
   return (
@@ -42,27 +36,14 @@ export function AboutPage({ colophon }: { colophon: Colophon }) {
         <div>
           <h4>What this is</h4>
           <p>
-            Most posts start with something we read and didn&apos;t fully get, work through the maths, and end with an interactive you can poke at. Less a publication, more a notebook we left the lid off.
+            Most posts start with something we read and didn&apos;t fully get, work through the maths, and end with an interactive you can poke at.
           </p>
           <p>
-            The maths is as careful as we can make it. The prose, less so. If we&apos;ve got something wrong, tell us.
-          </p>
-          <h4 style={{ marginTop: 28 }}>Why</h4>
-          <p>
-            Writing things down is how we actually learn them — explaining something makes it obvious when we don&apos;t really understand it. Statically generated, no client-side trackers, no email gates, no engagement metrics. Source is on GitHub.
+            If we&apos;ve got something wrong, tell us. Source is on GitHub.
           </p>
         </div>
         <div>
-          <h4>By the numbers</h4>
-          <dl className={styles.tech}>
-            <dt>posts</dt><dd>{colophon.stats.posts}</dd>
-            <dt>authors</dt><dd>{colophon.stats.authors}</dd>
-            <dt>topics</dt><dd>{colophon.stats.topics}</dd>
-            <dt>since</dt><dd>{colophon.stats.since} ({colophon.stats.activeYears}y)</dd>
-            {latestDate && <><dt>latest</dt><dd>{latestDate}</dd></>}
-          </dl>
-
-          <h4 style={{ marginTop: 28 }}>Colophon</h4>
+          <h4>Colophon</h4>
           <dl className={styles.tech}>
             {colophon.stack.length > 0 && (
               <>
