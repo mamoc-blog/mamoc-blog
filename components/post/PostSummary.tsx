@@ -11,6 +11,7 @@ import styles from './PostSummary.module.scss';
 type Props = {
   slug: string;
   metadata: PostMetadata;
+  readingTime: string;
 };
 
 type TocEntry = { id: string; text: string; depth: number };
@@ -19,7 +20,7 @@ function dateLong(d: string) {
   try { return format(parseISO(d), 'MMMM dd, yyyy'); } catch { return d; }
 }
 
-export function PostSummary({ slug, metadata }: Props) {
+export function PostSummary({ slug, metadata, readingTime }: Props) {
   const [toc, setToc] = useState<TocEntry[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -57,7 +58,7 @@ export function PostSummary({ slug, metadata }: Props) {
   return (
     <div className={styles.root}>
       <nav className={styles.crumbs} aria-label="Breadcrumb">
-        <Link href="/">~/mamoc</Link>
+        <Link href="/">Home</Link>
         <span className={styles.sep}>/</span>
         <Link href="/archive">posts</Link>
         {topic && (
@@ -69,11 +70,6 @@ export function PostSummary({ slug, metadata }: Props) {
         <span className={styles.sep}>/</span>
         <span>{slug}</span>
       </nav>
-
-      <div className={styles.kicker}>
-        <span className={styles.dot} aria-hidden="true" />
-        <span>Research Post · {metadata.date.slice(0, 4)}</span>
-      </div>
 
       <h1 className={styles.ti}>{metadata.title}</h1>
 
@@ -90,7 +86,7 @@ export function PostSummary({ slug, metadata }: Props) {
         <div />
         <div className={styles.stats}>
           <div><b>{dateLong(metadata.date)}</b>Published</div>
-          <div><b>~12 min</b>Reading</div>
+          <div><b>{readingTime}</b>Reading</div>
           <div><b>{toc.length}</b>Sections</div>
         </div>
       </div>

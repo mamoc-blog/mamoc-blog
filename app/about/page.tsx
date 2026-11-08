@@ -4,7 +4,7 @@ import { getColophon } from '@/lib/colophon';
 
 export const metadata: Metadata = {
   title: 'About',
-  description: 'About mamoc.blog — what it is, why we write it, and the colophon.',
+  description: 'A blog by Alex Cheetham and Cameron Michie.',
 };
 
 export default async function Page() {

@@ -23,24 +23,6 @@
   .tag { color: var(--color-primary); font-weight: 700; }
 }
 
-.kicker {
-  font-size: 11px;
-  color: var(--color-gray);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  margin-bottom: 16px;
-  display: flex;
-  gap: 12px;
-  align-items: center;
-
-  .dot {
-    width: 6px;
-    height: 6px;
-    background: var(--color-primary);
-    border-radius: 50%;
-  }
-}
-
 .ti {
   font-size: clamp(40px, 5.5vw, 72px);
   color: var(--color-primary);

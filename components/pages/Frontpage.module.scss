@@ -20,12 +20,6 @@
     img { height: 22px; width: auto; }
   }
 
-  .dt {
-    font-size: 11px;
-    color: var(--color-gray);
-    letter-spacing: 0.1em;
-  }
-
   nav {
     display: flex;
     align-items: baseline;
@@ -64,26 +58,6 @@
     font-style: italic;
     font-weight: 500;
     font-family: var(--font-family-secondary);
-  }
-
-  .issue {
-    position: absolute;
-    right: 48px;
-    top: 64px;
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--color-gray);
-    text-align: right;
-
-    .big {
-      display: block;
-      font-size: 48px;
-      font-weight: 800;
-      color: var(--color-black);
-      letter-spacing: -0.03em;
-      margin-top: 4px;
-    }
   }
 
   .tag {
@@ -267,8 +241,6 @@
     flex-wrap: wrap;
     gap: 12px;
 
-    .dt { display: none; }
-
     // nav is a single flex line by default with `gap: 28px`; on Pixel-5-
     // narrow viewports the 4 links + CommandTrigger overflow the row.
     // Allow internal wrap and shrink the gap so the nav fits.
@@ -278,7 +250,6 @@
     }
   }
   .masthead { padding: 32px 20px; }
-  .masthead .issue { position: static; text-align: left; margin-bottom: 16px; }
   .hero2 { grid-template-columns: 1fr; gap: 24px; padding: 32px 20px; }
   .hero2 .side { border-left: 0; padding-left: 0; border-top: 1px solid var(--color-border); padding-top: 24px; }
   .indexTitle { padding: 32px 20px 16px; }

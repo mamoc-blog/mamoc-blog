@@ -5,7 +5,6 @@ import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import Link from 'next/link';
 import { format, parseISO } from 'date-fns';
-import { type Issue } from '@/lib/site';
 import { AUTHORS } from '@/lib/authors';
 import { CommandTrigger } from '@/components/chrome/CommandTrigger';
 import { AuthorsMenu } from '@/components/chrome/AuthorsMenu';
@@ -28,13 +27,13 @@ export type FrontpagePost = {
   featured?: boolean;
 };
 
-type Props = { posts: FrontpagePost[]; issue: Issue };
+type Props = { posts: FrontpagePost[] };
 
 function dateLong(d: string) {
   try { return format(parseISO(d), 'MMMM dd, yyyy'); } catch { return d; }
 }
 
-export function Frontpage({ posts, issue }: Props) {
+export function Frontpage({ posts }: Props) {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
@@ -53,7 +52,6 @@ export function Frontpage({ posts, issue }: Props) {
       <header className={styles.hdr2}>
         <div className={styles.ml}>
           <Image src={logoSrc} alt="mamoc" width={140} height={22} />
-          <span className={styles.dt}>{issue.label}</span>
         </div>
         <nav>
           <Link href="/" className={styles.active}>Index</Link>
@@ -66,9 +64,6 @@ export function Frontpage({ posts, issue }: Props) {
 
       <section className={styles.masthead}>
         <h1>Maths, <span className={styles.amp}>&amp;</span><br />Some Code.</h1>
-        <div className={styles.issue}>
-          Issue<span className={styles.big}>{issue.number}</span>volume {issue.volume}
-        </div>
         <p className={styles.tag}>
           Long-form articles on mathematical and technical topics, with a focus on generating data to create interesting visuals. A blog written and maintained by {BYLINE}.
         </p>
@@ -76,7 +71,7 @@ export function Frontpage({ posts, issue }: Props) {
 
       <section className={styles.hero2}>
         <Link href={`/posts/${hero.id}`} className={styles.main}>
-          <div className={styles.lbl}>Featured · Editor&apos;s pick</div>
+          <div className={styles.lbl}>Featured</div>
           {hero.imageSrc && (
             <div className={styles.img}>
               <Image src={hero.imageSrc} alt={hero.title} fill style={{ objectFit: 'cover' }} sizes="(max-width: 1200px) 100vw, 800px" />
@@ -92,7 +87,7 @@ export function Frontpage({ posts, issue }: Props) {
         </Link>
 
         <aside className={styles.side}>
-          <div className={styles.t}>Also in this issue</div>
+          <div className={styles.t}>Latest</div>
           {rest.slice(0, 4).map((p, i) => (
             <Link href={`/posts/${p.id}`} className={styles.it} key={p.id}>
               <div className={styles.th}>
@@ -108,7 +103,7 @@ export function Frontpage({ posts, issue }: Props) {
       </section>
 
       <div className={styles.indexTitle}>
-        <h3>The Index · All Posts</h3>
+        <h3>All posts</h3>
         <div className={styles.n}>{posts.length} entries</div>
       </div>
       <div className={styles.indx}>

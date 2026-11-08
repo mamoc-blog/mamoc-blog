@@ -24,12 +24,6 @@ test.describe('Homepage', () => {
     await expect(page.locator('footer')).toBeVisible();
   });
 
-  test('issue/volume label is present in header', async ({ page }) => {
-    await page.goto('/');
-    // The header renders a "VOL.XX · MMM 'YY" style label
-    await expect(page.locator('header')).toContainText(/VOL\.\d+/);
-  });
-
   test('navigation links are present', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('header').getByRole('link', { name: /archive/i })).toBeVisible();

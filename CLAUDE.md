@@ -50,7 +50,7 @@ The MDX renderer is told which custom React components are usable inside posts. 
 
 ### Chrome and the command palette
 
-`app/layout.tsx` is async — it calls `getSortedPostsData()` once and threads the result into the `<CommandPaletteRoot>` so ⌘K search works on every route without per-page fetching. The `getIssue()` helper in `lib/site.ts` derives the magazine-style "VOL.0X · MMM 'YY" label from the latest post's date, so the header label advances on content ship, not on rebuilds.
+`app/layout.tsx` is async — it calls `getSortedPostsData()` once and threads the result into the `<CommandPaletteRoot>` so ⌘K search works on every route without per-page fetching.
 
 ### Build-time git info
 

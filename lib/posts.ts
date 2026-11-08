@@ -15,7 +15,22 @@ export type PostMetadata = {
   math?: boolean;
 };
 
-export type Post = PostMetadata & { id: string };
+export type Post = PostMetadata & { id: string; readingTime: string };
+
+const WORDS_PER_MINUTE = 230;
+
+/** Estimated reading time from the post's source: drops imports/exports, JSX
+ *  tags and fenced code, then counts whitespace-separated words. */
+export function getReadingTime(slug: string): string {
+  const src = fs.readFileSync(path.join(POSTS_DIR, `${slug}.mdx`), 'utf8');
+  const prose = src
+    .replace(/^export const metadata[\s\S]*?^};?$/m, '')
+    .replace(/^(import|export) .*$/gm, '')
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/<[^>]+>/g, ' ');
+  const words = prose.split(/\s+/).filter(Boolean).length;
+  return `~${Math.max(1, Math.round(words / WORDS_PER_MINUTE))} min`;
+}
 
 export function getAllPostSlugs(): string[] {
   return fs
@@ -37,7 +52,11 @@ export const getPostMetadata = cache(async (slug: string): Promise<PostMetadata>
 export const getSortedPostsData = cache(async (): Promise<Post[]> => {
   const slugs = getAllPostSlugs();
   const all = await Promise.all(
-    slugs.map(async (slug) => ({ id: slug, ...(await getPostMetadata(slug)) })),
+    slugs.map(async (slug) => ({
+      id: slug,
+      ...(await getPostMetadata(slug)),
+      readingTime: getReadingTime(slug),
+    })),
   );
   return all.sort((a, b) => (a.date < b.date ? 1 : -1));
 });

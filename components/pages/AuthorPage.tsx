@@ -26,8 +26,6 @@ export function AuthorPage({ author, posts }: Props) {
       <div className={styles.masthead}>
         <div className={styles.avatar}>
           <Image src={author.avatar} alt={author.name} width={240} height={240} />
-          <div className={styles.tag}>CO-AUTHOR</div>
-          <div className={styles.handle}>{author.handle}</div>
         </div>
         <div className={styles.intro}>
           <h1>{firstName}<br /><span className={styles.last}>{lastName}.</span></h1>
@@ -41,7 +39,7 @@ export function AuthorPage({ author, posts }: Props) {
             )}
             {author.social.linkedin && (
               <a href={author.social.linkedin} target="_blank" rel="noreferrer">
-                <span className={styles.u}>linkedin /</span> in/{author.slug}
+                <span className={styles.u}>linkedin /</span> in/{author.social.linkedin.replace(/\/$/, '').split('/').pop()}
               </a>
             )}
             {author.social.cv && (
@@ -57,32 +55,12 @@ export function AuthorPage({ author, posts }: Props) {
           <div className={styles.l}>Published</div>
         </div>
         <div className={styles.m}>
-          <div className={styles.n}>{posts.reduce((s, p) => s + (p.topics?.length ?? 0), 0)}<span className={styles.u}> tags</span></div>
-          <div className={styles.l}>Topics covered</div>
-        </div>
-        <div className={styles.m}>
           <div className={styles.n}>{earliestYear}</div>
-          <div className={styles.l}>Active since</div>
+          <div className={styles.l}>First post</div>
         </div>
       </div>
 
       <div className={styles.body}>
-        <aside className={styles.sidebar}>
-          {author.currentlyBuilding && (
-            <div className={styles.block}>
-              <div className={styles.hl}>Currently building</div>
-              <p>{author.currentlyBuilding}</p>
-            </div>
-          )}
-          {author.toolbox && (
-            <div className={styles.block}>
-              <div className={styles.hl}>Toolbox</div>
-              <div className={styles.row}><span>Language</span><b>{author.toolbox.language}</b></div>
-              <div className={styles.row}><span>Plotting</span><b>{author.toolbox.plotting}</b></div>
-              <div className={styles.row}><span>Sim kit</span><b>{author.toolbox.sims}</b></div>
-            </div>
-          )}
-        </aside>
         <div className={styles.right}>
           <h3>Posts · {posts.length}</h3>
           {posts.map((p) => (
